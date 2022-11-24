@@ -1,11 +1,13 @@
 package br.com.totemAutoatendimento.dominio.pessoa.usuario;
 
 import br.com.totemAutoatendimento.dominio.exception.SenhaInvalidaException;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Password {

@@ -3,7 +3,6 @@ package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
@@ -13,11 +12,9 @@ import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 @Repository
 public class ComandaSpringDataRepository implements ComandaRepository{
 
-	@Autowired ComandaJpaRepository jpaRepository;
-
 	@Override
 	public Comanda criar(Comanda comanda) {
-		return jpaRepository.save(comanda);
+		return null;
 	}
 
 	@Override

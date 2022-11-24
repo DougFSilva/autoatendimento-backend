@@ -2,7 +2,7 @@ package br.com.totemAutoatendimento.dominio.pessoa.cliente;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 import br.com.totemAutoatendimento.dominio.pessoa.Estado;
 
@@ -12,11 +12,11 @@ public record DadosCriarCliente(
 		String nome, 
 		
 		@NotBlank
-		@Size(min = 11, max = 11)
-		Integer cpf, 
+		@Pattern(regexp = "\\d{11}")
+		String cpf, 
 		
-		@Size(min = 9)
-		Integer telefone, 
+		@Pattern(regexp = "\\d{10,11}")
+		String telefone, 
 		
 		@Email
 		String enderecoEmail, 

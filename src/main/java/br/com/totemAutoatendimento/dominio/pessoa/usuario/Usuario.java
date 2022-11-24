@@ -3,8 +3,7 @@ package br.com.totemAutoatendimento.dominio.pessoa.usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Email;
-
+import br.com.totemAutoatendimento.dominio.pessoa.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +19,9 @@ public class Usuario {
 	
 	private String nome;
 	
-	private Integer cpf;
+	private String cpf;
 	
-	private Integer registro;
+	private String registro;
 	
 	private Email email;
 	

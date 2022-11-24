@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Perfil {
-
+	
 	private TipoPerfil tipo;
 }

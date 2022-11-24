@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa;
+package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.usuario;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,7 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import br.com.totemAutoatendimento.dominio.pessoa.Estado;
+import br.com.totemAutoatendimento.dominio.pessoa.usuario.Perfil;
+import br.com.totemAutoatendimento.dominio.pessoa.usuario.TipoPerfil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,21 +20,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "enderecos")
-public class EnderecoEntity {
+@Table(name = "perfis")
+public class PerfilEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@Enumerated(EnumType.STRING)
-	private Estado estado;
-
-	private String cidade;
-
-	private String bairro;
-
-	private String rua;
-
-	private String numero;
+	private TipoPerfil tipo;
+	
+	public PerfilEntity(Perfil perfil) {
+		this.tipo = perfil.getTipo();
+	}
 }

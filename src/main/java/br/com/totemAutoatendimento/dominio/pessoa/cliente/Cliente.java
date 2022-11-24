@@ -23,9 +23,9 @@ public class Cliente {
 	
 	private String nome;
 	
-	private Integer cpf;
+	private String cpf;
 	
-	private Integer telefone;
+	private String telefone;
 	
 	private Email email;
 	
@@ -33,7 +33,7 @@ public class Cliente {
 	
 	private List<Comanda> comandas = new ArrayList<>();
 	
-	public Cliente(String nome, Integer cpf, Integer telefone, Email email, Endereco endereco) {
+	public Cliente(String nome, String cpf, String telefone, Email email, Endereco endereco) {
 		this.nome = nome;
 		this.cpf = cpf;
 		this.telefone = telefone;
