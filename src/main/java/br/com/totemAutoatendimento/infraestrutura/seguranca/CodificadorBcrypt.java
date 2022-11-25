@@ -13,8 +13,8 @@ public class CodificadorBcrypt implements CodificadorDeSenha{
 	}
 
 	@Override
-	public boolean comparar() {
-		return false;
+	public boolean comparar(String senha, String senhaCodificada) {
+		return (senha + "_codificada").equals(senhaCodificada);
 	}
 
 	

@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.AlterarSenhaDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarDadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarTodosUsuarios;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.CriarUsuario;
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosAlterarSenhaDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosCriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosEditarUsuario;
@@ -65,6 +67,14 @@ public class UsuarioController {
 	public ResponseEntity<DadosDeUsuario> editarUsuario(@RequestBody @Valid DadosEditarUsuario dados){
 		EditarUsuario editarUsuario = new EditarUsuario(repository);
 		return ResponseEntity.ok().body(editarUsuario.executar(dados));
+	}
+	
+	@PutMapping(value = "/alterar-senha")
+	@Transactional
+	public ResponseEntity<Void> alterarSenhaDeUsuario(@RequestBody @Valid DadosAlterarSenhaDeUsuario dados){
+		AlterarSenhaDeUsuario alterarSenhaDeUsuario = new AlterarSenhaDeUsuario(repository, codificador);
+		alterarSenhaDeUsuario.executar(dados);
+		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping(value = "/{id}")
