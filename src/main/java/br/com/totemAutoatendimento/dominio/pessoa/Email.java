@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.dominio.pessoa;
 
-import br.com.totemAutoatendimento.dominio.exception.EmailInvalidoException;
+import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import lombok.Getter;
 
 @Getter
@@ -11,7 +11,7 @@ public class Email {
 	public Email(String endereco) {
 		if (endereco == null || !endereco.matches("^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
 
-			throw new EmailInvalidoException("Email " + endereco + " não é valido!");
+			throw new ViolacaoDeIntegridadeDeDadosException("Email " + endereco + " não é valido!");
 		}
 		this.endereco = endereco;
 	}
