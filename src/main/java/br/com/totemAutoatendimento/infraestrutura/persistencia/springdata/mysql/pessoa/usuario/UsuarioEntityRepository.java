@@ -1,10 +1,12 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.usuario;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import br.com.totemAutoatendimento.dominio.pessoa.Email;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.UsuarioRepository;
 
@@ -31,11 +33,29 @@ public class UsuarioEntityRepository implements UsuarioRepository {
 	}
 
 	@Override
-	public Usuario buscar(Long id) {
+	public Optional<Usuario> buscar(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
+	public Optional<Usuario> buscarPorCpf(String cpf) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Optional<Usuario> buscarPorRegistro(String registro) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Optional<Usuario> buscarPorEmail(Email email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public List<Usuario> buscarTodos() {
 		// TODO Auto-generated method stub

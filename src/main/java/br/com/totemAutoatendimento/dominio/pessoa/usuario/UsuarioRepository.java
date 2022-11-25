@@ -1,6 +1,9 @@
 package br.com.totemAutoatendimento.dominio.pessoa.usuario;
 
 import java.util.List;
+import java.util.Optional;
+
+import br.com.totemAutoatendimento.dominio.pessoa.Email;
 
 public interface UsuarioRepository {
 
@@ -10,7 +13,13 @@ public interface UsuarioRepository {
 	
 	Usuario editar(Long id, Usuario usuarioAtualizado);
 	
-	Usuario buscar(Long id);
+	Optional<Usuario> buscar(Long id);
+	
+	Optional<Usuario> buscarPorCpf(String cpf);
+	
+	Optional<Usuario> buscarPorRegistro(String registro);
+	
+	Optional<Usuario> buscarPorEmail(Email email);
 	
 	List<Usuario> buscarTodos();
 	
