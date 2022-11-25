@@ -2,16 +2,16 @@ package br.com.totemAutoatendimento.aplicacao.pessoa.usuario;
 
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.UsuarioRepository;
 
-public class RemoverUsuario {
+public class BuscarDadosDeUsuario {
 
 	private UsuarioRepository repository;
 
-	public RemoverUsuario(UsuarioRepository repository) {
+	public BuscarDadosDeUsuario(UsuarioRepository repository) {
 		this.repository = repository;
 	}
 	
-	public void executar(Long id) {
+	public DadosDeUsuario executar(Long id) {
 		BuscarUsuario buscarUsuario = new BuscarUsuario(repository);
-		repository.remover(buscarUsuario.executar(id));
+		return new DadosDeUsuario(buscarUsuario.executar(id));
 	}
 }

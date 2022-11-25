@@ -11,7 +11,7 @@ public interface UsuarioRepository {
 	
 	void remover(Usuario usuario);
 	
-	Usuario editar(Long id, Usuario usuarioAtualizado);
+	Usuario editar(Usuario usuarioAtualizado);
 	
 	Optional<Usuario> buscar(Long id);
 	

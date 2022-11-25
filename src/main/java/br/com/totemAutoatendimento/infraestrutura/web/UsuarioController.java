@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarDadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarTodosUsuarios;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.CriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosCriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosEditarUsuario;
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.EditarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.RemoverUsuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.CodificadorDeSenha;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
@@ -57,10 +60,17 @@ public class UsuarioController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PutMapping
+	@Transactional
+	public ResponseEntity<DadosDeUsuario> editarUsuario(@RequestBody @Valid DadosEditarUsuario dados){
+		EditarUsuario editarUsuario = new EditarUsuario(repository);
+		return ResponseEntity.ok().body(editarUsuario.executar(dados));
+	}
+	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DadosDeUsuario> buscarUsuario(@PathVariable Long id){
-		BuscarUsuario buscarUsuario = new BuscarUsuario(repository);
-		return ResponseEntity.ok().body(buscarUsuario.executar(id));
+		BuscarDadosDeUsuario buscarDadosDeUsuario = new BuscarDadosDeUsuario(repository);
+		return ResponseEntity.ok().body(buscarDadosDeUsuario.executar(id));
 	}
 	
 	@GetMapping

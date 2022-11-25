@@ -28,9 +28,8 @@ public class UsuarioEntityRepository implements UsuarioRepository {
 	}
 
 	@Override
-	public Usuario editar(Long id, Usuario usuarioAtualizado) {
-		// TODO Auto-generated method stub
-		return null;
+	public Usuario editar(Usuario usuarioAtualizado) {
+		return repository.save(new UsuarioEntity(usuarioAtualizado)).converterParaUsuario();
 	}
 
 	@Override
