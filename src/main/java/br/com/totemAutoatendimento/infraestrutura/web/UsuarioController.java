@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarTodosUsuarios;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.CriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosCriarUsuario;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosDoUsuario;
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.RemoverUsuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.CodificadorDeSenha;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
@@ -56,8 +58,14 @@ public class UsuarioController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<DadosDoUsuario> buscarUsuario(@PathVariable Long id){
+	public ResponseEntity<DadosDeUsuario> buscarUsuario(@PathVariable Long id){
 		BuscarUsuario buscarUsuario = new BuscarUsuario(repository);
 		return ResponseEntity.ok().body(buscarUsuario.executar(id));
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<DadosDeUsuario>> buscarTodosUsuarios(){
+		BuscarTodosUsuarios buscarTodosUsuarios = new BuscarTodosUsuarios(repository);
+		return ResponseEntity.ok().body(buscarTodosUsuarios.executar());
 	}
 }

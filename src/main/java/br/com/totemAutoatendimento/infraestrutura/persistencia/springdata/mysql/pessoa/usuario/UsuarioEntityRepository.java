@@ -71,8 +71,7 @@ public class UsuarioEntityRepository implements UsuarioRepository {
 	
 	@Override
 	public List<Usuario> buscarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAll().stream().map(UsuarioEntity::converterParaUsuario).toList();
 	}
 
 }

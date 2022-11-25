@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DadosDoUsuario {
+public class DadosDeUsuario {
 
 	private Long id;
 
@@ -24,7 +24,7 @@ public class DadosDoUsuario {
 
 	private List<Perfil> perfis = new ArrayList<>();
 	
-	public DadosDoUsuario(Usuario usuario) {
+	public DadosDeUsuario(Usuario usuario) {
 		this.id = usuario.getId();
 		this.nome = usuario.getNome();
 		this.cpf = usuario.getCpf();

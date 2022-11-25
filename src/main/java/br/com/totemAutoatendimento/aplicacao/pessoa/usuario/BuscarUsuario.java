@@ -14,12 +14,12 @@ public class BuscarUsuario {
 		this.repository = repository;
 	}
 
-	public DadosDoUsuario executar(Long id) {
+	public DadosDeUsuario executar(Long id) {
 		Optional<Usuario> usuario = repository.buscar(id);
 		if(usuario.isEmpty()) {
 			throw new ObjetoNaoEncontradoException("Usuário com id " + id + " não encontrado!");
 		}
-		return new DadosDoUsuario(usuario.get());
+		return new DadosDeUsuario(usuario.get());
 	}
 
 }
