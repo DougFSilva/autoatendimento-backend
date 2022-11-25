@@ -5,7 +5,6 @@ import java.util.List;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.pessoa.Email;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.CodificadorDeSenha;
-import br.com.totemAutoatendimento.dominio.pessoa.usuario.DadosCriarUsuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Password;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
