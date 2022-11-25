@@ -2,6 +2,7 @@ package br.com.totemAutoatendimento.aplicacao.pessoa.usuario;
 
 import java.util.List;
 
+import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.pessoa.Email;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
@@ -16,8 +17,12 @@ public class EditarUsuario {
 	}
 	
 	public DadosDeUsuario executar(DadosEditarUsuario dados) {
-		VerificadorDeDadosDeUsuario verificadorDeDados = new VerificadorDeDadosDeUsuario(repository);
-		verificadorDeDados.executar(dados.cpf(), dados.registro(), new Email(dados.email()));
+		if (repository.buscarPorCpf(dados.cpf()).isPresent()) {
+			throw new ViolacaoDeIntegridadeDeDadosException("Usuário com cpf " + dados.cpf() + " já cadastrado!");
+		}
+		if (repository.buscarPorRegistro(dados.registro()).isPresent()) {
+			throw new ViolacaoDeIntegridadeDeDadosException("Usuário com registro " + dados.registro() + " já cadastrado!");
+		}
 		BuscarUsuario buscarUsuario = new BuscarUsuario(repository);
 		Usuario usuario = buscarUsuario.executar(dados.id());
 		usuario.setNome(dados.nome());

@@ -1,7 +1,8 @@
-package br.com.totemAutoatendimento.dominio.pessoa.cliente;
+package br.com.totemAutoatendimento.aplicacao.pessoa.cliente;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import br.com.totemAutoatendimento.dominio.pessoa.Estado;
@@ -19,9 +20,9 @@ public record DadosCriarCliente(
 		String telefone, 
 		
 		@Email
-		String enderecoEmail, 
+		String email, 
 		
-		@NotBlank
+		@NotNull
 		Estado estado,
 		
 		@NotBlank

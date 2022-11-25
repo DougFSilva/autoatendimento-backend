@@ -16,7 +16,7 @@ import lombok.Setter;
 @Embeddable
 public class EmailEntity {
 
-	@Column(name = "email", unique = true)
+	@Column(name = "email")
 	private String endereco;
 	
 	public EmailEntity(Email email) {

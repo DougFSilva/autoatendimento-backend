@@ -1,16 +1,21 @@
 package br.com.totemAutoatendimento.dominio.pessoa.cliente;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ClienteRepository {
 
 	Cliente criar(Cliente cliente);
 	
-	void remover(Long id);
+	void remover(Cliente cliente);
 	
-	Cliente editar(Long id, Cliente clienteAtualizado);
+	Cliente editar(Cliente clienteAtualizado);
 	
-	Cliente buscar(Long id);
+	Optional<Cliente> buscar(Long id);
+	
+	Optional<Cliente> buscarClientePorCpf(String cpf);
 	
 	List<Cliente> buscarPorCidade(String cidade);
+	
+	List<Cliente> buscarTodos();
 }

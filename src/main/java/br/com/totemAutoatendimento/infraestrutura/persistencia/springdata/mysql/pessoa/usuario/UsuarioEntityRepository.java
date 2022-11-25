@@ -6,10 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.totemAutoatendimento.dominio.pessoa.Email;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.UsuarioRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.EmailEntity;
 
 @Repository
 public class UsuarioEntityRepository implements UsuarioRepository {
@@ -59,15 +57,6 @@ public class UsuarioEntityRepository implements UsuarioRepository {
 		return Optional.empty();
 	}
 
-	@Override
-	public Optional<Usuario> buscarPorEmail(Email email) {
-		Optional<UsuarioEntity> entity = repository.findByEmail(new EmailEntity(email.getEndereco()));
-		if(entity.isPresent()) {
-			return Optional.of(entity.get().converterParaUsuario());
-		}
-		return Optional.empty();
-	}
-	
 	@Override
 	public List<Usuario> buscarTodos() {
 		return repository.findAll().stream().map(UsuarioEntity::converterParaUsuario).toList();
