@@ -29,8 +29,7 @@ public class ClienteEntityRepository implements ClienteRepository{
 
 	@Override
 	public Cliente editar(Cliente clienteAtualizado) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.save(new ClienteEntity(clienteAtualizado)).converterParaCliente();
 	}
 
 	@Override

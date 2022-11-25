@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.CriarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.DadosCriarCliente;
+import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.DadosEditarCliente;
+import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.EditarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.RemoverCliente;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
@@ -49,5 +52,11 @@ public class ClienteController {
 		RemoverCliente removerCliente = new RemoverCliente(repository);
 		removerCliente.executar(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping
+	public ResponseEntity<Cliente> editarCliente (@RequestBody @Valid DadosEditarCliente dados){
+		EditarCliente editarCliente = new EditarCliente(repository);
+		return ResponseEntity.ok().body(editarCliente.executar(dados));
 	}
 }
