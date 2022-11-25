@@ -1,5 +1,6 @@
 package br.com.totemAutoatendimento.aplicacao.pessoa.cliente;
 
+import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
 
 public class RemoverCliente {
@@ -11,6 +12,8 @@ public class RemoverCliente {
 	}
 	
 	public void executar(Long id) {
-		
+		BuscarCliente buscaCliente = new BuscarCliente(repository);
+		Cliente cliente = buscaCliente.executar(id);
+		repository.remover(cliente);
 	}
 }

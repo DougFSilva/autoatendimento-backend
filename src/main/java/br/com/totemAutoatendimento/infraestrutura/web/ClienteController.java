@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.CriarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.DadosCriarCliente;
+import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.RemoverCliente;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
 
@@ -40,5 +42,12 @@ public class ClienteController {
 	public ResponseEntity<Cliente> buscarCliente(@PathVariable Long id){
 		BuscarCliente buscarCliente = new BuscarCliente(repository);
 		return ResponseEntity.ok().body(buscarCliente.executar(id));
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> removerCliente(@PathVariable Long id){
+		RemoverCliente removerCliente = new RemoverCliente(repository);
+		removerCliente.executar(id);
+		return ResponseEntity.noContent().build();
 	}
 }

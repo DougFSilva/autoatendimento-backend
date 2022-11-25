@@ -44,6 +44,4 @@ public class ExceptionHandlerController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
 	}
 	
-	
-	
 }

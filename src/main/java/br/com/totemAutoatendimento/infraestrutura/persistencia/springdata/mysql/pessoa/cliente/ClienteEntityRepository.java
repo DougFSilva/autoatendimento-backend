@@ -23,7 +23,7 @@ public class ClienteEntityRepository implements ClienteRepository{
 
 	@Override
 	public void remover(Cliente cliente) {
-		// TODO Auto-generated method stub
+		repository.delete(new ClienteEntity(cliente));
 		
 	}
 
