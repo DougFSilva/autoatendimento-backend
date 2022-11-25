@@ -9,7 +9,7 @@ public interface UsuarioRepository {
 
 	Usuario criar(Usuario usuario);
 	
-	void remover(Long id);
+	void remover(Usuario usuario);
 	
 	Usuario editar(Long id, Usuario usuarioAtualizado);
 	

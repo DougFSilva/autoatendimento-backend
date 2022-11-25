@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.CriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosCriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosDoUsuario;
+import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.RemoverUsuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.CodificadorDeSenha;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.UsuarioRepository;
@@ -44,6 +46,13 @@ public class UsuarioController {
 				.buildAndExpand(usuario.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> removerUsuario(@PathVariable Long id){
+		RemoverUsuario removerUsuario = new RemoverUsuario(repository);
+		removerUsuario.executar(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping(value = "/{id}")

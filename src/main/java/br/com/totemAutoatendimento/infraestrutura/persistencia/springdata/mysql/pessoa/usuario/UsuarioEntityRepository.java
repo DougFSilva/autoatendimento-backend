@@ -22,8 +22,8 @@ public class UsuarioEntityRepository implements UsuarioRepository {
 	}
 
 	@Override
-	public void remover(Long id) {
-		// TODO Auto-generated method stub
+	public void remover(Usuario usuario) {
+		repository.delete(new UsuarioEntity(usuario));
 		
 	}
 
