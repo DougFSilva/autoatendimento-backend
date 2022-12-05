@@ -1,9 +1,10 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
@@ -51,13 +52,13 @@ public class ClienteEntityRepository implements ClienteRepository{
 	}
 
 	@Override
-	public List<Cliente> buscarPorCidade(String cidade) {
-		return repository.findAllByEnderecoCidade(cidade).stream().map(ClienteEntity::converterParaCliente).toList();
+	public Page<Cliente> buscarPorCidade(Pageable paginacao, String cidade) {
+		return repository.findAllByEnderecoCidade(paginacao, cidade).map(ClienteEntity::converterParaCliente);
 	}
 
 	@Override
-	public List<Cliente> buscarTodos() {
-		return repository.findAll().stream().map(ClienteEntity::converterParaCliente).toList();
+	public Page<Cliente> buscarTodos(Pageable paginacao) {
+		return repository.findAll(paginacao).map(ClienteEntity::converterParaCliente);
 	}
 
 }

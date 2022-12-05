@@ -1,11 +1,12 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,14 +69,14 @@ public class ClienteController {
 	}
 	
 	@GetMapping(value = "/cidade/{cidade}")
-	public ResponseEntity<List<DadosDeCliente>> buscarClientesPorCidade(@PathVariable String cidade){
+	public ResponseEntity<Page<DadosDeCliente>> buscarClientesPorCidade(Pageable paginacao, @PathVariable String cidade){
 		BuscarClientesPorCidade buscarClientesPorCidade = new BuscarClientesPorCidade(repository);
-		return ResponseEntity.ok().body(buscarClientesPorCidade.executar(cidade));
+		return ResponseEntity.ok().body(buscarClientesPorCidade.executar(paginacao, cidade));
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<DadosDeCliente>> buscarTodosClientes(){
+	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao){
 		BuscarTodosClientes buscarTodosClientes = new BuscarTodosClientes(repository);
-		return ResponseEntity.ok().body(buscarTodosClientes.executar());
+		return ResponseEntity.ok().body(buscarTodosClientes.executar(paginacao));
 	}
 }

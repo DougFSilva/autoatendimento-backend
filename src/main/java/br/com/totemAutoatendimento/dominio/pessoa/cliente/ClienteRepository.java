@@ -1,7 +1,9 @@
 package br.com.totemAutoatendimento.dominio.pessoa.cliente;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ClienteRepository {
 
@@ -15,7 +17,7 @@ public interface ClienteRepository {
 	
 	Optional<Cliente> buscarClientePorCpf(String cpf);
 	
-	List<Cliente> buscarPorCidade(String cidade);
+	Page<Cliente> buscarPorCidade(Pageable paginacao, String cidade);
 	
-	List<Cliente> buscarTodos();
+	Page<Cliente> buscarTodos(Pageable paginacao);
 }

@@ -1,6 +1,8 @@
 package br.com.totemAutoatendimento.aplicacao.pessoa.cliente;
 
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
 
@@ -12,7 +14,7 @@ public class BuscarTodosClientes {
 		this.repository = repository;
 	}
 	
-	public List<DadosDeCliente> executar() {
-		return this.repository.buscarTodos().stream().map(DadosDeCliente::new).toList();
+	public Page<DadosDeCliente> executar(Pageable paginacao) {
+		return this.repository.buscarTodos(paginacao).map(DadosDeCliente::new);
 	}
 }

@@ -1,6 +1,8 @@
 package br.com.totemAutoatendimento.aplicacao.pessoa.cliente;
 
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
 
@@ -12,7 +14,7 @@ public class BuscarClientesPorCidade {
 		this.repository = repository;
 	}
 	
-	public List<DadosDeCliente> executar(String cidade){
-		return this.repository.buscarPorCidade(cidade).stream().map(DadosDeCliente::new).toList();
+	public Page<DadosDeCliente> executar(Pageable paginacao, String cidade){
+		return this.repository.buscarPorCidade(paginacao, cidade).map(DadosDeCliente::new);
 	}
 }
