@@ -52,14 +52,12 @@ public class ClienteEntityRepository implements ClienteRepository{
 
 	@Override
 	public List<Cliente> buscarPorCidade(String cidade) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAllByEnderecoCidade(cidade).stream().map(ClienteEntity::converterParaCliente).toList();
 	}
 
 	@Override
 	public List<Cliente> buscarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAll().stream().map(ClienteEntity::converterParaCliente).toList();
 	}
 
 }

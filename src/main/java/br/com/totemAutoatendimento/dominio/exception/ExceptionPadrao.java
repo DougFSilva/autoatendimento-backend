@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.web;
+package br.com.totemAutoatendimento.dominio.exception;
 
 public class ExceptionPadrao {
 

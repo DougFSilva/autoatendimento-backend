@@ -1,5 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.pessoa.cliente;
 
+import java.util.Optional;
+
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.pessoa.Email;
 import br.com.totemAutoatendimento.dominio.pessoa.Endereco;
@@ -14,8 +16,9 @@ public class EditarCliente {
 		this.repository = repository;
 	}
 	
-	public Cliente executar(DadosEditarCliente dados) {
-		if(repository.buscarClientePorCpf(dados.cpf()).isPresent()) {
+	public DadosDeCliente executar(DadosEditarCliente dados) {
+		Optional<Cliente> clientePorCpf = repository.buscarClientePorCpf(dados.cpf());
+		if(clientePorCpf.isPresent() && clientePorCpf.get().getId() != dados.id()) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Cliente com cpf " + dados.cpf() + " já cadastrado!");
 		}
 		BuscarCliente buscarCliente = new BuscarCliente(repository);
@@ -26,7 +29,8 @@ public class EditarCliente {
 		cliente.setEmail(new Email(dados.email()));
 		Endereco endereco = new Endereco(null, dados.estado(), dados.cidade(), dados.bairro(), dados.rua(), dados.numero());
 		cliente.setEndereco(endereco);
-		return repository.editar(cliente);
+		return new DadosDeCliente(repository.editar(cliente));
 		
 	}
+	
 }
