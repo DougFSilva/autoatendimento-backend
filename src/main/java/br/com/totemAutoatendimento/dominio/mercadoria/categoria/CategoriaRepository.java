@@ -9,11 +9,11 @@ public interface CategoriaRepository {
 	
 	void remover(Categoria categoria);
 	
-	Categoria editar(Long id, Categoria categoriaAtualizada);
+	Categoria editar(Categoria categoriaAtualizada);
 	
 	Optional<Categoria> buscar(Long id);
 	
-	Optional<Categoria> buscarCategoriaPorNome(String nome);
+	Optional<Categoria> buscarPorNome(String nome);
 	
 	List<Categoria> buscarTodas();
 	

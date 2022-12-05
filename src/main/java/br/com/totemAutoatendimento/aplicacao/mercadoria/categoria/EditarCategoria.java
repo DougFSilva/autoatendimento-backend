@@ -17,7 +17,7 @@ public class EditarCategoria {
 	public Categoria executar(Categoria categoriaAtualizada) {
 		BuscarCategoria buscarCategoria = new BuscarCategoria(repository);
 		Categoria categoria = buscarCategoria.executar(categoriaAtualizada.getId());
-		Optional<Categoria> categoriaPorNome = repository.buscarCategoriaPorNome(categoriaAtualizada.getNome());
+		Optional<Categoria> categoriaPorNome = repository.buscarPorNome(categoriaAtualizada.getNome());
 		if (categoriaPorNome.isPresent() && categoriaPorNome.get().getId() != categoriaAtualizada.getId()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					"Categoria com nome " + categoriaAtualizada.getNome() + " já cadastrada!");

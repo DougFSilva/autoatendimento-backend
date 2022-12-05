@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria;
+package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +26,8 @@ public class CategoriaEntityRepository implements CategoriaRepository{
 	}
 
 	@Override
-	public Categoria editar(Long id, Categoria categoriaAtualizada) {
-		// TODO Auto-generated method stub
-		return null;
+	public Categoria editar(Categoria categoriaAtualizada) {
+		return repository.save(new CategoriaEntity(categoriaAtualizada)).converterParaCategoria();
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class CategoriaEntityRepository implements CategoriaRepository{
 	}
 
 	@Override
-	public Optional<Categoria> buscarCategoriaPorNome(String nome) {
+	public Optional<Categoria> buscarPorNome(String nome) {
 		Optional<CategoriaEntity> entity = repository.findByNome(nome);
 		if(entity.isPresent()) {
 			return Optional.of(entity.get().converterParaCategoria());

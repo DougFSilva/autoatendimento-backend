@@ -15,7 +15,7 @@ private CategoriaRepository repository;
 	}
 	
 	public Categoria executar(String nome) {
-	 Optional<Categoria> categoria = repository.buscarCategoriaPorNome(nome);
+	 Optional<Categoria> categoria = repository.buscarPorNome(nome);
 	 return categoria.orElseThrow(() -> new ObjetoNaoEncontradoException("Categoria com nome " + nome + " não encontrada!"));
 	}
 }

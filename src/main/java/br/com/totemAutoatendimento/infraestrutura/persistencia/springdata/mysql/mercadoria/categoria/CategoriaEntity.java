@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria;
+package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

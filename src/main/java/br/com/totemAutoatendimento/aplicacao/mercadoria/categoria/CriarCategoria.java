@@ -13,7 +13,7 @@ public class CriarCategoria {
 	}
 	
 	public Categoria executar(String nome) {
-		if(repository.buscarCategoriaPorNome(nome).isPresent()) {
+		if(repository.buscarPorNome(nome).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Categoria com nome " + nome + " já cadastrada!");
 		}
 		Categoria categoria = new Categoria(null, nome);
