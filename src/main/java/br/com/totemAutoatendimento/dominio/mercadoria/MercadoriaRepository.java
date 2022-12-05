@@ -2,6 +2,9 @@ package br.com.totemAutoatendimento.dominio.mercadoria;
 
 import java.util.List;
 
+import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
+import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Subcategoria;
+
 public interface MercadoriaRepository {
 
 	Mercadoria criar(Mercadoria mercadoria);

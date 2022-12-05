@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.dominio.mercadoria;
+package br.com.totemAutoatendimento.dominio.mercadoria.categoria;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Subcategoria {
+public class Categoria {
 
 	private Long id;
 	
