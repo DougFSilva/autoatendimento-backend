@@ -28,24 +28,33 @@ import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.DadosEditarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.EditarUsuario;
 import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.RemoverUsuario;
-import br.com.totemAutoatendimento.dominio.pessoa.usuario.CodificadorDeSenha;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
-import br.com.totemAutoatendimento.dominio.pessoa.usuario.UsuarioRepository;
 
 @RestController
 @RequestMapping(value = "/usuario")
 public class UsuarioController {
 
 	@Autowired
-	private UsuarioRepository repository;
+	private CriarUsuario criarUsuario;
 
 	@Autowired
-	private CodificadorDeSenha codificador;
+	private RemoverUsuario removerUsuario;
+
+	@Autowired
+	private EditarUsuario editarUsuario;
+
+	@Autowired
+	private AlterarSenhaDeUsuario alterarSenhaDeUsuario;
+
+	@Autowired
+	private BuscarDadosDeUsuario buscarDadosDeUsuario;
+
+	@Autowired
+	private BuscarTodosUsuarios buscarTodosUsuarios;
 
 	@PostMapping
 	@Transactional
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid DadosCriarUsuario dados) {
-		CriarUsuario criarUsuario = new CriarUsuario(repository, codificador);
 		Usuario usuario = criarUsuario.executar(dados);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -57,7 +66,6 @@ public class UsuarioController {
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> removerUsuario(@PathVariable Long id){
-		RemoverUsuario removerUsuario = new RemoverUsuario(repository);
 		removerUsuario.executar(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -65,27 +73,23 @@ public class UsuarioController {
 	@PutMapping
 	@Transactional
 	public ResponseEntity<DadosDeUsuario> editarUsuario(@RequestBody @Valid DadosEditarUsuario dados){
-		EditarUsuario editarUsuario = new EditarUsuario(repository);
 		return ResponseEntity.ok().body(editarUsuario.executar(dados));
 	}
 	
 	@PutMapping(value = "/alterar-senha")
 	@Transactional
 	public ResponseEntity<Void> alterarSenhaDeUsuario(@RequestBody @Valid DadosAlterarSenhaDeUsuario dados){
-		AlterarSenhaDeUsuario alterarSenhaDeUsuario = new AlterarSenhaDeUsuario(repository, codificador);
 		alterarSenhaDeUsuario.executar(dados);
 		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DadosDeUsuario> buscarUsuario(@PathVariable Long id){
-		BuscarDadosDeUsuario buscarDadosDeUsuario = new BuscarDadosDeUsuario(repository);
 		return ResponseEntity.ok().body(buscarDadosDeUsuario.executar(id));
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<DadosDeUsuario>> buscarTodosUsuarios(){
-		BuscarTodosUsuarios buscarTodosUsuarios = new BuscarTodosUsuarios(repository);
 		return ResponseEntity.ok().body(buscarTodosUsuarios.executar());
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoException;
 import br.com.totemAutoatendimento.dominio.exception.ExceptionPadrao;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.VerificacaoDeSenhaException;
@@ -40,6 +41,13 @@ public class ExceptionHandlerController {
 	
 	@ExceptionHandler(VerificacaoDeSenhaException.class)
 	public ResponseEntity<ExceptionPadrao> verificacaoDeSenhaException(VerificacaoDeSenhaException exception) {
+		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
+				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
+	}
+
+	@ExceptionHandler(ErroNoUploadDeArquivoException.class)
+	public ResponseEntity<ExceptionPadrao> erroNoUploadDeArquivoException(ErroNoUploadDeArquivoException exception) {
 		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
 				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);

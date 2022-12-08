@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.categoria;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
@@ -13,7 +14,7 @@ public class BuscarTodasCategorias {
 		this.repository = repository;
 	}
 	
-	public List<Categoria> executar(){
-		return repository.buscarTodas();
+	public Page<Categoria> executar(Pageable paginacao){
+		return repository.buscarTodas(paginacao);
 	}
 }

@@ -29,54 +29,64 @@ import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.DadosEditarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.EditarCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.RemoverCliente;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
-import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
 
 @RestController
 @RequestMapping(value = "/cliente")
 public class ClienteController {
-	
+
 	@Autowired
-	private ClienteRepository repository;
+	private CriarCliente criarCliente;
+
+	@Autowired
+	private RemoverCliente removerCliente;
+
+	@Autowired
+	private EditarCliente editarCliente;
+
+	@Autowired
+	private BuscarDadosDeCliente buscarDadosDeCliente;
+
+	@Autowired
+	private BuscarClientesPorCidade buscarClientesPorCidade;
+
+	@Autowired
+	private BuscarTodosClientes buscarTodosClientes;
 	
+
 	@PostMapping
 	@Transactional
-	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados){
-		CriarCliente criarCliente = new CriarCliente(repository);
+	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
 		Cliente cliente = criarCliente.executar(dados);
-		System.out.println(cliente);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
+				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> removerCliente(@PathVariable Long id){
-		RemoverCliente removerCliente = new RemoverCliente(repository);
+	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
 		removerCliente.executar(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@PutMapping
 	@Transactional
-	public ResponseEntity<DadosDeCliente> editarCliente (@RequestBody @Valid DadosEditarCliente dados){
-		EditarCliente editarCliente = new EditarCliente(repository);
+	public ResponseEntity<DadosDeCliente> editarCliente(@RequestBody @Valid DadosEditarCliente dados) {
 		return ResponseEntity.ok().body(editarCliente.executar(dados));
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<DadosDeCliente> buscarCliente(@PathVariable Long id){
-		BuscarDadosDeCliente buscarDadosDeCliente = new BuscarDadosDeCliente(repository);
+	public ResponseEntity<DadosDeCliente> buscarCliente(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscarDadosDeCliente.executar(id));
 	}
-	
+
 	@GetMapping(value = "/cidade/{cidade}")
-	public ResponseEntity<Page<DadosDeCliente>> buscarClientesPorCidade(Pageable paginacao, @PathVariable String cidade){
-		BuscarClientesPorCidade buscarClientesPorCidade = new BuscarClientesPorCidade(repository);
+	public ResponseEntity<Page<DadosDeCliente>> buscarClientesPorCidade(Pageable paginacao,
+			@PathVariable String cidade) {
 		return ResponseEntity.ok().body(buscarClientesPorCidade.executar(paginacao, cidade));
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao){
-		BuscarTodosClientes buscarTodosClientes = new BuscarTodosClientes(repository);
+	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscarTodosClientes.executar(paginacao));
 	}
 }

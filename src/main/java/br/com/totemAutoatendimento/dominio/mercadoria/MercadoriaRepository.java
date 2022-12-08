@@ -1,6 +1,9 @@
 package br.com.totemAutoatendimento.dominio.mercadoria;
 
-import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
@@ -9,17 +12,17 @@ public interface MercadoriaRepository {
 
 	Mercadoria criar(Mercadoria mercadoria);
 	
-	void remover(Long id);
+	void remover(Mercadoria mercadoria);
 	
-	Mercadoria editar(Long id, Mercadoria mercadoriaAtualizada);
+	Mercadoria editar(Mercadoria mercadoriaAtualizada);
 	
-	Mercadoria buscar(Long id);
+	Optional<Mercadoria> buscar(Long id);
 	
-	List<Mercadoria> buscarPorCategoria(Categoria categoria);
+	Page<Mercadoria> buscarPorCategoria(Pageable paginacao, Categoria categoria);
 	
-	List<Mercadoria> buscarPorSubcategoria(Subcategoria subcatergoria);
+	Page<Mercadoria> buscarPorSubcategoria(Pageable paginacao, Subcategoria subcatergoria);
 	
-	List<Mercadoria> buscarPorPromocao(Boolean promocao);
+	Page<Mercadoria> buscarEmPromocao(Pageable paginacao, Boolean promocao);
 	
-	List<Mercadoria> buscarTodas();
+	Page<Mercadoria> buscarTodas(Pageable paginacao);
 }

@@ -8,11 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Mercadoria {
 
 	private Long id;
@@ -30,5 +32,7 @@ public class Mercadoria {
 	private Boolean promocao;
 	
 	private BigDecimal precoPromocional;
-	
+
+	private String imagem;
+
 }
