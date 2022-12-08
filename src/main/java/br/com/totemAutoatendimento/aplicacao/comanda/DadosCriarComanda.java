@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.dominio.comanda;
+package br.com.totemAutoatendimento.aplicacao.comanda;
 
 public record DadosCriarComanda(String cartao, Long idCliente) {
 

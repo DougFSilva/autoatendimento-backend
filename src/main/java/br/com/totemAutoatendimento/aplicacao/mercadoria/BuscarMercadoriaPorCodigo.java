@@ -3,7 +3,6 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria;
 import java.util.Optional;
 
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 

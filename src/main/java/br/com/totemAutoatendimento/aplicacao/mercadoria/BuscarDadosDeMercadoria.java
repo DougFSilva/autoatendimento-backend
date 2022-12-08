@@ -1,6 +1,5 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 
 public class BuscarDadosDeMercadoria {

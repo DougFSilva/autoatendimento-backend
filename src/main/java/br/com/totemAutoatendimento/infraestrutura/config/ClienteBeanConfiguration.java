@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarClientePorCpf;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarClientesPorCidade;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarDadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarTodosClientes;
@@ -36,6 +37,11 @@ public class ClienteBeanConfiguration {
     @Bean
     public BuscarDadosDeCliente buscarDadosDeCliente() {
         return new BuscarDadosDeCliente(repository);
+    }
+
+    @Bean
+    public BuscarClientePorCpf buscarClientePorCpf() {
+        return new BuscarClientePorCpf(repository);
     }
 
     @Bean

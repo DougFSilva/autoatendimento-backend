@@ -1,8 +1,8 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 

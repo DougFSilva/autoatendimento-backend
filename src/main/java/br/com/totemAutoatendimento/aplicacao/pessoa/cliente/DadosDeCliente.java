@@ -2,14 +2,10 @@ package br.com.totemAutoatendimento.aplicacao.pessoa.cliente;
 
 import br.com.totemAutoatendimento.dominio.pessoa.Estado;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
 @Getter
-@Setter
 @ToString
 public class DadosDeCliente {
 

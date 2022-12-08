@@ -1,26 +1,33 @@
 package br.com.totemAutoatendimento.dominio.comanda;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
 
 public interface ComandaRepository {
 
 	Comanda criar(Comanda comanda);
 	
-	void remover(Long id);
+	void remover(Comanda comanda);
 	
-	Comanda editar(Long id, Comanda comandaAtualizada);
+	Comanda editar(Comanda comandaAtualizada);
 	
-	Comanda buscar(Long id);
+	Optional<Comanda> buscar(Long id);
+
+	Optional<Comanda> buscarComandaPorCartao(String cartao, Boolean aberta);
 	
-	List<Comanda> buscarPorCliente(Long id);
+	Page<Comanda> buscarPorCliente(Pageable paginacao, Cliente cliente);
 	
-	List<Comanda> buscarPorData(LocalDateTime dataInicial, LocalDateTime dataFinal);
+	Page<Comanda> buscarPorData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal);
 	
-	List<Comanda> buscarPorTipoDePagamento(TipoPagamento tipoPagamento);
+	Page<Comanda> buscarPorTipoDePagamento(Pageable paginacao, TipoPagamento tipoPagamento);
 	
-	List<Comanda> buscarAbertas();
+	Page<Comanda> buscarAbertas(Pageable paginacao, Boolean aberta);
 	
-	List<Comanda> buscarTodas();
+	Page<Comanda> buscarTodas(Pageable paginacao);
 	
 }

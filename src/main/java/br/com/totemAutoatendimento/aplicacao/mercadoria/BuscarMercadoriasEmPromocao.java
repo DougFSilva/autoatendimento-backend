@@ -3,7 +3,6 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 
 public class BuscarMercadoriasEmPromocao {

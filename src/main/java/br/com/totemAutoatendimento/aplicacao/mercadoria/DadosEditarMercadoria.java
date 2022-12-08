@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.dominio.mercadoria;
+package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
 import java.math.BigDecimal;
 

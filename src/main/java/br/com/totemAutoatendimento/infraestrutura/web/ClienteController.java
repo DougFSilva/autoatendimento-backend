@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarClientePorCpf;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarClientesPorCidade;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarDadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarTodosClientes;
@@ -45,6 +46,9 @@ public class ClienteController {
 
 	@Autowired
 	private BuscarDadosDeCliente buscarDadosDeCliente;
+
+	@Autowired
+	private BuscarClientePorCpf buscarClientePorCpf;
 
 	@Autowired
 	private BuscarClientesPorCidade buscarClientesPorCidade;
@@ -77,6 +81,11 @@ public class ClienteController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<DadosDeCliente> buscarCliente(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscarDadosDeCliente.executar(id));
+	}
+
+	@GetMapping(value = "/cp0/{cpf}")
+	public ResponseEntity<DadosDeCliente> buscarClientePorCpf(@PathVariable String cpf){
+		return ResponseEntity.ok().body(buscarClientePorCpf.executar(cpf));
 	}
 
 	@GetMapping(value = "/cidade/{cidade}")

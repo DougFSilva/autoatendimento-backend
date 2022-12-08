@@ -6,10 +6,10 @@ import java.util.List;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.pessoa.usuario.Usuario;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@Setter
+@ToString
 public class DadosDeUsuario {
 
 	private Long id;

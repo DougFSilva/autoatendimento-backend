@@ -2,6 +2,7 @@ package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -18,19 +19,26 @@ public class ComandaSpringDataRepository implements ComandaRepository{
 	}
 
 	@Override
-	public void remover(Long id) {
+	public void remover(Comanda comanda) {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public Comanda editar(Long id, Comanda comandaAtualizada) {
+	public Comanda editar(Comanda comandaAtualizada) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Comanda buscar(Long id) {
+	public Optional<Comanda> buscar(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	@Override
+	public Optional<Comanda> buscarComandaPorCartao(String cartao, Boolean aberta) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,7 +73,5 @@ public class ComandaSpringDataRepository implements ComandaRepository{
 		return null;
 	}
 
-	
-	
 	
 }

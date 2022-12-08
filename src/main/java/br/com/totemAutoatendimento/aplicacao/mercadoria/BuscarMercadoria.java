@@ -1,7 +1,5 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
-import java.util.Optional;
-
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
@@ -15,8 +13,7 @@ public class BuscarMercadoria {
     }
 
     public Mercadoria executar(Long id) {
-        Optional<Mercadoria> mercadoria = repository.buscar(id);
-        return mercadoria
+        return repository.buscar(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Mercadoria com id " + id + " não encontrada!"));
     }
 }

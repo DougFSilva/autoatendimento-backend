@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscarSubcategoriaPorNome;
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;

@@ -2,22 +2,18 @@ package br.com.totemAutoatendimento.aplicacao.comanda;
 
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
-import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
 
-public class RemoverComanda {
+public class BuscarDadosDeComanda {
 
     private ComandaRepository repository;
 
-    public RemoverComanda(ComandaRepository repository){
+    public BuscarDadosDeComanda(ComandaRepository repository){
         this.repository = repository;
     }
 
-    public void executar(Long id){
+    public DadosDeComanda executar(Long id){
         BuscarComanda buscarComanda = new BuscarComanda(repository);
         Comanda comanda = buscarComanda.executar(id);
-        if(comanda.getAberta()){
-            throw new RegrasDeNegocioException("Não é possível remover uma comanda aberta!");
-        }
-        repository.remover(comanda);
+        return new DadosDeComanda(comanda);
     }
 }

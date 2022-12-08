@@ -33,13 +33,13 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorCate
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarTodasMercadorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.CriarMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosCriarMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosDeMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoverQuantidadeDeMercadoria;
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosCriarMercadoria;
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
-import br.com.totemAutoatendimento.dominio.mercadoria.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 
 @RestController

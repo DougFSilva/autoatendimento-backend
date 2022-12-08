@@ -18,6 +18,8 @@ public class Pedido {
 	private Long id;
 	
 	private Mercadoria mercadoria;
+
+	private Integer quantidade;
 	
 	private LocalDate data;
 	
