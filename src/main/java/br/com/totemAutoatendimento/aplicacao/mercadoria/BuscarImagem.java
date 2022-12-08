@@ -8,9 +8,10 @@ import java.io.IOException;
 import br.com.totemAutoatendimento.dominio.exception.ArquivoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ErroNaConversaoDaImagemEmByteArrayException;
 
-public class BuscarImagemDaMercadoria {
+public class BuscarImagem {
 
     public byte[] executar(String path) {
+        System.out.println("====="+ path);
         File file = new File(path);
         byte[] imagem = new byte[(int) file.length()];
         FileInputStream fileInputStream;

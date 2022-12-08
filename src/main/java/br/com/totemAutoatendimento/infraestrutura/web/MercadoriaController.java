@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarDadosDeMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarImagemDaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriaPorCodigo;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasEmPromocao;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorCategoria;
@@ -34,7 +34,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarTodasMercadorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.CriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemDeMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.DadosCriarMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.DadosEditarMercadoria;
@@ -75,7 +75,7 @@ public class MercadoriaController {
     private BuscarTodasMercadorias buscarTodasMercadorias;
 
     @Autowired
-    private UploadImagemDeMercadoria uploadImagemDeMercadoria;
+    private UploadImagemMercadoria uploadImagemDeMercadoria;
 
     @PostMapping
     @Transactional
@@ -144,8 +144,8 @@ public class MercadoriaController {
     @GetMapping(value = "/imagem/{nomeDaImagem}")
     public ResponseEntity<byte[]> buscarImagemDaMercadoria(@PathVariable String nomeDaImagem) {
         String extensao = nomeDaImagem.split("\\.")[1];
-        BuscarImagemDaMercadoria buscarImagemDaMercadoria = new BuscarImagemDaMercadoria();
-        byte[] imagem = buscarImagemDaMercadoria.executar(path + "mercadoria/" + nomeDaImagem);
+        BuscarImagem buscarImagem = new BuscarImagem();
+        byte[] imagem = buscarImagem.executar(path + "mercadoria/" + nomeDaImagem);
         HttpHeaders httpHeaders = new HttpHeaders();
         switch(extensao.toLowerCase()){
             case "jpg":

@@ -16,7 +16,7 @@ public class CriarCategoria {
 		if(repository.buscarPorNome(nome).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Categoria com nome " + nome + " já cadastrada!");
 		}
-		Categoria categoria = new Categoria(null, nome);
+		Categoria categoria = new Categoria(null, nome, null);
 		return repository.criar(categoria);
 	}
 }

@@ -13,11 +13,11 @@ import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDado
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 
-public class UploadImagemDeMercadoria {
+public class UploadImagemMercadoria {
 
     private MercadoriaRepository repository;
 
-    public UploadImagemDeMercadoria(MercadoriaRepository repository) {
+    public UploadImagemMercadoria(MercadoriaRepository repository) {
         this.repository = repository;
     }
 
@@ -28,13 +28,13 @@ public class UploadImagemDeMercadoria {
         }
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         BuscarMercadoria buscarMercadoria = new BuscarMercadoria(repository);
+        Mercadoria mercadoria = buscarMercadoria.executar(id);
         try {
             Files.copy(file.getInputStream(), Path.of(pathLocal + "mercadoria/", nome), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new ErroNoUploadDeArquivoException("Erro no processo de upload do arquivo!", e.getCause());
         }
-        Mercadoria mercadoria = buscarMercadoria.executar(id);
         mercadoria.setImagem(url + "/mercadoria/imagem/" + nome);
-        repository.criar(mercadoria);
+        repository.editar(mercadoria);
     }
 }

@@ -13,7 +13,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarTodasMercadorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.CriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemDeMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria.CategoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.subcategoria.SubcategoriaEntityRepository;
@@ -76,8 +76,8 @@ public class MercadoriaBeanConfiguration {
     }
 
     @Bean
-    public UploadImagemDeMercadoria uploadImagemDeMercadoria() {
-        return new UploadImagemDeMercadoria(repository);
+    public UploadImagemMercadoria uploadImagemDeMercadoria() {
+        return new UploadImagemMercadoria(repository);
     }
 
 }

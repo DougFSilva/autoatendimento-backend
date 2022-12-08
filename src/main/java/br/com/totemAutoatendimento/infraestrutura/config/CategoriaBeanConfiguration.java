@@ -8,6 +8,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarTodasCat
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriarCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditarCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoverCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria.CategoriaEntityRepository;
 
@@ -38,6 +39,11 @@ public class CategoriaBeanConfiguration {
     @Bean
     public BuscarTodasCategorias buscarTodasCategorias() {
         return new BuscarTodasCategorias(repository);
+    }
+
+    @Bean
+    public UploadImagemDaCategoria uploadImagemDaCategoria() {
+        return new UploadImagemDaCategoria(repository);
     }
 
 }

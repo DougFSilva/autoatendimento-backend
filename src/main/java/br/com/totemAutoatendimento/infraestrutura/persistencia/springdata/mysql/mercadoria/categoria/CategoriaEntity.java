@@ -27,13 +27,16 @@ public class CategoriaEntity {
 	
 	@Column(unique = true)
 	private String nome;
+
+	private String imagem;
 	
 	public CategoriaEntity(Categoria categoria) {
 		this.id = categoria.getId();
 		this.nome = categoria.getNome();
+		this.imagem = categoria.getImagem();
 	}
 	
 	public Categoria converterParaCategoria() {
-		return new Categoria(this.id, this.nome);
+		return new Categoria(this.id, this.nome, this.imagem);
 	}
 }
