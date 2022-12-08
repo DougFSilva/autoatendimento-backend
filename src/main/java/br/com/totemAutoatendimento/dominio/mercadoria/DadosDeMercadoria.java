@@ -16,6 +16,8 @@ import lombok.ToString;
 public class DadosDeMercadoria {
 
     private Long id;
+
+    private String codigo;
 	
 	private String categoria;
 	
@@ -35,6 +37,7 @@ public class DadosDeMercadoria {
     
     public DadosDeMercadoria(Mercadoria mercadoria){
         this.id = mercadoria.getId();
+        this.codigo = mercadoria.getCodigo();
         this.categoria = mercadoria.getCategoria().getNome();
         this.subcategoria = mercadoria.getSubcategoria().getNome();
         this.descricao = mercadoria.getDescricao();

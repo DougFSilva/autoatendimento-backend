@@ -45,6 +45,15 @@ public class MercadoriaEntityRepository implements MercadoriaRepository {
     }
 
     @Override
+    public Optional<Mercadoria> buscarPorCodigo(String codigo){
+        Optional<MercadoriaEntity> entity = repository.findByCodigo(codigo);
+        if (entity.isPresent()) {
+            return Optional.of(entity.get().converterParaMercadoria());
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Page<Mercadoria> buscarPorCategoria(Pageable paginacao, Categoria categoria) {
         return repository.findAllByCategoria(paginacao, new CategoriaEntity(categoria))
                 .map(MercadoriaEntity::converterParaMercadoria);

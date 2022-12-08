@@ -3,6 +3,7 @@ package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql
 import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,10 +35,13 @@ public class MercadoriaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Column(unique = true)
+    private String codigo;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     private CategoriaEntity categoria;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private SubcategoriaEntity subcategoria;
 
     private String descricao;
@@ -54,6 +58,7 @@ public class MercadoriaEntity {
 
     public MercadoriaEntity(Mercadoria mercadoria) {
         this.id = mercadoria.getId();
+        this.codigo = mercadoria.getCodigo();
         this.categoria = new CategoriaEntity(mercadoria.getCategoria());
         this.subcategoria = new SubcategoriaEntity(mercadoria.getSubcategoria());
         this.descricao = mercadoria.getDescricao();
@@ -67,7 +72,7 @@ public class MercadoriaEntity {
     public Mercadoria converterParaMercadoria() {
         Categoria categorgia = this.categoria.converterParaCategoria();
         Subcategoria subcategoria = this.subcategoria.converterParaSubcategoria();
-        return new Mercadoria(this.id, categorgia, subcategoria, this.descricao, this.quantidade, this.preco,
+        return new Mercadoria(this.id, this.codigo, categorgia, subcategoria, this.descricao, this.quantidade, this.preco,
                 this.promocao, this.precoPromocional, this.imagem);
     }
 }

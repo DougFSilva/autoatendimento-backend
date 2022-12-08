@@ -8,6 +8,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarTodasCat
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriarCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditarCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoverCategoria;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria.CategoriaEntityRepository;
 
 @Configuration
@@ -16,6 +17,9 @@ public class CategoriaBeanConfiguration {
     @Autowired
     private CategoriaEntityRepository repository;
 
+    @Autowired
+    private MercadoriaEntityRepository mercadoriaRepository;
+
     @Bean
     public CriarCategoria criarCategoria() {
         return new CriarCategoria(repository);
@@ -23,7 +27,7 @@ public class CategoriaBeanConfiguration {
 
     @Bean
     public RemoverCategoria removerCategoria() {
-        return new RemoverCategoria(repository);
+        return new RemoverCategoria(repository, mercadoriaRepository);
     }
 
     @Bean

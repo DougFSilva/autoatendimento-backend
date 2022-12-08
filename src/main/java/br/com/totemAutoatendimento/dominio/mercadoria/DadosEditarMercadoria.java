@@ -11,6 +11,9 @@ public record DadosEditarMercadoria(
 Long id,
 
 @NotBlank
+String codigo,
+
+@NotBlank
 String categoria,
 
 @NotBlank
@@ -19,16 +22,16 @@ String subcategoria,
 @NotBlank
 String descricao,
 
-@NotBlank
+@NotNull
 Integer quantidade,
 
-@NotBlank
+@NotNull
 BigDecimal preco,
 
-@NotBlank
+@NotNull
 Boolean promocao,
 
-@NotBlank
+@NotNull
 BigDecimal precoPromocional)
 {
 

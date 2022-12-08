@@ -18,6 +18,8 @@ import lombok.ToString;
 public class Mercadoria {
 
 	private Long id;
+
+	private String codigo;
 	
 	private Categoria categoria;
 	

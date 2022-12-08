@@ -1,5 +1,9 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
+import org.springframework.data.domain.Pageable;
+
+import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
+import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;
 
@@ -7,13 +11,23 @@ public class RemoverSubcategoria {
 
     private SubcategoriaRepository repository;
 
-    public RemoverSubcategoria(SubcategoriaRepository repository) {
+    private MercadoriaRepository mercadoriaRepository;
+
+    public RemoverSubcategoria(SubcategoriaRepository repository, MercadoriaRepository mercadoriaRepository) {
         this.repository = repository;
+        this.mercadoriaRepository = mercadoriaRepository;
     }
 
-    public void executar(Long id){
+    public void executar(Long id) {
         BuscarSubcategoria buscarSubcategoria = new BuscarSubcategoria(repository);
         Subcategoria subcategoria = buscarSubcategoria.executar(id);
+        int quantidadeDeMercadoria = mercadoriaRepository.buscarPorSubcategoria(Pageable.unpaged(), subcategoria)
+                .getContent().size();
+        if (quantidadeDeMercadoria > 0) {
+            throw new ViolacaoDeIntegridadeDeDadosException(
+                    "Impossível remover subcategoria pois existem " + quantidadeDeMercadoria
+                            + " mercadorias pertencentes a ela!");
+        }
         repository.remover(subcategoria);
     }
 }

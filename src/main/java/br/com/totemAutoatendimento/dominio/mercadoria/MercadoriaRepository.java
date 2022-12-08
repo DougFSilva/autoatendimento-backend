@@ -17,6 +17,8 @@ public interface MercadoriaRepository {
 	Mercadoria editar(Mercadoria mercadoriaAtualizada);
 	
 	Optional<Mercadoria> buscar(Long id);
+
+	Optional<Mercadoria> buscarPorCodigo(String codigo);
 	
 	Page<Mercadoria> buscarPorCategoria(Pageable paginacao, Categoria categoria);
 	
