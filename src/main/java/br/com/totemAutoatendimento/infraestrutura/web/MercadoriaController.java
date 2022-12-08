@@ -44,7 +44,7 @@ import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 @RequestMapping(value = "/mercadoria")
 public class MercadoriaController {
 
-    @Value("${mercadoria.imagem.path}")
+    @Value("${imagens.path}")
     private String path;
 
     @Autowired
@@ -145,7 +145,7 @@ public class MercadoriaController {
     public ResponseEntity<byte[]> buscarImagemDaMercadoria(@PathVariable String nomeDaImagem) {
         String extensao = nomeDaImagem.split("\\.")[1];
         BuscarImagemDaMercadoria buscarImagemDaMercadoria = new BuscarImagemDaMercadoria();
-        byte[] imagem = buscarImagemDaMercadoria.executar(path + "/" + nomeDaImagem);
+        byte[] imagem = buscarImagemDaMercadoria.executar(path + "mercadoria/" + nomeDaImagem);
         HttpHeaders httpHeaders = new HttpHeaders();
         switch(extensao.toLowerCase()){
             case "jpg":

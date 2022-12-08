@@ -23,14 +23,13 @@ public class UploadImagemDeMercadoria {
 
     public void executar(Long id, MultipartFile file, String pathLocal, String nome) {
         String extensao = file.getContentType();
-        System.out.println("======" + extensao);
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){
             throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
         }
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         BuscarMercadoria buscarMercadoria = new BuscarMercadoria(repository);
         try {
-            Files.copy(file.getInputStream(), Path.of(pathLocal, nome), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Path.of(pathLocal + "mercadoria/", nome), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new ErroNoUploadDeArquivoException("Erro no processo de upload do arquivo!", e.getCause());
         }
