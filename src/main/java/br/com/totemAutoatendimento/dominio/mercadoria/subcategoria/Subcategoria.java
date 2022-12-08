@@ -16,4 +16,6 @@ public class Subcategoria {
 	private Long id;
 	
 	private String nome;
+
+	private String imagem;
 }

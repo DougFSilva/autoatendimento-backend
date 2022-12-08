@@ -21,9 +21,9 @@ public class EditarSubcategoria {
                 .buscarPorNome(subcategoriaAtualizada.getNome());
         if (subcategoriaPorNome.isPresent() && subcategoriaPorNome.get().getId() != subcategoriaAtualizada.getId()) {
             throw new ViolacaoDeIntegridadeDeDadosException(
-                    "Categoria com nome " + subcategoriaAtualizada.getNome() + " já cadastrada!");
+                    "Subcategoria com nome " + subcategoriaAtualizada.getNome() + " já cadastrada!");
         }
         subcategoria.setNome(subcategoriaAtualizada.getNome());
-        return repository.criar(subcategoria);
+        return repository.editar(subcategoria);
     }
 }

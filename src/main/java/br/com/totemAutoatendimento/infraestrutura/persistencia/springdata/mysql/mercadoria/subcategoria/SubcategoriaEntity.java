@@ -26,13 +26,16 @@ public class SubcategoriaEntity {
 	
 	private String nome;
 
+    private String imagem;
+
     public SubcategoriaEntity(Subcategoria subcategoria){
         this.id = subcategoria.getId();
         this.nome = subcategoria.getNome();
+        this.imagem = subcategoria.getImagem();
     }
 
     public Subcategoria converterParaSubcategoria(){
-        return new Subcategoria(this.id, this.nome);
+        return new Subcategoria(this.id, this.nome, this.imagem);
     }
 
 }

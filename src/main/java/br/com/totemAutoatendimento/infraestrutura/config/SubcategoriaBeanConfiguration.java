@@ -8,6 +8,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscarTodas
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriarSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditarSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoverSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.UploadImagemDaSubcategoria;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.subcategoria.SubcategoriaEntityRepository;
 
@@ -38,5 +39,10 @@ public class SubcategoriaBeanConfiguration {
     @Bean
     public BuscarTodasSubcategorias buscarTodasSubcategorias() {
         return new BuscarTodasSubcategorias(repository);
+    }
+
+    @Bean
+    public UploadImagemDaSubcategoria uploadImagemDaSubcategoria() {
+        return new UploadImagemDaSubcategoria(repository);
     }
 }

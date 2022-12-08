@@ -1,8 +1,5 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -27,7 +27,7 @@ public class SubcategoriaEntityRepository implements SubcategoriaRepository{
     }
 
     @Override
-    public Subcategoria editar(Long id, Subcategoria subcategoriaAtualizada) {
+    public Subcategoria editar(Subcategoria subcategoriaAtualizada) {
         return repository.save(new SubcategoriaEntity(subcategoriaAtualizada)).converterParaSubcategoria();
     }
 

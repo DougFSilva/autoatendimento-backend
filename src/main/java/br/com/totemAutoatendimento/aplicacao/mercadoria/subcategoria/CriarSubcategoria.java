@@ -16,6 +16,6 @@ public class CriarSubcategoria {
         if (repository.buscarPorNome(nome).isPresent()) {
             throw new ViolacaoDeIntegridadeDeDadosException("Subcategoria com nome " + nome + " já cadastrada!");
         }
-        return repository.criar(new Subcategoria(null, nome));
+        return repository.criar(new Subcategoria(null, nome, null));
     }
 }

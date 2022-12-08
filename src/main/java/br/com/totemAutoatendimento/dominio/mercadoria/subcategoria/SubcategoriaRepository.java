@@ -11,7 +11,7 @@ public interface SubcategoriaRepository {
 
 	void remover(Subcategoria subcategoria);
 
-	Subcategoria editar(Long id, Subcategoria subcategoriaAtualizada);
+	Subcategoria editar(Subcategoria subcategoriaAtualizada);
 
 	Optional<Subcategoria> buscar(Long id);
 
