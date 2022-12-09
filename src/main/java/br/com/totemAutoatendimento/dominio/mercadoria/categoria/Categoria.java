@@ -14,8 +14,9 @@ import lombok.ToString;
 public class Categoria {
 
 	private Long id;
-	
+
 	private String nome;
 
 	private String imagem;
+
 }

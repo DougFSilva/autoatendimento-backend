@@ -2,6 +2,8 @@ package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -33,9 +35,9 @@ import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 @RequestMapping(value = "mercadoria/subcategoria")
 public class SubcategoriaController {
 
-	@Value("${imagens.path}")
-	private String path;
-    
+    @Value("${imagens.path}")
+    private String path;
+
     @Autowired
     private CriarSubcategoria criarSubcategoria;
 
@@ -52,51 +54,57 @@ public class SubcategoriaController {
     private UploadImagemDaSubcategoria uploadImagemDaSubcategoria;
 
     @PostMapping(value = "/{nome}")
+    @Transactional
     public ResponseEntity<Subcategoria> criarSubcategoria(@PathVariable String nome) {
         Subcategoria subcategoria = criarSubcategoria.executar(nome);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{nome}").buildAndExpand(subcategoria.getId())
                 .toUri();
-                return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id){
+    public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
         removerSubcategoria.executar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping
-    public ResponseEntity<Subcategoria> editarSubcategoria(@RequestBody Subcategoria subcategoriaAtualizada){
+    @Transactional
+    public ResponseEntity<Subcategoria> editarSubcategoria(@RequestBody Subcategoria subcategoriaAtualizada) {
         return ResponseEntity.ok().body(editarSubcategoria.executar(subcategoriaAtualizada));
     }
 
     @GetMapping
-    public ResponseEntity<Page<Subcategoria>> buscarTodasSubcategorias(Pageable paginacao){
+    public ResponseEntity<Page<Subcategoria>> buscarTodasSubcategorias(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarTodasSubcategorias.executar(paginacao));
     }
 
     @PostMapping(value = "/{id}/imagem")
-	public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
-			@RequestParam("file") MultipartFile file) {
-		uploadImagemDaSubcategoria.executar(id, file, path, file.getOriginalFilename());
-		return ResponseEntity.ok().build();
-	}
+    @Transactional
+    public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+        String pathLocal = this.path + "/mercadoria/subcategoria/" + file.getOriginalFilename();
+        String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+                + file.getOriginalFilename();
+        uploadImagemDaSubcategoria.executar(id, file, pathLocal, urlServidor);
+        return ResponseEntity.ok().build();
+    }
 
-	@GetMapping(value = "/imagem/{nomeDaImagem}")
-	public ResponseEntity<byte[]> buscarImagemDaSubcategoria(@PathVariable String nomeDaImagem) {
-		String extensao = nomeDaImagem.split("\\.")[1];
-		BuscarImagem buscarImagem = new BuscarImagem();
-		byte[] imagem = buscarImagem.executar(path + "subcategoria/" + nomeDaImagem);
-		HttpHeaders httpHeaders = new HttpHeaders();
-		switch (extensao.toLowerCase()) {
-			case "jpg":
-				httpHeaders.setContentType(MediaType.IMAGE_JPEG);
-				break;
-			case "png":
-				httpHeaders.setContentType(MediaType.IMAGE_PNG);
-				break;
-		}
-		return ResponseEntity.ok().headers(httpHeaders).body(imagem);
-	}
+    @GetMapping(value = "/imagem/{nomeDaImagem}")
+    public ResponseEntity<byte[]> buscarImagemDaSubcategoria(@PathVariable String nomeDaImagem) {
+        String extensao = nomeDaImagem.split("\\.")[1];
+        BuscarImagem buscarImagem = new BuscarImagem();
+        byte[] imagem = buscarImagem.executar(path + "subcategoria/" + nomeDaImagem);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        switch (extensao.toLowerCase()) {
+            case "jpg":
+                httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+                break;
+            case "png":
+                httpHeaders.setContentType(MediaType.IMAGE_PNG);
+                break;
+        }
+        return ResponseEntity.ok().headers(httpHeaders).body(imagem);
+    }
 
 }

@@ -38,8 +38,8 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverQuantidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoverQuantidadeDeMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 
 @RestController
@@ -101,6 +101,7 @@ public class MercadoriaController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<DadosDeMercadoria> editarMercadoria(@RequestBody @Valid DadosEditarMercadoria dados) {
         return ResponseEntity.ok().body(editarMercadoria.executar(dados));
     }
@@ -143,19 +144,27 @@ public class MercadoriaController {
     }
 
     @PostMapping(value = "/{id}/adicionar-quantidade/{quantidade}")
-    public ResponseEntity<DadosDeMercadoria> adicionarQuantidadeDeMercadoria(@PathVariable Long id, @PathVariable Integer quantidade){
+    @Transactional
+    public ResponseEntity<DadosDeMercadoria> adicionarQuantidadeDeMercadoria(@PathVariable Long id,
+            @PathVariable Integer quantidade) {
         return ResponseEntity.ok().body(adicionarQuantidadeDeMercadoria.executar(id, quantidade));
     }
 
     @PostMapping(value = "/{id}/remover-quantidade/{quantidade}")
-    public ResponseEntity<DadosDeMercadoria> removerQuantidadeDeMercadoria(@PathVariable Long id, @PathVariable Integer quantidade){
+    @Transactional
+    public ResponseEntity<DadosDeMercadoria> removerQuantidadeDeMercadoria(@PathVariable Long id,
+            @PathVariable Integer quantidade) {
         return ResponseEntity.ok().body(removerQuantidadeDeMercadoria.executar(id, quantidade));
     }
 
     @PostMapping(value = "/{id}/adicionar-imagem")
+    @Transactional
     public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
-        uploadImagemDeMercadoria.executar(id, file, path, file.getOriginalFilename());
+        String pathLocal = this.path + "/mercadoria/" + file.getOriginalFilename();
+        String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+                + file.getOriginalFilename();
+        uploadImagemDeMercadoria.executar(id, file, pathLocal, urlServidor);
         return ResponseEntity.ok().build();
     }
 
@@ -165,7 +174,7 @@ public class MercadoriaController {
         BuscarImagem buscarImagem = new BuscarImagem();
         byte[] imagem = buscarImagem.executar(path + "mercadoria/" + nomeDaImagem);
         HttpHeaders httpHeaders = new HttpHeaders();
-        switch(extensao.toLowerCase()){
+        switch (extensao.toLowerCase()) {
             case "jpg":
                 httpHeaders.setContentType(MediaType.IMAGE_JPEG);
                 break;

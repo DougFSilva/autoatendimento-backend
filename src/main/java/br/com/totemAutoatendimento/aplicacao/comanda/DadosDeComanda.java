@@ -7,7 +7,6 @@ import java.util.List;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.pedido.DadosDePedido;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
-import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -31,7 +30,7 @@ public class DadosDeComanda {
 	
 	private Boolean aberta;
 	
-	private TipoPagamento tipoPagamento;
+	private String tipoPagamento;
 
 	private BigDecimal valor;
 	
@@ -46,7 +45,7 @@ public class DadosDeComanda {
 		this.abertura = comanda.getAbertura();
 		this.fechamento = comanda.getFechamento();
 		this.aberta = comanda.getAberta();
-		this.tipoPagamento = comanda.getTipoPagamento();
+		this.tipoPagamento = comanda.getTipoPagamento().getDescricao();
 		this.valor = comanda.getValor().multiply(new BigDecimal((100 - comanda.getDesconto())/100));
 		this.desconto = comanda.getDesconto();
 	}

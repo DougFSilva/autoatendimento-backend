@@ -45,7 +45,7 @@ public class Comanda {
 		this.abertura = LocalDateTime.now();
 		this.fechamento = null;
 		this.aberta = true;
-		this.tipoPagamento = null;
+		this.tipoPagamento = TipoPagamento.NAO_PAGO;
 		this.valor = BigDecimal.ZERO;
 		this.desconto = 0;
 	}

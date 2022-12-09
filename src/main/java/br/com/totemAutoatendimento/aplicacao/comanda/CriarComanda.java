@@ -13,14 +13,15 @@ public class CriarComanda {
 
 	private ClienteRepository clienteRepository;
 
-	public CriarComanda(ComandaRepository repository) {
+	public CriarComanda(ComandaRepository repository, ClienteRepository clienteRepository) {
 		this.repository = repository;
+		this.clienteRepository = clienteRepository;
 	}
 
 	public Comanda executar(DadosCriarComanda dados) {
-		if (repository.buscarComandaPorCartao(dados.cartao(), true).isPresent()) {
+		if (repository.buscarPorCartao(dados.cartao(), true).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
-					"Não é possivel criar comanda, pois já existe uma aberta para esse cartão!");
+					"Comanda aberta existente para esse cartão!");
 		}
 		BuscarCliente buscarCliente = new BuscarCliente(clienteRepository);
 		Cliente cliente = buscarCliente.executar(dados.idCliente());

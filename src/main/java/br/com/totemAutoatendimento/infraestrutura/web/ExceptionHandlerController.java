@@ -15,6 +15,7 @@ import br.com.totemAutoatendimento.dominio.exception.ErroNaConversaoDaImagemEmBy
 import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoException;
 import br.com.totemAutoatendimento.dominio.exception.ExceptionPadrao;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
 import br.com.totemAutoatendimento.dominio.exception.VerificacaoDeSenhaException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 
@@ -64,7 +65,7 @@ public class ExceptionHandlerController {
 	public ResponseEntity<ExceptionPadrao> arquivoNaoEncontradoException(ArquivoNaoEncontradoException exception) {
 		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
 				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionPadrao);
 	}
 
 	@ExceptionHandler(ErroNaConversaoDaImagemEmByteArrayException.class)
@@ -80,6 +81,13 @@ public class ExceptionHandlerController {
 				HttpStatus.BAD_REQUEST.value(), "O tamanho da imagem deve ser no máximo " + TamanhoMaximoDeImagem);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
 	}
-	
+
+	@ExceptionHandler(RegrasDeNegocioException.class)
+	public ResponseEntity<ExceptionPadrao> regrasDeNegocioException(RegrasDeNegocioException exception) {
+		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
+				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
+	}
+
 	
 }
