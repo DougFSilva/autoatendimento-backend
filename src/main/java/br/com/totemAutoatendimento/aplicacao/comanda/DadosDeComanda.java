@@ -34,7 +34,7 @@ public class DadosDeComanda {
 
 	private BigDecimal valor;
 	
-	private Integer desconto;
+	private Float desconto;
 
 	public DadosDeComanda(Comanda comanda){
 		this.id = comanda.getId();
@@ -46,7 +46,7 @@ public class DadosDeComanda {
 		this.fechamento = comanda.getFechamento();
 		this.aberta = comanda.getAberta();
 		this.tipoPagamento = comanda.getTipoPagamento().getDescricao();
-		this.valor = comanda.getValor().multiply(new BigDecimal((100 - comanda.getDesconto())/100));
+		this.valor = comanda.getValor();
 		this.desconto = comanda.getDesconto();
 	}
 }

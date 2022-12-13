@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.totemAutoatendimento.aplicacao.comanda.AplicarDescontoEmComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaAbertaPorCartao;
 import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorCliente;
 import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorData;
@@ -13,11 +14,9 @@ import br.com.totemAutoatendimento.aplicacao.comanda.BuscarDadosDeComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.BuscarTodasComandas;
 import br.com.totemAutoatendimento.aplicacao.comanda.CriarComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.FecharComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.ReabrirComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoverComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.FazerPedido;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.ComandaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.PedidoEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente.ClienteEntityRepository;
 
 @Configuration
@@ -27,13 +26,7 @@ public class ComandaBeanConfiguration {
     private ComandaEntityRepository repository;
 
     @Autowired
-    private PedidoEntityRepository pedidoEntityRepository;
-
-    @Autowired
     private ClienteEntityRepository clienteRepository;
-
-    @Autowired
-    private MercadoriaEntityRepository mercadoriaRepository;
 
     @Bean
     public BuscarComandaAbertaPorCartao buscarComandaAbertaPorCartao(){
@@ -76,8 +69,18 @@ public class ComandaBeanConfiguration {
     }
 
     @Bean
+    public AplicarDescontoEmComanda aplicarDescontoEmComanda() {
+        return new AplicarDescontoEmComanda(repository);
+    }
+
+    @Bean
     public FecharComanda fecharComanda() {
         return new FecharComanda(repository);
+    }
+
+    @Bean
+    public ReabrirComanda reabrirComanda() {
+        return new ReabrirComanda(repository);
     }
 
     @Bean
@@ -85,8 +88,4 @@ public class ComandaBeanConfiguration {
         return new RemoverComanda(repository);
     }
 
-    @Bean
-    public FazerPedido fazerPedido() {
-        return new FazerPedido(repository, mercadoriaRepository);
-    }
 }

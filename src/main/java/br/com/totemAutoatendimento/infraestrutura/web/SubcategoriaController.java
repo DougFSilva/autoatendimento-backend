@@ -94,7 +94,7 @@ public class SubcategoriaController {
     public ResponseEntity<byte[]> buscarImagemDaSubcategoria(@PathVariable String nomeDaImagem) {
         String extensao = nomeDaImagem.split("\\.")[1];
         BuscarImagem buscarImagem = new BuscarImagem();
-        byte[] imagem = buscarImagem.executar(path + "subcategoria/" + nomeDaImagem);
+        byte[] imagem = buscarImagem.executar(path + "mercadoria/subcategoria/" + nomeDaImagem);
         HttpHeaders httpHeaders = new HttpHeaders();
         switch (extensao.toLowerCase()) {
             case "jpg":

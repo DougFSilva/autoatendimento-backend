@@ -1,11 +1,14 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.totemAutoatendimento.aplicacao.comanda.AplicarDescontoEmComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaAbertaPorCartao;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorCliente;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorData;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorTipoDePagamento;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandasAbertas;
 import br.com.totemAutoatendimento.aplicacao.comanda.BuscarDadosDeComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscarTodasComandas;
 import br.com.totemAutoatendimento.aplicacao.comanda.CriarComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.DadosCriarComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.DadosDeComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.DadosFecharComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.FecharComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.ReabrirComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoverComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.DadosFazerPedido;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.FazerPedido;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
+import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 
 @RestController
 @RequestMapping(value = "/comanda")
@@ -41,10 +50,31 @@ public class ComandaController {
     private BuscarDadosDeComanda buscarDadosDeComanda;
 
     @Autowired
-    private FazerPedido fazerPedido;
+    private BuscarComandaAbertaPorCartao buscarComandaAbertaPorCartao;
+
+    @Autowired
+    private BuscarComandaPorCliente buscarComandaPorCliente;
+
+    @Autowired
+    private BuscarComandaPorData buscarComandaPorData;
+
+    @Autowired
+    private BuscarComandaPorTipoDePagamento buscarComandaPorTipoDePagamento;
+
+    @Autowired
+    private BuscarComandasAbertas buscarComandasAbertas;
+
+    @Autowired
+    private BuscarTodasComandas buscarTodasComandas;
+
+    @Autowired
+    private AplicarDescontoEmComanda aplicarDescontoEmComanda;
 
     @Autowired
     private FecharComanda fecharComanda;
+
+    @Autowired
+    private ReabrirComanda reabrirComanda;
 
     @PostMapping
     @Transactional
@@ -66,14 +96,54 @@ public class ComandaController {
         return ResponseEntity.ok().body(buscarDadosDeComanda.executar(id));
     }
 
-    @PostMapping(value = "/fazer-pedido")
-    public ResponseEntity<DadosDeComanda> fazerPedido(@RequestBody @Valid DadosFazerPedido dados){
-        return ResponseEntity.ok().body(fazerPedido.executar(dados));
+    @GetMapping(value = "/cartao/{cartao}/aberta")
+    public ResponseEntity<DadosDeComanda> buscarComandaAbertaPorCartao(@PathVariable String cartao){
+        return ResponseEntity.ok().body(buscarComandaAbertaPorCartao.executar(cartao));
     }
 
-    @PostMapping(value = "/fechar")
-    public ResponseEntity<DadosDeComanda> fecharComanda(@RequestBody @Valid DadosFecharComanda dados){
-        return ResponseEntity.ok().body(fecharComanda.executar(dados));
+    @GetMapping(value = "/cliente/{id}")
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorCliente(Pageable paginacao, @PathVariable Long id){
+        return ResponseEntity.ok().body(buscarComandaPorCliente.executar(paginacao, id));
+    }
+
+    @GetMapping(value = "/data/{dataInicial}/{dataFinal}")
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorData(Pageable paginacao, @PathVariable LocalDate dataInicial, @PathVariable LocalDate dataFinal){
+        return ResponseEntity.ok().body(buscarComandaPorData.executar(paginacao, dataInicial, dataFinal));
+    }
+
+    @GetMapping(value = "/tipo-pagamento/{tipoPagamento}")
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorTipoDePagamento(Pageable paginacao, @PathVariable TipoPagamento tipoPagamento){
+        return ResponseEntity.ok().body(buscarComandaPorTipoDePagamento.executar(paginacao, tipoPagamento));
+    }
+
+    @GetMapping(value = "/abertas")
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasAbertas(Pageable paginacao){
+        return ResponseEntity.ok().body(buscarComandasAbertas.executar(paginacao, true));
+    }
+
+    @GetMapping(value = "/fechadas")
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasFechadas(Pageable paginacao){
+        return ResponseEntity.ok().body(buscarComandasAbertas.executar(paginacao, false));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<DadosDeComanda>> buscarTodasComandas(Pageable paginacao){
+        return ResponseEntity.ok().body(buscarTodasComandas.executar(paginacao));
+    }
+
+    @PostMapping(value = "/{id}/desconto/{desconto}")
+    public ResponseEntity<DadosDeComanda> aplicarDescontoEmComanda(@PathVariable Long id, @PathVariable Float desconto){
+        return ResponseEntity.ok().body(aplicarDescontoEmComanda.executar(id, desconto));
+    }
+    
+    @PostMapping(value = "/{id}/{tipoPagamento}")
+    public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable TipoPagamento tipoPagamento){
+        return ResponseEntity.ok().body(fecharComanda.executar(id, tipoPagamento));
+    }
+
+    @PostMapping(value = "/{id}/reabrir")
+    public ResponseEntity<DadosDeComanda> reabrirComanda(@PathVariable Long id){
+        return ResponseEntity.ok().body(reabrirComanda.executar(id));
     }
 
 }

@@ -11,7 +11,6 @@ import br.com.totemAutoatendimento.dominio.exception.ErroNaConversaoDaImagemEmBy
 public class BuscarImagem {
 
     public byte[] executar(String path) {
-        System.out.println("====="+ path);
         File file = new File(path);
         byte[] imagem = new byte[(int) file.length()];
         FileInputStream fileInputStream;

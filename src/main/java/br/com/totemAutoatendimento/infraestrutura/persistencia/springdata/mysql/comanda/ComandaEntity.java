@@ -59,7 +59,7 @@ public class ComandaEntity {
 
 	private BigDecimal valor;
 
-	private Integer desconto;
+	private Float desconto;
 
 	public ComandaEntity(Comanda comanda) {
 		this.id = comanda.getId();

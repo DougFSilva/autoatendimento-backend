@@ -5,6 +5,7 @@ import java.time.LocalTime;
 
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode(of = "id")
 @ToString
 public class Pedido {
 

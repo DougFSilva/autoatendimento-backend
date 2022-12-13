@@ -23,7 +23,6 @@ public class EditarCategoria {
 					"Categoria com nome " + categoriaAtualizada.getNome() + " já cadastrada!");
 		}
 		categoria.setNome(categoriaAtualizada.getNome());
-		categoria.setImagem(categoriaAtualizada.getImagem());
 		return repository.criar(categoria);
 	}
 }

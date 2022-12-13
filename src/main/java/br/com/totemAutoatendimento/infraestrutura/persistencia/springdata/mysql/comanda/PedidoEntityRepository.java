@@ -12,8 +12,8 @@ import br.com.totemAutoatendimento.dominio.comanda.Pedido;
 import br.com.totemAutoatendimento.dominio.comanda.PedidoRepository;
 
 @Repository
-public class PedidoEntityRepository implements PedidoRepository{
-    
+public class PedidoEntityRepository implements PedidoRepository {
+
     @Autowired
     private PedidoEntityJpaRepository repository;
 
@@ -28,9 +28,14 @@ public class PedidoEntityRepository implements PedidoRepository{
     }
 
     @Override
+    public Pedido editar(Pedido pedidoAtualizado) {
+        return repository.save(new PedidoEntity(pedidoAtualizado)).converterParaPedido();
+    }
+
+    @Override
     public Optional<Pedido> buscar(Long id) {
         Optional<PedidoEntity> entity = repository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             return Optional.of(entity.get().converterParaPedido());
         }
         return Optional.empty();
@@ -42,15 +47,15 @@ public class PedidoEntityRepository implements PedidoRepository{
     }
 
     @Override
-    public Page<Pedido> buscarPorData(Pageable paginacao, LocalDate data) {
-        // TODO Auto-generated method stub
-        return null;
+    public Page<Pedido> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
+        return repository.findAllByDataBetween(paginacao, dataInicial, dataFinal)
+                .map(PedidoEntity::converterParaPedido);
     }
 
     @Override
     public Page<Pedido> buscarPorEntregue(Pageable paginacao, Boolean entregue) {
-        // TODO Auto-generated method stub
-        return null;
+        return repository.findAllByEntregue(paginacao, entregue).map(PedidoEntity::converterParaPedido);
     }
+
 
 }

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 public record DadosFazerPedido(
 
-    @NotNull
+    @NotBlank
     String cartao,
 
     @NotBlank

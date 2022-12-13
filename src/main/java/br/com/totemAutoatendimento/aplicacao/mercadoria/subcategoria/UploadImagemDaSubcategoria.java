@@ -30,6 +30,7 @@ public class UploadImagemDaSubcategoria {
         try {
             Files.copy(file.getInputStream(), Path.of(pathLocal), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ErroNoUploadDeArquivoException("Erro no processo de upload do arquivo!", e.getCause());
         }
         subcategoria.setImagem(urlServidor);

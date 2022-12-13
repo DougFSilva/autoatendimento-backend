@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
+import br.com.totemAutoatendimento.dominio.comanda.Pedido;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente.ClienteEntity;
@@ -54,6 +55,15 @@ public class ComandaEntityRepository implements ComandaRepository {
 	}
 
 	@Override
+	public Optional<Comanda> buscarPorPedido(Pedido pedido) {
+		Optional<ComandaEntity> entity = repository.findByPedidos(new PedidoEntity(pedido));
+		if(entity.isPresent()){
+			return Optional.of(entity.get().converterParaComanda());
+		}
+		return Optional.empty();
+	}
+
+	@Override
 	public Page<Comanda> buscarAbertas(Pageable paginacao, Boolean aberta) {
 		return repository.findAllByAberta(paginacao, aberta).map(ComandaEntity::converterParaComanda);
 	}
@@ -65,7 +75,7 @@ public class ComandaEntityRepository implements ComandaRepository {
 	}
 
 	@Override
-	public Page<Comanda> buscarPorData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal) {
+	public Page<Comanda> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
 		return repository.findAllByAberturaBetween(paginacao, dataInicial, dataFinal)
 				.map(ComandaEntity::converterParaComanda);
 	}
@@ -80,5 +90,6 @@ public class ComandaEntityRepository implements ComandaRepository {
 	public Page<Comanda> buscarTodas(Pageable paginacao) {
 		return repository.findAll(paginacao).map(ComandaEntity::converterParaComanda);
 	}
+
 
 }

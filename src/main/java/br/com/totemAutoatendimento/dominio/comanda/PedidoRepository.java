@@ -12,9 +12,11 @@ public interface PedidoRepository {
 
     void remover(Pedido pedido);
 
+    Pedido editar(Pedido pedidoAtualizado);
+
     Optional<Pedido> buscar(Long id);
 
-    Page<Pedido> buscarPorData(Pageable paginacao, LocalDate data);
+    Page<Pedido> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 
     Page<Pedido> buscarPorEntregue(Pageable paginacao, Boolean entregue);
 
