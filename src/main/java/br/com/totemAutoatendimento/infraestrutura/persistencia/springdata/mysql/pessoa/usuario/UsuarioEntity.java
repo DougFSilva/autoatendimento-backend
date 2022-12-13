@@ -61,7 +61,6 @@ public class UsuarioEntity {
 		this.email = new EmailEntity(usuario.getEmail());
 		this.password = new PasswordEntity(usuario.getPassword());
 		this.perfis = usuario.getPerfis().stream().map(PerfilEntity::new).toList();
-		
 	}
 	
 	public Usuario converterParaUsuario() {
