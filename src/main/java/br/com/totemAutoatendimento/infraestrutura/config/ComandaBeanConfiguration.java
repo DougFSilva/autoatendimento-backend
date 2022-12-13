@@ -16,6 +16,7 @@ import br.com.totemAutoatendimento.aplicacao.comanda.CriarComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.FecharComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.ReabrirComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoverComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.RemoverDescontoDaComanda;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.ComandaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente.ClienteEntityRepository;
 
@@ -71,6 +72,11 @@ public class ComandaBeanConfiguration {
     @Bean
     public AplicarDescontoEmComanda aplicarDescontoEmComanda() {
         return new AplicarDescontoEmComanda(repository);
+    }
+
+    @Bean
+    public RemoverDescontoDaComanda removerDescontoDaComanda() {
+        return new RemoverDescontoDaComanda(repository);
     }
 
     @Bean

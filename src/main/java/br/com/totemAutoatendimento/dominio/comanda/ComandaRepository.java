@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.dominio.comanda;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public interface ComandaRepository {
 	
 	Page<Comanda> buscarPorCliente(Pageable paginacao, Cliente cliente);
 	
-	Page<Comanda> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
+	Page<Comanda> buscarPorData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal);
 	
 	Page<Comanda> buscarPorTipoDePagamento(Pageable paginacao, TipoPagamento tipoPagamento);
 	

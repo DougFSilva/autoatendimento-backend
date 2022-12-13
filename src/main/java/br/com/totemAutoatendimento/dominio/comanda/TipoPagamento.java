@@ -1,7 +1,7 @@
 
-
 package br.com.totemAutoatendimento.dominio.comanda;
 
+import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import lombok.Getter;
 
 @Getter
@@ -15,9 +15,17 @@ public enum TipoPagamento {
 
     private String descricao;
 
-    TipoPagamento(String descricao){
+    TipoPagamento(String descricao) {
         this.descricao = descricao;
     }
 
+    public static TipoPagamento toEnum(String tipo){
+        for (TipoPagamento tipoPagamento: values()){
+            if(tipoPagamento.name().equals(tipo)){
+                return tipoPagamento;
+            }
+        }
+        throw new ViolacaoDeIntegridadeDeDadosException("Tipo de pagamento " + tipo + " não conhecido!");
+    }
 
 }

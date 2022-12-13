@@ -33,6 +33,7 @@ import br.com.totemAutoatendimento.aplicacao.comanda.DadosDeComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.FecharComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.ReabrirComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoverComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.RemoverDescontoDaComanda;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 
@@ -71,6 +72,9 @@ public class ComandaController {
     private AplicarDescontoEmComanda aplicarDescontoEmComanda;
 
     @Autowired
+    private RemoverDescontoDaComanda removerDescontoDaComanda;
+
+    @Autowired
     private FecharComanda fecharComanda;
 
     @Autowired
@@ -107,13 +111,14 @@ public class ComandaController {
     }
 
     @GetMapping(value = "/data/{dataInicial}/{dataFinal}")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorData(Pageable paginacao, @PathVariable LocalDate dataInicial, @PathVariable LocalDate dataFinal){
-        return ResponseEntity.ok().body(buscarComandaPorData.executar(paginacao, dataInicial, dataFinal));
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorData(Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal){
+        return ResponseEntity.ok().body(buscarComandaPorData.executar(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
     }
 
     @GetMapping(value = "/tipo-pagamento/{tipoPagamento}")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorTipoDePagamento(Pageable paginacao, @PathVariable TipoPagamento tipoPagamento){
-        return ResponseEntity.ok().body(buscarComandaPorTipoDePagamento.executar(paginacao, tipoPagamento));
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorTipoDePagamento(Pageable paginacao, @PathVariable String tipoPagamento){
+
+        return ResponseEntity.ok().body(buscarComandaPorTipoDePagamento.executar(paginacao, TipoPagamento.toEnum(tipoPagamento)));
     }
 
     @GetMapping(value = "/abertas")
@@ -131,14 +136,19 @@ public class ComandaController {
         return ResponseEntity.ok().body(buscarTodasComandas.executar(paginacao));
     }
 
-    @PostMapping(value = "/{id}/desconto/{desconto}")
+    @PostMapping(value = "/{id}/aplicar-desconto/{desconto}")
     public ResponseEntity<DadosDeComanda> aplicarDescontoEmComanda(@PathVariable Long id, @PathVariable Float desconto){
         return ResponseEntity.ok().body(aplicarDescontoEmComanda.executar(id, desconto));
     }
+
+    @PostMapping(value = "/{id}/remover-desconto")
+    public ResponseEntity<DadosDeComanda> removerDescontoDaComanda(@PathVariable Long id){
+        return ResponseEntity.ok().body(removerDescontoDaComanda.executar(id));
+    }
     
     @PostMapping(value = "/{id}/{tipoPagamento}")
-    public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable TipoPagamento tipoPagamento){
-        return ResponseEntity.ok().body(fecharComanda.executar(id, tipoPagamento));
+    public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable String tipoPagamento){
+        return ResponseEntity.ok().body(fecharComanda.executar(id, TipoPagamento.toEnum(tipoPagamento)));
     }
 
     @PostMapping(value = "/{id}/reabrir")

@@ -83,9 +83,10 @@ public class SubcategoriaController {
     @Transactional
     public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
-        String pathLocal = this.path + "/mercadoria/subcategoria/" + file.getOriginalFilename();
+        String nomeDaImagem = id + "-" + file.getOriginalFilename();
+        String pathLocal = this.path + "/mercadoria/subcategoria/" + nomeDaImagem;
         String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
-                + file.getOriginalFilename();
+                + "/mercadoria/subcategoria/imagem/" + nomeDaImagem;
         uploadImagemDaSubcategoria.executar(id, file, pathLocal, urlServidor);
         return ResponseEntity.ok().build();
     }

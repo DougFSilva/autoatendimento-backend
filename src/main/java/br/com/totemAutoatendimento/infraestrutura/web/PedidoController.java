@@ -74,8 +74,8 @@ public class PedidoController {
     }
 
     @GetMapping(value = "/data/{dataInicial}/{dataFinal}")
-    public ResponseEntity<Page<DadosDePedido>> buscarPedidosPorData(Pageable paginacao, @PathVariable LocalDate dataInicial, @PathVariable LocalDate dataFinal){
-        return ResponseEntity.ok().body(buscarPedidosPorData.executar(paginacao, dataInicial, dataFinal));
+    public ResponseEntity<Page<DadosDePedido>> buscarPedidosPorData(Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal){
+        return ResponseEntity.ok().body(buscarPedidosPorData.executar(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
     }
 
     @GetMapping(value = "/entregues")

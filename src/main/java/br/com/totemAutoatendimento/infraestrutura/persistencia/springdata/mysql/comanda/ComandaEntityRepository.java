@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ public class ComandaEntityRepository implements ComandaRepository {
 	}
 
 	@Override
-	public Page<Comanda> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
+	public Page<Comanda> buscarPorData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal) {
 		return repository.findAllByAberturaBetween(paginacao, dataInicial, dataFinal)
 				.map(ComandaEntity::converterParaComanda);
 	}

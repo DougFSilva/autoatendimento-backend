@@ -83,8 +83,10 @@ public class CategoriaController {
 	@Transactional
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
-		String pathLocal = this.path + "/mercadoria/categoria/" + file.getOriginalFilename();
-		String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + file.getOriginalFilename();
+		String nomeDaImagem = id + "-" + file.getOriginalFilename();
+		String pathLocal = this.path + "/mercadoria/categoria/" + nomeDaImagem;
+		String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+				+ "/mercadoria/categoria/imagem/" + nomeDaImagem;
 		uploadImagemDaCategoria.executar(id, file, pathLocal, urlServidor);
 		return ResponseEntity.ok().build();
 	}

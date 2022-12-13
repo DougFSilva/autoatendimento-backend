@@ -128,7 +128,7 @@ public class MercadoriaController {
         return ResponseEntity.ok().body(buscarMercadoriasPorSubcategoria.executar(paginacao, subcategoria));
     }
 
-    @GetMapping(value = "/em-promocao")
+    @GetMapping(value = "/com-promocao")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasEmPromocao(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, true));
     }
@@ -143,27 +143,29 @@ public class MercadoriaController {
         return ResponseEntity.ok().body(buscarTodasMercadorias.executar(paginacao));
     }
 
-    @PostMapping(value = "/{id}/adicionar-quantidade/{quantidade}")
+    @PostMapping(value = "/{id}/adicionar/{quantidade}")
     @Transactional
     public ResponseEntity<DadosDeMercadoria> adicionarQuantidadeDeMercadoria(@PathVariable Long id,
             @PathVariable Integer quantidade) {
         return ResponseEntity.ok().body(adicionarQuantidadeDeMercadoria.executar(id, quantidade));
     }
 
-    @PostMapping(value = "/{id}/remover-quantidade/{quantidade}")
+    @PostMapping(value = "/{id}/remover/{quantidade}")
     @Transactional
     public ResponseEntity<DadosDeMercadoria> removerQuantidadeDeMercadoria(@PathVariable Long id,
             @PathVariable Integer quantidade) {
         return ResponseEntity.ok().body(removerQuantidadeDeMercadoria.executar(id, quantidade));
     }
 
-    @PostMapping(value = "/{id}/adicionar-imagem")
+    @PostMapping(value = "/{id}/imagem")
     @Transactional
     public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
-        String pathLocal = this.path + "/mercadoria/" + file.getOriginalFilename();
+        String nomeDaImagem = id + "-" + file.getOriginalFilename();
+        String pathLocal = this.path + "/mercadoria/" + nomeDaImagem;
         String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
-                + file.getOriginalFilename();
+                + "/mercadoria/imagem/" + nomeDaImagem;
+       
         uploadImagemDeMercadoria.executar(id, file, pathLocal, urlServidor);
         return ResponseEntity.ok().build();
     }

@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ public interface ComandaEntityJpaRepository extends JpaRepository<ComandaEntity,
 
     Page<ComandaEntity> findAllByCliente(Pageable paginacao, ClienteEntity cliente);
 
-    Page<ComandaEntity> findAllByAberturaBetween(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
+    Page<ComandaEntity> findAllByAberturaBetween(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal);
 
     Page<ComandaEntity> findAllByTipoPagamento(Pageable paginacao, TipoPagamento tipoPagamento);
 
