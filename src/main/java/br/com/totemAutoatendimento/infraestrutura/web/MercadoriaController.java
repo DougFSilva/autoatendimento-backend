@@ -2,7 +2,6 @@ package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.AdicionarQuantidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarDadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriaPorCodigo;
@@ -38,7 +36,6 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverQuantidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 
@@ -79,14 +76,7 @@ public class MercadoriaController {
     @Autowired
     private UploadImagemMercadoria uploadImagemDeMercadoria;
 
-    @Autowired
-    private AdicionarQuantidadeDeMercadoria adicionarQuantidadeDeMercadoria;
-
-    @Autowired
-    private RemoverQuantidadeDeMercadoria removerQuantidadeDeMercadoria;
-
     @PostMapping
-    @Transactional
     public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
         Mercadoria mercadoria = criarMercadoria.executar(dados);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
@@ -101,7 +91,6 @@ public class MercadoriaController {
     }
 
     @PutMapping
-    @Transactional
     public ResponseEntity<DadosDeMercadoria> editarMercadoria(@RequestBody @Valid DadosEditarMercadoria dados) {
         return ResponseEntity.ok().body(editarMercadoria.executar(dados));
     }
@@ -143,29 +132,14 @@ public class MercadoriaController {
         return ResponseEntity.ok().body(buscarTodasMercadorias.executar(paginacao));
     }
 
-    @PostMapping(value = "/{id}/adicionar/{quantidade}")
-    @Transactional
-    public ResponseEntity<DadosDeMercadoria> adicionarQuantidadeDeMercadoria(@PathVariable Long id,
-            @PathVariable Integer quantidade) {
-        return ResponseEntity.ok().body(adicionarQuantidadeDeMercadoria.executar(id, quantidade));
-    }
-
-    @PostMapping(value = "/{id}/remover/{quantidade}")
-    @Transactional
-    public ResponseEntity<DadosDeMercadoria> removerQuantidadeDeMercadoria(@PathVariable Long id,
-            @PathVariable Integer quantidade) {
-        return ResponseEntity.ok().body(removerQuantidadeDeMercadoria.executar(id, quantidade));
-    }
-
     @PostMapping(value = "/{id}/imagem")
-    @Transactional
     public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
         String nomeDaImagem = id + "-" + file.getOriginalFilename();
         String pathLocal = this.path + "/mercadoria/" + nomeDaImagem;
         String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
                 + "/mercadoria/imagem/" + nomeDaImagem;
-       
+
         uploadImagemDeMercadoria.executar(id, file, pathLocal, urlServidor);
         return ResponseEntity.ok().build();
     }

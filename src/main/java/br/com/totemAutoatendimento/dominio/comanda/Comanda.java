@@ -6,8 +6,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
-import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
+import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

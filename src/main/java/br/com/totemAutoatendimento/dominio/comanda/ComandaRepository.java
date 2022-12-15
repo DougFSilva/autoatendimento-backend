@@ -7,7 +7,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
+import br.com.totemAutoatendimento.dominio.cliente.Cliente;
+import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 
 public interface ComandaRepository {
 

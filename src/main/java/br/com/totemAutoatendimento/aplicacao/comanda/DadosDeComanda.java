@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.DadosDePedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.DadosDePedido;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

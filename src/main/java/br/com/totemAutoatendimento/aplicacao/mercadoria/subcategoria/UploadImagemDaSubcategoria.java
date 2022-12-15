@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoException;
@@ -20,6 +21,7 @@ public class UploadImagemDaSubcategoria {
         this.repository = repository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void executar(Long id, MultipartFile file, String pathLocal, String urlServidor) {
         String extensao = file.getContentType();
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){

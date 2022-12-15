@@ -3,7 +3,6 @@ package br.com.totemAutoatendimento.infraestrutura.web;
 import java.net.URI;
 import java.time.LocalDate;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +80,6 @@ public class ComandaController {
     private ReabrirComanda reabrirComanda;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Comanda> criarComanda(@RequestBody @Valid DadosCriarComanda dados) {
         Comanda comanda = criarComanda.executar(dados);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(comanda.getId())
@@ -90,69 +88,74 @@ public class ComandaController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removerComanda(@PathVariable Long id){
+    public ResponseEntity<Void> removerComanda(@PathVariable Long id) {
         removerComanda.executar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<DadosDeComanda> buscarDadosDeComanda(@PathVariable Long id){
+    public ResponseEntity<DadosDeComanda> buscarDadosDeComanda(@PathVariable Long id) {
         return ResponseEntity.ok().body(buscarDadosDeComanda.executar(id));
     }
 
-    @GetMapping(value = "/cartao/{cartao}/aberta")
-    public ResponseEntity<DadosDeComanda> buscarComandaAbertaPorCartao(@PathVariable String cartao){
+    @GetMapping(value = "/aberta/cartao/{cartao}")
+    public ResponseEntity<DadosDeComanda> buscarComandaAbertaPorCartao(@PathVariable String cartao) {
         return ResponseEntity.ok().body(buscarComandaAbertaPorCartao.executar(cartao));
     }
 
     @GetMapping(value = "/cliente/{id}")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorCliente(Pageable paginacao, @PathVariable Long id){
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorCliente(Pageable paginacao, @PathVariable Long id) {
         return ResponseEntity.ok().body(buscarComandaPorCliente.executar(paginacao, id));
     }
 
     @GetMapping(value = "/data/{dataInicial}/{dataFinal}")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorData(Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal){
-        return ResponseEntity.ok().body(buscarComandaPorData.executar(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorData(Pageable paginacao,
+            @PathVariable String dataInicial, @PathVariable String dataFinal) {
+        return ResponseEntity.ok().body(
+                buscarComandaPorData.executar(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
     }
 
     @GetMapping(value = "/tipo-pagamento/{tipoPagamento}")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorTipoDePagamento(Pageable paginacao, @PathVariable String tipoPagamento){
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorTipoDePagamento(Pageable paginacao,
+            @PathVariable String tipoPagamento) {
 
-        return ResponseEntity.ok().body(buscarComandaPorTipoDePagamento.executar(paginacao, TipoPagamento.toEnum(tipoPagamento)));
+        return ResponseEntity.ok()
+                .body(buscarComandaPorTipoDePagamento.executar(paginacao, TipoPagamento.toEnum(tipoPagamento)));
     }
 
     @GetMapping(value = "/abertas")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasAbertas(Pageable paginacao){
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasAbertas(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarComandasAbertas.executar(paginacao, true));
     }
 
     @GetMapping(value = "/fechadas")
-    public ResponseEntity<Page<DadosDeComanda>> buscarComandasFechadas(Pageable paginacao){
+    public ResponseEntity<Page<DadosDeComanda>> buscarComandasFechadas(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarComandasAbertas.executar(paginacao, false));
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosDeComanda>> buscarTodasComandas(Pageable paginacao){
+    public ResponseEntity<Page<DadosDeComanda>> buscarTodasComandas(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarTodasComandas.executar(paginacao));
     }
 
     @PostMapping(value = "/{id}/aplicar-desconto/{desconto}")
-    public ResponseEntity<DadosDeComanda> aplicarDescontoEmComanda(@PathVariable Long id, @PathVariable Float desconto){
+    public ResponseEntity<DadosDeComanda> aplicarDescontoEmComanda(@PathVariable Long id,
+            @PathVariable Float desconto) {
         return ResponseEntity.ok().body(aplicarDescontoEmComanda.executar(id, desconto));
     }
 
     @PostMapping(value = "/{id}/remover-desconto")
-    public ResponseEntity<DadosDeComanda> removerDescontoDaComanda(@PathVariable Long id){
+    public ResponseEntity<DadosDeComanda> removerDescontoDaComanda(@PathVariable Long id) {
         return ResponseEntity.ok().body(removerDescontoDaComanda.executar(id));
     }
-    
+
     @PostMapping(value = "/{id}/{tipoPagamento}")
-    public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable String tipoPagamento){
+    public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable String tipoPagamento) {
         return ResponseEntity.ok().body(fecharComanda.executar(id, TipoPagamento.toEnum(tipoPagamento)));
     }
 
     @PostMapping(value = "/{id}/reabrir")
-    public ResponseEntity<DadosDeComanda> reabrirComanda(@PathVariable Long id){
+    public ResponseEntity<DadosDeComanda> reabrirComanda(@PathVariable Long id) {
         return ResponseEntity.ok().body(reabrirComanda.executar(id));
     }
 

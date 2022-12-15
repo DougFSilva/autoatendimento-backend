@@ -2,8 +2,6 @@ package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -54,7 +52,6 @@ public class CategoriaController {
 	private UploadImagemDaCategoria uploadImagemDaCategoria;
 
 	@PostMapping(value = "/{nome}")
-	@Transactional
 	public ResponseEntity<Categoria> criarCategoria(@PathVariable String nome) {
 		Categoria categoria = criarCategoria.executar(nome);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
@@ -69,7 +66,6 @@ public class CategoriaController {
 	}
 
 	@PutMapping
-	@Transactional
 	public ResponseEntity<Categoria> editarCategoria(@RequestBody Categoria categoria) {
 		return ResponseEntity.ok().body(editarCategoria.executar(categoria));
 	}
@@ -80,7 +76,6 @@ public class CategoriaController {
 	}
 
 	@PostMapping(value = "/{id}/imagem")
-	@Transactional
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
 		String nomeDaImagem = id + "-" + file.getOriginalFilename();

@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente.ClienteEntity;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.cliente.ClienteEntity;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pedido.PedidoEntity;
 
 @Repository
 public interface ComandaEntityJpaRepository extends JpaRepository<ComandaEntity, Long>{

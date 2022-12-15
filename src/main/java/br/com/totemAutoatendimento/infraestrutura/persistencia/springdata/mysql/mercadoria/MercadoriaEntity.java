@@ -46,8 +46,6 @@ public class MercadoriaEntity {
 
     private String descricao;
 
-    private Integer quantidade;
-
     private BigDecimal preco;
 
     private Boolean promocao;
@@ -56,23 +54,25 @@ public class MercadoriaEntity {
 
     private String imagem;
 
+    private Boolean disponivel;
+
     public MercadoriaEntity(Mercadoria mercadoria) {
         this.id = mercadoria.getId();
         this.codigo = mercadoria.getCodigo();
         this.categoria = new CategoriaEntity(mercadoria.getCategoria());
         this.subcategoria = new SubcategoriaEntity(mercadoria.getSubcategoria());
         this.descricao = mercadoria.getDescricao();
-        this.quantidade = mercadoria.getQuantidade();
         this.preco = mercadoria.getPreco();
         this.promocao = mercadoria.getPromocao();
         this.precoPromocional = mercadoria.getPrecoPromocional();
         this.imagem = mercadoria.getImagem();
+        this.disponivel = mercadoria.getDisponivel();
     }
 
     public Mercadoria converterParaMercadoria() {
         Categoria categorgia = this.categoria.converterParaCategoria();
         Subcategoria subcategoria = this.subcategoria.converterParaSubcategoria();
-        return new Mercadoria(this.id, this.codigo, categorgia, subcategoria, this.descricao, this.quantidade, this.preco,
-                this.promocao, this.precoPromocional, this.imagem);
+        return new Mercadoria(id, codigo, categorgia, subcategoria, descricao,preco,
+                promocao, precoPromocional, imagem, disponivel);
     }
 }

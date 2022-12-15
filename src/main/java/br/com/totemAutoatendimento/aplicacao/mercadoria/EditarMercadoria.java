@@ -2,6 +2,9 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarCategoriaPorNome;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscarSubcategoriaPorNome;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
@@ -27,11 +30,13 @@ public class EditarMercadoria {
         this.subcategoriaRepository = subcategoriaRepository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public DadosDeMercadoria executar(DadosEditarMercadoria dados) {
         Optional<Mercadoria> mercadoriaPorCodigo = repository.buscarPorCodigo(dados.codigo());
-        if(mercadoriaPorCodigo.isPresent() && mercadoriaPorCodigo.get().getId() != dados.id()){
+        if (mercadoriaPorCodigo.isPresent() && mercadoriaPorCodigo.get().getId() != dados.id()) {
             throw new ViolacaoDeIntegridadeDeDadosException(
-                "Mercadoria com código " + dados.codigo() + " já cadastrada!");
+                    "Mercadoria com código " + dados.codigo() + " já cadastrada!");
         }
         BuscarMercadoria buscarMercadoria = new BuscarMercadoria(repository);
         BuscarCategoriaPorNome buscarCategoriaPorNome = new BuscarCategoriaPorNome(categoriaRepository);
@@ -43,10 +48,10 @@ public class EditarMercadoria {
         mercadoria.setCategoria(categoria);
         mercadoria.setSubcategoria(subcategoriaPorNome);
         mercadoria.setDescricao(dados.descricao());
-        mercadoria.setQuantidade(dados.quantidade());
         mercadoria.setPreco(dados.preco());
         mercadoria.setPromocao(dados.promocao());
         mercadoria.setPrecoPromocional(dados.precoPromocional());
+        mercadoria.setDisponivel(dados.disponivel());
         return new DadosDeMercadoria(repository.editar(mercadoria));
     }
 }

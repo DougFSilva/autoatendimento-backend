@@ -18,9 +18,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
-import br.com.totemAutoatendimento.dominio.comanda.Pedido;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente.ClienteEntity;
+import br.com.totemAutoatendimento.dominio.pedido.Pedido;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.cliente.ClienteEntity;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pedido.PedidoEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

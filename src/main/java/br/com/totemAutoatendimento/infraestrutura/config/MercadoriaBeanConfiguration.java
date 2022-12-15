@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.AdicionarQuantidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarDadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriaPorCodigo;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasEmPromocao;
@@ -14,7 +13,6 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarTodasMercadorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.CriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverQuantidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria.CategoriaEntityRepository;
@@ -34,7 +32,7 @@ public class MercadoriaBeanConfiguration {
 
     @Bean
     public CriarMercadoria criarMercadoria() {
-        return new CriarMercadoria(repository, categoriaRepository,subcategoriaRepository);
+        return new CriarMercadoria(repository, categoriaRepository, subcategoriaRepository);
     }
 
     @Bean
@@ -80,16 +78,6 @@ public class MercadoriaBeanConfiguration {
     @Bean
     public UploadImagemMercadoria uploadImagemDeMercadoria() {
         return new UploadImagemMercadoria(repository);
-    }
-
-    @Bean
-    public AdicionarQuantidadeDeMercadoria adicionarQuantidadeDeMercadoria(){
-        return new AdicionarQuantidadeDeMercadoria(repository);
-    }
-
-    @Bean
-    public RemoverQuantidadeDeMercadoria removerQuantidadeDeMercadoria() {
-        return new RemoverQuantidadeDeMercadoria(repository);
     }
 
 }

@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.AlterarSenhaDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarDadosDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.BuscarTodosUsuarios;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.CriarUsuario;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.EditarUsuario;
-import br.com.totemAutoatendimento.aplicacao.pessoa.usuario.RemoverUsuario;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.usuario.UsuarioEntityRepository;
+import br.com.totemAutoatendimento.aplicacao.usuario.AlterarSenhaDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.BuscarDadosDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.BuscarTodosUsuarios;
+import br.com.totemAutoatendimento.aplicacao.usuario.BuscarUsuarioPorRegistro;
+import br.com.totemAutoatendimento.aplicacao.usuario.CriarUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.EditarUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.RemoverUsuario;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.usuario.UsuarioEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.CodificadorBcrypt;
 
 @Configuration
@@ -50,6 +51,11 @@ public class UsuarioBeanConfiguration {
     @Bean
     public BuscarTodosUsuarios buscarTodosUsuarios() {
         return new BuscarTodosUsuarios(repository);
+    }
+
+    @Bean
+    public BuscarUsuarioPorRegistro buscarUsuarioPorRegistro() {
+        return new BuscarUsuarioPorRegistro(repository);
     }
     
 }

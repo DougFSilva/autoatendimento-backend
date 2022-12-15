@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.categoria;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
@@ -18,6 +19,7 @@ public class RemoverCategoria {
 		this.mercadoriaRepository = mercadoriaRepository;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	public void executar(Long id) {
 		BuscarCategoria buscarCategoria = new BuscarCategoria(repository);
 		Categoria categoria = buscarCategoria.executar(id);

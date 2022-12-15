@@ -23,16 +23,17 @@ String subcategoria,
 String descricao,
 
 @NotNull
-Integer quantidade,
-
-@NotNull
 BigDecimal preco,
 
 @NotNull
 Boolean promocao,
 
 @NotNull
-BigDecimal precoPromocional)
+BigDecimal precoPromocional,
+
+@NotNull
+Boolean disponivel
+)
 {
 
 }

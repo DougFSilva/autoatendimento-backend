@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.BuscarDadosDePedido;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.BuscarPedidosEntregues;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.BuscarPedidosPorData;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.BuscarTodosPedidos;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.EntregarPedido;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.FazerPedido;
-import br.com.totemAutoatendimento.aplicacao.comanda.pedido.RemoverPedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.BuscarDadosDePedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.BuscarPedidosEntregues;
+import br.com.totemAutoatendimento.aplicacao.pedido.BuscarPedidosPorData;
+import br.com.totemAutoatendimento.aplicacao.pedido.BuscarTodosPedidos;
+import br.com.totemAutoatendimento.aplicacao.pedido.EntregarPedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.FazerPedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.RemoverPedido;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.ComandaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.PedidoEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pedido.PedidoEntityRepository;
 
 @Configuration
 public class PedidoBeanConfiguration {
@@ -29,7 +29,7 @@ public class PedidoBeanConfiguration {
 
     @Bean
     public FazerPedido fazerPedido() {
-        return new FazerPedido(comandaRepository, mercadoriaRepository);
+        return new FazerPedido(repository, comandaRepository, mercadoriaRepository);
     }
 
     @Bean

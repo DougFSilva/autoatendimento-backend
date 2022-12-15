@@ -2,6 +2,7 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarCategoriaPorNome;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
@@ -19,6 +20,7 @@ public class BuscarMercadoriasPorCategoria {
         this.categoriaRepository = categoriaRepository;
     }
 
+    @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
     public Page<DadosDeMercadoria> executar(Pageable paginacao, String nomeDaCategoria){
         BuscarCategoriaPorNome buscarCategoriaPorNome = new BuscarCategoriaPorNome(categoriaRepository);
         Categoria categoria = buscarCategoriaPorNome.executar(nomeDaCategoria);

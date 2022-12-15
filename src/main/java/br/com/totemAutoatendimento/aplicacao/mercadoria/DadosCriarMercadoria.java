@@ -15,8 +15,6 @@ public record DadosCriarMercadoria(
 
 		@NotBlank String descricao,
 
-		@NotNull Integer quantidade,
-
 		@NotNull BigDecimal preco,
 
 		@NotNull Boolean promocao,

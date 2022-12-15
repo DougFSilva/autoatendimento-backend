@@ -2,11 +2,12 @@ package br.com.totemAutoatendimento.aplicacao.comanda;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
-import br.com.totemAutoatendimento.aplicacao.pessoa.cliente.BuscarCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.BuscarCliente;
+import br.com.totemAutoatendimento.dominio.cliente.Cliente;
+import br.com.totemAutoatendimento.dominio.cliente.ClienteRepository;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
-import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
-import br.com.totemAutoatendimento.dominio.pessoa.cliente.ClienteRepository;
 
 public class BuscarComandaPorCliente {
 
@@ -19,6 +20,7 @@ public class BuscarComandaPorCliente {
         this.clienteRepository = clienteRepository;
     }
 
+    @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
     public Page<DadosDeComanda> executar(Pageable paginacao, Long id) {
         BuscarCliente buscarCliente = new BuscarCliente(clienteRepository);
         Cliente cliente = buscarCliente.executar(id);

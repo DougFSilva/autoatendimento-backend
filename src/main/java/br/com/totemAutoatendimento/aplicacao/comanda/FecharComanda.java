@@ -3,12 +3,15 @@ package br.com.totemAutoatendimento.aplicacao.comanda;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
-import br.com.totemAutoatendimento.dominio.comanda.Pedido;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
+import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 
 public class FecharComanda {
 
@@ -18,6 +21,8 @@ public class FecharComanda {
         this.repository = repository;
     }
 
+    @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
+    @Transactional
     public DadosDeComanda executar(Long id, TipoPagamento tipoPagamento) {
         BuscarComanda buscarComanda = new BuscarComanda(repository);
         Comanda comanda = buscarComanda.executar(id);

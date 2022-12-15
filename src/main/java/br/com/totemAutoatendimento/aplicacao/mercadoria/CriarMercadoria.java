@@ -1,5 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarCategoriaPorNome;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscarSubcategoriaPorNome;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
@@ -25,6 +27,7 @@ public class CriarMercadoria {
         this.subcategoriaRepository = subcategoriaRepository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Mercadoria executar(DadosCriarMercadoria dados) {
         if (repository.buscarPorCodigo(dados.codigo()).isPresent()) {
             throw new ViolacaoDeIntegridadeDeDadosException(
@@ -35,9 +38,8 @@ public class CriarMercadoria {
         Categoria categoria = buscarCategoriaPorNome.executar(dados.categoria());
         Subcategoria subcategoria = buscarSubcategoriaPorNome.executar(dados.subcategoria());
         Mercadoria mercadoria = new Mercadoria(null, dados.codigo(), categoria, subcategoria, dados.descricao(),
-                dados.quantidade(),
                 dados.preco(),
-                dados.promocao(), dados.precoPromocional(), null);
+                dados.promocao(), dados.precoPromocional(), null, true);
         return repository.criar(mercadoria);
     }
 

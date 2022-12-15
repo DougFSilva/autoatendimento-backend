@@ -8,12 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
-import br.com.totemAutoatendimento.dominio.comanda.Pedido;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
-import br.com.totemAutoatendimento.dominio.pessoa.cliente.Cliente;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pessoa.cliente.ClienteEntity;
+import br.com.totemAutoatendimento.dominio.pedido.Pedido;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.cliente.ClienteEntity;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pedido.PedidoEntity;
 
 @Repository
 public class ComandaEntityRepository implements ComandaRepository {

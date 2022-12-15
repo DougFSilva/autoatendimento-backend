@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import br.com.totemAutoatendimento.dominio.exception.ArquivoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.exception.ErroNaAutenticacaoDeUsuario;
 import br.com.totemAutoatendimento.dominio.exception.ErroNaConversaoDaImagemEmByteArrayException;
 import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoException;
 import br.com.totemAutoatendimento.dominio.exception.ExceptionPadrao;
@@ -84,6 +85,13 @@ public class ExceptionHandlerController {
 
 	@ExceptionHandler(RegrasDeNegocioException.class)
 	public ResponseEntity<ExceptionPadrao> regrasDeNegocioException(RegrasDeNegocioException exception) {
+		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
+				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
+	}
+
+	@ExceptionHandler(ErroNaAutenticacaoDeUsuario.class)
+	public ResponseEntity<ExceptionPadrao> erroNaAutenticacaoDeUsuario(ErroNaAutenticacaoDeUsuario exception) {
 		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
 				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);

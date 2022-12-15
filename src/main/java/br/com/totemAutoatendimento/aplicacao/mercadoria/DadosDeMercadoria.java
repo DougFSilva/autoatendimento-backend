@@ -20,8 +20,6 @@ public class DadosDeMercadoria {
 	
 	private String descricao;
 	
-	private Integer quantidade;
-	
 	private BigDecimal preco;
 	
 	private Boolean promocao;
@@ -29,6 +27,8 @@ public class DadosDeMercadoria {
 	private BigDecimal precoPromocional;
 
     private String imagem;
+
+    private Boolean disponivel;
     
     public DadosDeMercadoria(Mercadoria mercadoria){
         this.id = mercadoria.getId();
@@ -36,10 +36,10 @@ public class DadosDeMercadoria {
         this.categoria = mercadoria.getCategoria().getNome();
         this.subcategoria = mercadoria.getSubcategoria().getNome();
         this.descricao = mercadoria.getDescricao();
-        this.quantidade = mercadoria.getQuantidade();
         this.preco = mercadoria.getPreco();
         this.promocao = mercadoria.getPromocao();
         this.precoPromocional = mercadoria.getPrecoPromocional();
         this.imagem = mercadoria.getImagem();
+        this.disponivel = mercadoria.getDisponivel();
     }
 }
