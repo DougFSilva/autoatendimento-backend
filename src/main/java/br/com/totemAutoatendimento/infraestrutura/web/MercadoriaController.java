@@ -40,6 +40,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/mercadoria")
@@ -82,6 +83,7 @@ public class MercadoriaController {
     @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
             "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
             "buscarTodasMercadorias" }, allEntries = true)
+    @Operation(summary = "Criar mercadoria", description = "Cria uma mercadoria no sistema")
     public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
         Mercadoria mercadoria = criarMercadoria.executar(dados);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
@@ -93,6 +95,7 @@ public class MercadoriaController {
     @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
             "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
             "buscarTodasMercadorias" }, allEntries = true)
+    @Operation(summary = "Remover mercadoria", description = "Remove alguma mercadoria existente")
     public ResponseEntity<Void> removerMercadoria(@PathVariable Long id) {
         removerMercadoria.executar(id);
         return ResponseEntity.noContent().build();
@@ -102,22 +105,26 @@ public class MercadoriaController {
     @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
             "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
             "buscarTodasMercadorias" }, allEntries = true)
+    @Operation(summary = "Editar mercadoria", description = "Edita alguma mercadoria existente")
     public ResponseEntity<DadosDeMercadoria> editarMercadoria(@RequestBody @Valid DadosEditarMercadoria dados) {
         return ResponseEntity.ok().body(editarMercadoria.executar(dados));
     }
 
     @GetMapping(value = "/{id}")
+    @Operation(summary = "Buscar mercadoria", description = "Busca alguma mercadoria pelo id")
     public ResponseEntity<DadosDeMercadoria> buscarMercadoria(@PathVariable Long id) {
         return ResponseEntity.ok().body(buscarDadosDeMercadoria.executar(id));
     }
 
     @GetMapping(value = "/codigo/{codigo}")
+    @Operation(summary = "Buscar mercadoria por codigo", description = "Busca alguma mercadoria pelo codigo")
     public ResponseEntity<DadosDeMercadoria> buscarMercadoriaPorCodigo(@PathVariable String codigo) {
         return ResponseEntity.ok().body(buscarMercadoriaPorCodigo.executar(codigo));
     }
 
     @GetMapping(value = "/categoria/{categoria}")
     @Cacheable(value = "buscarMercadoriasPorCategoria")
+    @Operation(summary = "Buscar mercadorias por categoria", description = "Busca mercadorias pela categoria")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorCategoria(Pageable paginacao,
             @PathVariable String categoria) {
         return ResponseEntity.ok().body(buscarMercadoriasPorCategoria.executar(paginacao, categoria));
@@ -125,6 +132,7 @@ public class MercadoriaController {
 
     @GetMapping(value = "/subcategoria/{subcategoria}")
     @Cacheable(value = "buscarMercadoriasPorSubcategoria")
+    @Operation(summary = "Buscar mercadorias por subcategoria", description = "Busca mercadorias pela subcategoria")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorSubcategoria(Pageable paginacao,
             @PathVariable String subcategoria) {
         return ResponseEntity.ok().body(buscarMercadoriasPorSubcategoria.executar(paginacao, subcategoria));
@@ -132,18 +140,21 @@ public class MercadoriaController {
 
     @GetMapping(value = "/com-promocao")
     @Cacheable(value = "buscarMercadoriasEmPromocao")
+    @Operation(summary = "Buscar mercadorias em promoção", description = "Busca mercadorias que estão em promoção")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasEmPromocao(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, true));
     }
 
     @GetMapping(value = "/sem-promocao")
     @Cacheable(value = "buscarMercadoriasSemPromocao")
+    @Operation(summary = "Buscar mercadorias sem promoção", description = "Busca mercadorias que estão sem promoção")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasSemPromocao(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, false));
     }
 
     @GetMapping
     @Cacheable(value = "buscarTodasMercadorias")
+    @Operation(summary = "Buscar todas mercadorias", description = "Busca todas mercadorias existentes")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarTodasMercadorias(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarTodasMercadorias.executar(paginacao));
     }
@@ -152,6 +163,7 @@ public class MercadoriaController {
     @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
             "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
             "buscarTodasMercadorias" }, allEntries = true)
+    @Operation(summary = "Adicionar imagem à mercadoria", description = "Adiciona uma imagem em formato jpg ou png a alguma mercadoria existente")
     public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
         String nomeDaImagem = id + "-" + file.getOriginalFilename();
@@ -164,6 +176,7 @@ public class MercadoriaController {
     }
 
     @GetMapping(value = "/imagem/{nomeDaImagem}")
+    @Operation(summary = "Buscar imagem da mercadoria", description = "Busca imagem da mercadoria")
     public ResponseEntity<byte[]> buscarImagemDaMercadoria(@PathVariable String nomeDaImagem) {
         String extensao = nomeDaImagem.split("\\.")[1];
         BuscarImagem buscarImagem = new BuscarImagem();

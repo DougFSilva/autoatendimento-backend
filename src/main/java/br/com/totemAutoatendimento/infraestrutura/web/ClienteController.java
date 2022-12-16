@@ -31,6 +31,7 @@ import br.com.totemAutoatendimento.aplicacao.cliente.DadosEditarCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.EditarCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.RemoverCliente;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/cliente")
@@ -58,7 +59,8 @@ public class ClienteController {
 	private BuscarTodosClientes buscarTodosClientes;
 
 	@PostMapping
-		@CacheEvict(value = {"buscarTodosClientes", "buscarClientesPorCidade"})
+	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
+	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
 		Cliente cliente = criarCliente.executar(dados);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
@@ -67,37 +69,43 @@ public class ClienteController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-		@CacheEvict(value = {"buscarTodosClientes", "buscarClientesPorCidade"})
+	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
+		@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
 	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
 		removerCliente.executar(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping
-		@CacheEvict(value = {"buscarTodosClientes", "buscarClientesPorCidade"})
+	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
+		@Operation(summary = "Editar cliente", description = "Edita algum cliente existente")
 	public ResponseEntity<DadosDeCliente> editarCliente(@RequestBody @Valid DadosEditarCliente dados) {
 		return ResponseEntity.ok().body(editarCliente.executar(dados));
 	}
 
 	@GetMapping(value = "/{id}")
+		@Operation(summary = "Buscar cliente", description = "Busca algum cliente existente pelo id")
 	public ResponseEntity<DadosDeCliente> buscarCliente(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscarDadosDeCliente.executar(id));
 	}
 
 	@GetMapping(value = "/cpf/{cpf}")
+		@Operation(summary = "Buscar cliente por cpf", description = "Busca algum cliente existente por cpf")
 	public ResponseEntity<DadosDeCliente> buscarClientePorCpf(@PathVariable String cpf) {
 		return ResponseEntity.ok().body(buscarClientePorCpf.executar(cpf));
 	}
 
 	@GetMapping(value = "/cidade/{cidade}")
-		@Cacheable(value = "buscarClientesPorCidade")
+	@Cacheable(value = "buscarClientesPorCidade")
+		@Operation(summary = "Buscar clientes por cidade", description = "Busca clientes pela cidade")
 	public ResponseEntity<Page<DadosDeCliente>> buscarClientesPorCidade(Pageable paginacao,
 			@PathVariable String cidade) {
 		return ResponseEntity.ok().body(buscarClientesPorCidade.executar(paginacao, cidade));
 	}
 
 	@GetMapping
-		@Cacheable(value = "buscarTodosClientes")
+	@Cacheable(value = "buscarTodosClientes")
+		@Operation(summary = "Buscar todos clientes", description = "Busca todos os clientes existentes")
 	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscarTodosClientes.executar(paginacao));
 	}

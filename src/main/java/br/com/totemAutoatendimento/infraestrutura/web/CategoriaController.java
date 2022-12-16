@@ -30,6 +30,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditarCategori
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoverCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/mercadoria/categoria")
@@ -55,6 +56,7 @@ public class CategoriaController {
 
 	@PostMapping(value = "/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@Operation(summary = "Criar categoria", description = "Cria uma categoria para cadastrar mercadorias")
 	public ResponseEntity<Categoria> criarCategoria(@PathVariable String nome) {
 		Categoria categoria = criarCategoria.executar(nome);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
@@ -63,26 +65,30 @@ public class CategoriaController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-		@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
 		removerCategoria.executar(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping
-		@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
 	public ResponseEntity<Categoria> editarCategoria(@RequestBody Categoria categoria) {
 		return ResponseEntity.ok().body(editarCategoria.executar(categoria));
 	}
 
 	@GetMapping
 	@Cacheable(value = "buscarTodasCategorias")
+	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes")
 	public ResponseEntity<Page<Categoria>> buscarTodasCategorias(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscarTodasCategorias.executar(paginacao));
 	}
 
 	@PostMapping(value = "/{id}/imagem")
-		@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@Operation(summary = "Adicionar imagem", description = "Adiciona uma imagem em formato jgp ou png a alguma categoria existente")
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
 		String nomeDaImagem = id + "-" + file.getOriginalFilename();
@@ -94,6 +100,7 @@ public class CategoriaController {
 	}
 
 	@GetMapping(value = "/imagem/{nomeDaImagem}")
+	@Operation(summary = "Buscar imagem", description = "Busca imagem da categoria")
 	public ResponseEntity<byte[]> buscarImagemDaCategoria(@PathVariable String nomeDaImagem) {
 		String extensao = nomeDaImagem.split("\\.")[1];
 		BuscarImagem buscarImagem = new BuscarImagem();

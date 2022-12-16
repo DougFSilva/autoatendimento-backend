@@ -17,6 +17,7 @@ import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.DadosDeLogin;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/autenticacao")
@@ -29,6 +30,7 @@ public class AutenticacaoController {
 	private TokenService tokenService;
 
 	@PostMapping
+	@Operation(summary = "Auntenticar no sistema", description = "Faz a autenticação no sistema com usuário e senha")
 	public ResponseEntity<DadosDeUsuario> autenticar(@RequestBody @Valid DadosDeLogin dados) {
 		AutenticacaoDeUsuario autenticacaoDeUsuario = new AutenticacaoDeUsuario(authenticationManager);
 		Authentication autenticacao = autenticacaoDeUsuario.executar(dados);

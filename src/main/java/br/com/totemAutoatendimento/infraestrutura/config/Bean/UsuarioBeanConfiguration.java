@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.config;
+package br.com.totemAutoatendimento.infraestrutura.config.Bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

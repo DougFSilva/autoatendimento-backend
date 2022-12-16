@@ -49,10 +49,11 @@ public class SegurancaConfiguration {
         http.cors()
             .and().authorizeRequests()
             .antMatchers(HttpMethod.POST, "/autenticacao").permitAll()
-            .antMatchers(HttpMethod.POST, "/usuario").permitAll() //Temporário, remover
             .antMatchers(HttpMethod.POST, "/pedido/cartao/*").permitAll()
             .antMatchers(HttpMethod.DELETE, "/pedido").permitAll()
             .antMatchers(HttpMethod.GET, "/comanda/aberta/cartao/*").permitAll()
+            .antMatchers(HttpMethod.GET, "/v3/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
             .anyRequest().authenticated()
             .and().csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
