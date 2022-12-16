@@ -11,11 +11,13 @@ import br.com.totemAutoatendimento.aplicacao.comanda.DadosDeComanda;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
-import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
+import br.com.totemAutoatendimento.dominio.pedido.EventoDePedido;
+import br.com.totemAutoatendimento.dominio.pedido.MensagemDePedido;
 import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
+import br.com.totemAutoatendimento.dominio.pedido.TipoDeMensagemDePedido;
 
 public class FazerPedido {
 
@@ -25,11 +27,14 @@ public class FazerPedido {
 
     private MercadoriaRepository mercadoriaRepository;
 
+    private EventoDePedido eventoDePedido;
+
     public FazerPedido(PedidoRepository repository, ComandaRepository comandaRepository,
-            MercadoriaRepository mercadoriaRepository) {
+            MercadoriaRepository mercadoriaRepository, EventoDePedido eventoDePedido) {
         this.repository = repository;
         this.comandaRepository = comandaRepository;
         this.mercadoriaRepository = mercadoriaRepository;
+        this.eventoDePedido = eventoDePedido;
     }
 
     @Transactional
@@ -38,21 +43,15 @@ public class FazerPedido {
         if (comanda.isEmpty()) {
             throw new ObjetoNaoEncontradoException("Comanda aberta com cartão " + cartao + " não encontrada!");
         }
+        VerificarDisponibilidadeDeMercadoria verificarDisponilidade = new VerificarDisponibilidadeDeMercadoria(mercadoriaRepository);
         dados.forEach(dado -> {
-            Optional<Mercadoria> mercadoria = mercadoriaRepository.buscarPorCodigo(dado.codigoDaMercadoria());
-            if (mercadoria.isEmpty()) {
-                throw new ObjetoNaoEncontradoException(
-                        "Mercadoria com código " + dado.codigoDaMercadoria() + " não encontrada!");
-            }
-            if (!mercadoria.get().getDisponivel()) {
-                throw new RegrasDeNegocioException(
-                        "Não é possível realizar pedido, pois a mercadoria está indisponível!");
-            }
-            Pedido pedido = new Pedido(null, mercadoria.get(), dado.quantidade(), LocalDate.now(), LocalTime.now(),
+            Mercadoria mercadoria = verificarDisponilidade.executar(dado.codigoDaMercadoria());
+            Pedido pedido = new Pedido(null, mercadoria, dado.quantidade(), LocalDate.now(), LocalTime.now(),
                     null,
                     false);
             Pedido pedidoCriado = repository.criar(pedido);
             comanda.get().adicionarPedido(pedidoCriado);
+            eventoDePedido.notificar(new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, pedidoCriado));
         });
         return new DadosDeComanda(comandaRepository.editar(comanda.get()));
     }

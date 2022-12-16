@@ -1,44 +1,37 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.totemAutoatendimento.aplicacao.usuario.DadosDeUsuario;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.DadosDeLogin;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping(value = "/autenticacao")
 public class AutenticacaoController {
 
 	@Autowired
-	private AuthenticationManager authenticationManager;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
     
-	@Autowired
-	private TokenService tokenService;
-
-	@PostMapping
+	@PostMapping(value = "/login")
 	@Operation(summary = "Auntenticar no sistema", description = "Faz a autenticação no sistema com usuário e senha")
-	public ResponseEntity<DadosDeUsuario> autenticar(@RequestBody @Valid DadosDeLogin dados) {
-		AutenticacaoDeUsuario autenticacaoDeUsuario = new AutenticacaoDeUsuario(authenticationManager);
-		Authentication autenticacao = autenticacaoDeUsuario.executar(dados);
-		Usuario usuario = (Usuario)autenticacao.getPrincipal(); // Busca o usuário
-		String token = tokenService.gerarToken(autenticacao); // Gera o token
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setBearerAuth(token);
-		return ResponseEntity.ok().headers(httpHeaders).body(new DadosDeUsuario(usuario));
+	public ResponseEntity<DadosDeUsuario> login(@RequestBody @Valid DadosDeLogin dados) {
+		Usuario usuario = autenticacaoDeUsuario.executar(dados); 
+		return ResponseEntity.ok().body(new DadosDeUsuario(usuario));
 
+	}
+
+	@PostMapping(value = "/logout")
+	public ResponseEntity<Void> logout(HttpSession session){
+		session.invalidate();
+		return ResponseEntity.noContent().build();
 	}
 }
