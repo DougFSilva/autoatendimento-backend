@@ -6,6 +6,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -77,6 +79,9 @@ public class MercadoriaController {
     private UploadImagemMercadoria uploadImagemDeMercadoria;
 
     @PostMapping
+    @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
+            "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
+            "buscarTodasMercadorias" }, allEntries = true)
     public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
         Mercadoria mercadoria = criarMercadoria.executar(dados);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
@@ -85,12 +90,18 @@ public class MercadoriaController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
+            "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
+            "buscarTodasMercadorias" }, allEntries = true)
     public ResponseEntity<Void> removerMercadoria(@PathVariable Long id) {
         removerMercadoria.executar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping
+    @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
+            "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
+            "buscarTodasMercadorias" }, allEntries = true)
     public ResponseEntity<DadosDeMercadoria> editarMercadoria(@RequestBody @Valid DadosEditarMercadoria dados) {
         return ResponseEntity.ok().body(editarMercadoria.executar(dados));
     }
@@ -106,33 +117,41 @@ public class MercadoriaController {
     }
 
     @GetMapping(value = "/categoria/{categoria}")
+    @Cacheable(value = "buscarMercadoriasPorCategoria")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorCategoria(Pageable paginacao,
             @PathVariable String categoria) {
         return ResponseEntity.ok().body(buscarMercadoriasPorCategoria.executar(paginacao, categoria));
     }
 
     @GetMapping(value = "/subcategoria/{subcategoria}")
+    @Cacheable(value = "buscarMercadoriasPorSubcategoria")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorSubcategoria(Pageable paginacao,
             @PathVariable String subcategoria) {
         return ResponseEntity.ok().body(buscarMercadoriasPorSubcategoria.executar(paginacao, subcategoria));
     }
 
     @GetMapping(value = "/com-promocao")
+    @Cacheable(value = "buscarMercadoriasEmPromocao")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasEmPromocao(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, true));
     }
 
     @GetMapping(value = "/sem-promocao")
+    @Cacheable(value = "buscarMercadoriasSemPromocao")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasSemPromocao(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, false));
     }
 
     @GetMapping
+    @Cacheable(value = "buscarTodasMercadorias")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarTodasMercadorias(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarTodasMercadorias.executar(paginacao));
     }
 
     @PostMapping(value = "/{id}/imagem")
+    @CacheEvict(value = { "buscarMercadoriasPorCategoria", "buscarMercadoriasPorSubcategoria",
+            "buscarMercadoriasEmPromocao", "buscarMercadoriasSemPromocao",
+            "buscarTodasMercadorias" }, allEntries = true)
     public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
         String nomeDaImagem = id + "-" + file.getOriginalFilename();

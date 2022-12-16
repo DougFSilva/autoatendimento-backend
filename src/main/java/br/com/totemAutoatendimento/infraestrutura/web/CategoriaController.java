@@ -4,6 +4,8 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +54,7 @@ public class CategoriaController {
 	private UploadImagemDaCategoria uploadImagemDaCategoria;
 
 	@PostMapping(value = "/{nome}")
+	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	public ResponseEntity<Categoria> criarCategoria(@PathVariable String nome) {
 		Categoria categoria = criarCategoria.executar(nome);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
@@ -60,22 +63,26 @@ public class CategoriaController {
 	}
 
 	@DeleteMapping(value = "/{id}")
+		@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
 		removerCategoria.executar(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping
+		@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	public ResponseEntity<Categoria> editarCategoria(@RequestBody Categoria categoria) {
 		return ResponseEntity.ok().body(editarCategoria.executar(categoria));
 	}
 
 	@GetMapping
+	@Cacheable(value = "buscarTodasCategorias")
 	public ResponseEntity<Page<Categoria>> buscarTodasCategorias(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscarTodasCategorias.executar(paginacao));
 	}
 
 	@PostMapping(value = "/{id}/imagem")
+		@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
 		String nomeDaImagem = id + "-" + file.getOriginalFilename();

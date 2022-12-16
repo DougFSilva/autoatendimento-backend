@@ -4,6 +4,8 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +54,7 @@ public class SubcategoriaController {
     private UploadImagemDaSubcategoria uploadImagemDaSubcategoria;
 
     @PostMapping(value = "/{nome}")
+        @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
     public ResponseEntity<Subcategoria> criarSubcategoria(@PathVariable String nome) {
         Subcategoria subcategoria = criarSubcategoria.executar(nome);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{nome}").buildAndExpand(subcategoria.getId())
@@ -60,17 +63,20 @@ public class SubcategoriaController {
     }
 
     @DeleteMapping(value = "/{id}")
+        @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
     public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
         removerSubcategoria.executar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping
+        @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
     public ResponseEntity<Subcategoria> editarSubcategoria(@RequestBody Subcategoria subcategoriaAtualizada) {
         return ResponseEntity.ok().body(editarSubcategoria.executar(subcategoriaAtualizada));
     }
 
     @GetMapping
+    @Cacheable(value = "buscarTodasSubcategorias")
     public ResponseEntity<Page<Subcategoria>> buscarTodasSubcategorias(Pageable paginacao) {
         return ResponseEntity.ok().body(buscarTodasSubcategorias.executar(paginacao));
     }

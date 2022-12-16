@@ -5,6 +5,8 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +58,7 @@ public class ClienteController {
 	private BuscarTodosClientes buscarTodosClientes;
 
 	@PostMapping
+		@CacheEvict(value = {"buscarTodosClientes", "buscarClientesPorCidade"})
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
 		Cliente cliente = criarCliente.executar(dados);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
@@ -64,12 +67,14 @@ public class ClienteController {
 	}
 
 	@DeleteMapping(value = "/{id}")
+		@CacheEvict(value = {"buscarTodosClientes", "buscarClientesPorCidade"})
 	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
 		removerCliente.executar(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping
+		@CacheEvict(value = {"buscarTodosClientes", "buscarClientesPorCidade"})
 	public ResponseEntity<DadosDeCliente> editarCliente(@RequestBody @Valid DadosEditarCliente dados) {
 		return ResponseEntity.ok().body(editarCliente.executar(dados));
 	}
@@ -79,18 +84,20 @@ public class ClienteController {
 		return ResponseEntity.ok().body(buscarDadosDeCliente.executar(id));
 	}
 
-	@GetMapping(value = "/cp0/{cpf}")
+	@GetMapping(value = "/cpf/{cpf}")
 	public ResponseEntity<DadosDeCliente> buscarClientePorCpf(@PathVariable String cpf) {
 		return ResponseEntity.ok().body(buscarClientePorCpf.executar(cpf));
 	}
 
 	@GetMapping(value = "/cidade/{cidade}")
+		@Cacheable(value = "buscarClientesPorCidade")
 	public ResponseEntity<Page<DadosDeCliente>> buscarClientesPorCidade(Pageable paginacao,
 			@PathVariable String cidade) {
 		return ResponseEntity.ok().body(buscarClientesPorCidade.executar(paginacao, cidade));
 	}
 
 	@GetMapping
+		@Cacheable(value = "buscarTodosClientes")
 	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscarTodosClientes.executar(paginacao));
 	}
