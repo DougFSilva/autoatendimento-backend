@@ -16,6 +16,6 @@ public class BuscarPedidosEntregues {
 
     @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
     public Page<DadosDePedido> executar(Pageable paginacao, Boolean entregue){
-       return repository.buscarPorEntregue(paginacao, entregue).map(DadosDePedido::new);
+        return repository.buscarPorEntregue(paginacao, entregue).map(DadosDePedido::new);
     }
 }

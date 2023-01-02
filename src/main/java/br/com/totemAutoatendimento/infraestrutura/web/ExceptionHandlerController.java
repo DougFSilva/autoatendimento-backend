@@ -17,6 +17,7 @@ import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoExcept
 import br.com.totemAutoatendimento.dominio.exception.ExceptionPadrao;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
+import br.com.totemAutoatendimento.dominio.exception.UsuarioSemPermissaoException;
 import br.com.totemAutoatendimento.dominio.exception.VerificacaoDeSenhaException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 
@@ -96,6 +97,16 @@ public class ExceptionHandlerController {
 				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
 	}
+
+	@ExceptionHandler(UsuarioSemPermissaoException.class)
+	public ResponseEntity<ExceptionPadrao> usuarioSemPermissaoException(UsuarioSemPermissaoException exception) {
+		ExceptionPadrao exceptionPadrao = new ExceptionPadrao(System.currentTimeMillis(),
+				HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionPadrao);
+	}
+
+
+	
 
 	
 }

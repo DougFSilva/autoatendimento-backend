@@ -17,16 +17,16 @@ public class AutenticacaoDeUsuario {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public Usuario executar(DadosDeLogin dados) {
+    public Usuario autenticar(DadosDeLogin dados) {
         UsernamePasswordAuthenticationToken autenticacaoToken = new UsernamePasswordAuthenticationToken(
                 dados.registro(), dados.password());
         try {
-            Authentication autenticacao = authenticationManager.authenticate(autenticacaoToken); // Tenta fazer a autenticação
+            Authentication autenticacao = authenticationManager.authenticate(autenticacaoToken); // Tenta fazer a
+                                                                                                 // autenticação
             SecurityContextHolder.getContext().setAuthentication(autenticacao);
             return (Usuario) autenticacao.getPrincipal();
         } catch (AuthenticationException e) {
             throw new ErroNaAutenticacaoDeUsuario("Erro na autenticação do usuário. Usuário e/ou senha inválidos!");
         }
-
     }
 }

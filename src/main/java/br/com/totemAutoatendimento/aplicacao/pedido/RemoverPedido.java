@@ -23,7 +23,8 @@ public class RemoverPedido {
 
     private EventoDePedido eventoDePedido;
 
-    public RemoverPedido(PedidoRepository repository, ComandaRepository comandaRepository, EventoDePedido eventoDePedido) {
+    public RemoverPedido(PedidoRepository repository, ComandaRepository comandaRepository,
+            EventoDePedido eventoDePedido) {
         this.repository = repository;
         this.comandaRepository = comandaRepository;
         this.eventoDePedido = eventoDePedido;
@@ -45,7 +46,8 @@ public class RemoverPedido {
         comanda.get().removerPedido(pedido.get());
         Comanda comandaAtualizada = comandaRepository.editar(comanda.get());
         repository.remover(pedido.get());
-        eventoDePedido.notificar(new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_REMOVIDO, pedido.get()));
+        eventoDePedido.notificar(
+                new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_REMOVIDO, new DadosDePedido(pedido.get())));
         return new DadosDeComanda(comandaAtualizada);
     }
 }

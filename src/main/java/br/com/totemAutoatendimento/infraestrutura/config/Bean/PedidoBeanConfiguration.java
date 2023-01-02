@@ -14,6 +14,7 @@ import br.com.totemAutoatendimento.aplicacao.pedido.RemoverPedido;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.ComandaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pedido.PedidoEntityRepository;
+import br.com.totemAutoatendimento.infraestrutura.web.websocket.EnviarPedidoRecebidoWebsocket;
 
 @Configuration
 public class PedidoBeanConfiguration {
@@ -27,14 +28,17 @@ public class PedidoBeanConfiguration {
     @Autowired
     private MercadoriaEntityRepository mercadoriaRepository;
 
+    @Autowired 
+    private EnviarPedidoRecebidoWebsocket enviarPedidoRecebidoWebsocket;
+
     @Bean
     public FazerPedido fazerPedido() {
-        return new FazerPedido(repository, comandaRepository, mercadoriaRepository);
+        return new FazerPedido(repository, comandaRepository, mercadoriaRepository, enviarPedidoRecebidoWebsocket);
     }
 
     @Bean
     public RemoverPedido removerPedido() {
-        return new RemoverPedido(repository, comandaRepository);
+        return new RemoverPedido(repository, comandaRepository, enviarPedidoRecebidoWebsocket);
     }
 
     @Bean

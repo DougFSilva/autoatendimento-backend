@@ -51,7 +51,7 @@ public class FazerPedido {
                     false);
             Pedido pedidoCriado = repository.criar(pedido);
             comanda.get().adicionarPedido(pedidoCriado);
-            eventoDePedido.notificar(new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, pedidoCriado));
+            eventoDePedido.notificar(new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, new DadosDePedido(pedidoCriado)));
         });
         return new DadosDeComanda(comandaRepository.editar(comanda.get()));
     }

@@ -6,9 +6,6 @@ import javax.validation.constraints.NotNull;
 public record DadosFazerPedido(
 
     @NotBlank
-    String cartao,
-
-    @NotBlank
     String codigoDaMercadoria,
 
     @NotNull

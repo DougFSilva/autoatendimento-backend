@@ -57,7 +57,8 @@ public class PedidoController {
 
     @PostMapping(value = "/cartao/{cartao}")
     @Operation(summary = "Fazer pedido", description = "Cria um pedido para uma comanda aberta no sistema")
-    public ResponseEntity<DadosDeComanda> fazerPedido(@PathVariable String cartao,  @RequestBody @Valid List<DadosFazerPedido> dados) {
+    public ResponseEntity<DadosDeComanda> fazerPedido(@PathVariable String cartao,
+            @RequestBody @Valid List<DadosFazerPedido> dados) {
         return ResponseEntity.ok().body(fazerPedido.executar(cartao, dados));
     }
 

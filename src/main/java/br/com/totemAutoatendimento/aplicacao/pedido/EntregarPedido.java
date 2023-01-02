@@ -10,7 +10,7 @@ import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
 
 public class EntregarPedido {
-    
+
     private PedidoRepository repository;
 
     public EntregarPedido(PedidoRepository repository) {
@@ -18,9 +18,9 @@ public class EntregarPedido {
     }
 
     @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-    public void executar(Long id){
+    public void executar(Long id) {
         Optional<Pedido> pedido = repository.buscar(id);
-        if(pedido.isEmpty()){
+        if (pedido.isEmpty()) {
             throw new ObjetoNaoEncontradoException("Pedido com id " + id + " não encontrado!");
         }
         pedido.get().setEntregue(true);

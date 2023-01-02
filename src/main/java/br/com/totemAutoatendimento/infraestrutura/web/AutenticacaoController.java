@@ -24,7 +24,7 @@ public class AutenticacaoController {
 	@PostMapping(value = "/login")
 	@Operation(summary = "Auntenticar no sistema", description = "Faz a autenticação no sistema com usuário e senha")
 	public ResponseEntity<DadosDeUsuario> login(@RequestBody @Valid DadosDeLogin dados) {
-		Usuario usuario = autenticacaoDeUsuario.executar(dados); 
+		Usuario usuario = autenticacaoDeUsuario.autenticar(dados); 
 		return ResponseEntity.ok().body(new DadosDeUsuario(usuario));
 
 	}

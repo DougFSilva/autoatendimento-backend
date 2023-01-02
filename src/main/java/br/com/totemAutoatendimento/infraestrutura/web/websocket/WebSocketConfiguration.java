@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.config;
+package br.com.totemAutoatendimento.infraestrutura.web.websocket;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

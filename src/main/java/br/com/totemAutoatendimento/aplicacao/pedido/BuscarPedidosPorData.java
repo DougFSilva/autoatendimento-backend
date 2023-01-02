@@ -9,15 +9,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
 
 public class BuscarPedidosPorData {
-    
+
     private PedidoRepository repository;
 
-    public BuscarPedidosPorData(PedidoRepository repository){
+    public BuscarPedidosPorData(PedidoRepository repository) {
         this.repository = repository;
     }
 
     @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-    public Page<DadosDePedido> executar(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal){
-       return repository.buscarPorData(paginacao, dataInicial, dataFinal).map(DadosDePedido::new);
+    public Page<DadosDePedido> executar(Pageable paginacao, LocalDate dataInicial,
+            LocalDate dataFinal) {
+        return repository.buscarPorData(paginacao, dataInicial, dataFinal).map(DadosDePedido::new);
     }
 }
