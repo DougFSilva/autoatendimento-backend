@@ -89,7 +89,7 @@ public class CategoriaController {
 	}
 
 	@PostMapping(value = "/{id}/imagem")
-	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
+	@CacheEvict(value = {"buscarTodasCategorias","buscarImagemDaCategoria"}, allEntries = true)
 	@Operation(summary = "Adicionar imagem", description = "Adiciona uma imagem em formato jgp ou png a alguma categoria existente")
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
@@ -102,6 +102,7 @@ public class CategoriaController {
 	}
 
 	@GetMapping(value = "/imagem/{nomeDaImagem}")
+	@Cacheable(value = "buscarImagemDaCategoria")
 	@Operation(summary = "Buscar imagem", description = "Busca imagem da categoria")
 	public ResponseEntity<byte[]> buscarImagemDaCategoria(@PathVariable String nomeDaImagem) {
 		String extensao = nomeDaImagem.split("\\.")[1];

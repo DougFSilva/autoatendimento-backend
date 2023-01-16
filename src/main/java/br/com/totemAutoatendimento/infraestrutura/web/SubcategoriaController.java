@@ -68,7 +68,7 @@ public class SubcategoriaController {
 
     @DeleteMapping(value = "/{id}")
     @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
-        @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
+    @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
     public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
         removeSubcategoria.remover(id);
         return ResponseEntity.noContent().build();
@@ -76,7 +76,7 @@ public class SubcategoriaController {
 
     @PutMapping
     @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
-        @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
+    @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
     public ResponseEntity<Subcategoria> editarSubcategoria(@RequestBody Subcategoria subcategoriaAtualizada) {
         return ResponseEntity.ok().body(editaSubcategoria.editar(subcategoriaAtualizada));
     }
@@ -89,7 +89,8 @@ public class SubcategoriaController {
     }
 
     @PostMapping(value = "/{id}/imagem")
-        @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
+    @CacheEvict(value = {"buscarTodasSubcategorias", "buscarImagemDaSubcategoria"}, allEntries = true)
+    @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
     public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
         String nomeDaImagem = id + "-" + file.getOriginalFilename();
@@ -101,6 +102,8 @@ public class SubcategoriaController {
     }
 
     @GetMapping(value = "/imagem/{nomeDaImagem}")
+    @Cacheable(value = "buscarImagemDaSubcategoria")
+    @Operation(summary = "Buscar imagem", description = "Busca imagem da subcategoria")
     public ResponseEntity<byte[]> buscarImagemDaSubcategoria(@PathVariable String nomeDaImagem) {
         String extensao = nomeDaImagem.split("\\.")[1];
         BuscaImagem buscarImagem = new BuscaImagem();

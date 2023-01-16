@@ -50,8 +50,16 @@ public class FazPedido {
 			VerificaDisponibilidadeDeMercadoria verificaDisponibilidadeDeMercadoria = new VerificaDisponibilidadeDeMercadoria(
 					mercadoriaRepository);
 			Mercadoria mercadoria = verificaDisponibilidadeDeMercadoria.verificar(dado.codigoDaMercadoria());
-			Pedido pedido = new Pedido(null, comanda.get(), mercadoria, dado.mesa(), dado.quantidade(), LocalDate.now(),
-					LocalTime.now(), null, false);
+			Pedido pedido = new Pedido(
+					null, 
+					comanda.get(), 
+					mercadoria, 
+					dado.mesa(), 
+					dado.quantidade(), 
+					LocalDate.now(),
+					LocalTime.now(), 
+					null, 
+					false);
 			Pedido pedidoCriado = repository.criar(pedido);
 			comanda.get().adicionarValor(pedidoCriado);
 			eventoDePedido.notificar(
