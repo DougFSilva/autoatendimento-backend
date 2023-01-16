@@ -39,7 +39,7 @@ public class BuscaDadosDeComandas {
 	public DadosDeComanda buscarAbertasPeloCartao(String cartao) {
 		Optional<Comanda> comanda = repository.buscarPeloCartao(cartao, true);
 		if (comanda.isEmpty()) {
-			throw new ObjetoNaoEncontradoException("Comanda com carta :" + cartao + " não encontrada!");
+			throw new ObjetoNaoEncontradoException("Comanda com cartão :" + cartao + " não encontrada!");
 		}
 		return new DadosDeComanda(comanda.get());
 	}
