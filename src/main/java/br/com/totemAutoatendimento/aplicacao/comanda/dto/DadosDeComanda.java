@@ -33,7 +33,7 @@ public class DadosDeComanda {
 
 	public DadosDeComanda(Comanda comanda) {
 		this.id = comanda.getId();
-		this.cartao = comanda.getCartao();
+		this.cartao = comanda.getCartao().getCodigo();
 		this.cpfDoCliente = comanda.getCliente().getCpf();
 		this.nomeDoCliente = comanda.getCliente().getNome();
 		this.abertura = comanda.getAbertura();

@@ -9,13 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.CartaoEntity;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.ClienteEntity;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.ComandaEntity;
 
 @Repository
 public interface ComandaEntityDao extends JpaRepository<ComandaEntity, Long>{
 
-    Optional<ComandaEntity> findByCartaoAndAberta(String cartao, Boolean aberta);
+    Optional<ComandaEntity> findByCartaoAndAberta(CartaoEntity cartao, Boolean aberta);
 
     Page<ComandaEntity> findAllByAberta(Pageable paginacao, Boolean aberta);
 

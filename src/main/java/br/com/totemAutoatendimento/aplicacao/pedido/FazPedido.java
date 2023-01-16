@@ -29,7 +29,7 @@ public class FazPedido {
 	private final ComandaRepository comandaRepository;
 
 	private final MercadoriaRepository mercadoriaRepository;
-
+	
 	private final EventoDePedido eventoDePedido;
 
 	public FazPedido(PedidoRepository repository, ComandaRepository comandaRepository,
@@ -41,10 +41,10 @@ public class FazPedido {
 	}
 
 	@Transactional
-	public DadosDeComanda fazer(String cartao, List<DadosFazerPedido> dados) {
-		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(cartao, true);
+	public DadosDeComanda fazer(String codigoCartao, List<DadosFazerPedido> dados) {
+		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
-			throw new ObjetoNaoEncontradoException("Comanda aberta com cartão " + cartao + " não encontrada!");
+			throw new ObjetoNaoEncontradoException("Comanda aberta com cartão " + codigoCartao + " não encontrada!");
 		}
 		dados.forEach(dado -> {
 			VerificaDisponibilidadeDeMercadoria verificaDisponibilidadeDeMercadoria = new VerificaDisponibilidadeDeMercadoria(

@@ -30,7 +30,7 @@ public class PedidoBeanConfiguration {
 
 	@Bean
 	public FazPedido fazPedido() {
-		return new FazPedido(pedidoEntityAdapter, comandaEntityAdapter, mercadoriaEntityAdapter,
+		return new FazPedido(pedidoEntityAdapter, comandaEntityAdapter, mercadoriaEntityAdapter, 
 				enviarPedidoRecebidoWebsocket);
 	}
 

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 public record DadosCriarComanda(
 
-		@NotBlank String cartao,
+		@NotBlank String codigoCartao,
 
 		@NotNull Long idCliente) {
 

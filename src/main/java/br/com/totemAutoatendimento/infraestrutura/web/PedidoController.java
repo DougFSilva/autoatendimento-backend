@@ -24,7 +24,6 @@ import br.com.totemAutoatendimento.aplicacao.pedido.FazPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.RemovePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
-import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosRemoverPedido;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -51,10 +50,10 @@ public class PedidoController {
         return ResponseEntity.ok().body(fazPedido.fazer(cartao, dados));
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}/cartao/{cartao}")
     @Operation(summary = "Remover pedido", description = "Remove algum pedido de alguma comanda aberta existente")
-    public ResponseEntity<DadosDeComanda> removerPedido(@RequestBody @Valid DadosRemoverPedido dados) {
-        return ResponseEntity.ok().body(removePedido.remover(dados));
+    public ResponseEntity<DadosDeComanda> removerPedido(@PathVariable Long id, @PathVariable String cartao) {
+        return ResponseEntity.ok().body(removePedido.remover(id, cartao));
     }
 
     @PostMapping(value = "/{id}/entregar")

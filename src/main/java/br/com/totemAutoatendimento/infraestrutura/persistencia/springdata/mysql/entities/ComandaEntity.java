@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -33,7 +34,8 @@ public class ComandaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String cartao;
+	@ManyToOne(cascade = CascadeType.MERGE)
+	private CartaoEntity cartao;
 
 	@OneToOne(cascade = CascadeType.MERGE)
 	private ClienteEntity cliente;

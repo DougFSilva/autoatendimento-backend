@@ -23,7 +23,7 @@ public class BuscaDadosDeComandas {
 	private final ComandaRepository repository;
 
 	private final ClienteRepository clienteRepository;
-
+	
 	public BuscaDadosDeComandas(ComandaRepository repository, ClienteRepository clienteRepository) {
 		this.repository = repository;
 		this.clienteRepository = clienteRepository;
@@ -36,10 +36,10 @@ public class BuscaDadosDeComandas {
 		return new DadosDeComanda(comanda);
 	}
 
-	public DadosDeComanda buscarAbertasPeloCartao(String cartao) {
-		Optional<Comanda> comanda = repository.buscarPeloCartao(cartao, true);
+	public DadosDeComanda buscarAbertasPeloCartao(String codigoCartao) {
+		Optional<Comanda> comanda = repository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
-			throw new ObjetoNaoEncontradoException("Comanda com cartão :" + cartao + " não encontrada!");
+			throw new ObjetoNaoEncontradoException("Comanda com cartão :" + codigoCartao + " não encontrada!");
 		}
 		return new DadosDeComanda(comanda.get());
 	}

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
+import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
 import br.com.totemAutoatendimento.dominio.pedido.Pedido;
@@ -24,7 +25,7 @@ public class Comanda {
 
 	private Long id;
 
-	private String cartao;
+	private Cartao cartao;
 
 	private Cliente cliente;
 
@@ -40,7 +41,7 @@ public class Comanda {
 
 	private Float desconto;
 
-	public Comanda(String cartao, Cliente cliente) {
+	public Comanda(Cartao cartao, Cliente cliente) {
 		this.cartao = cartao;
 		this.cliente = cliente;
 		this.abertura = LocalDateTime.now();

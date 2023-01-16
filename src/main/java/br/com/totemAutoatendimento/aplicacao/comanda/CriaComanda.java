@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.cliente.BuscaClientePeloId;
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosCriarComanda;
+import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.cliente.ClienteRepository;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
@@ -17,7 +18,7 @@ public class CriaComanda {
 	private final ComandaRepository repository;
 
 	private final ClienteRepository clienteRepository;
-
+	
 	public CriaComanda(ComandaRepository repository, ClienteRepository clienteRepository) {
 		this.repository = repository;
 		this.clienteRepository = clienteRepository;
@@ -25,13 +26,13 @@ public class CriaComanda {
 
 	@Transactional
 	public Comanda criar(DadosCriarComanda dados) {
-		if (repository.buscarPeloCartao(dados.cartao(), true).isPresent()) {
+		if (repository.buscarPeloCartao(dados.codigoCartao(), true).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					"Comanda aberta existente para esse cartão!");
 		}
 		BuscaClientePeloId buscaClientePeloId = new BuscaClientePeloId(clienteRepository);
 		Cliente cliente = buscaClientePeloId.buscar(dados.idCliente());
-		Comanda comanda = new Comanda(dados.cartao(), cliente);
+		Comanda comanda = new Comanda(new Cartao(dados.codigoCartao()), cliente);
 		return repository.criar(comanda);
 	}
 

@@ -8,13 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.conversores.CartaoEntityConverter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.conversores.ClienteEntityConverter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.conversores.ComandaEntityConverter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.dao.ComandaEntityDao;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.CartaoEntity;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.ComandaEntity;
 
 @Repository
@@ -28,6 +31,9 @@ public class ComandaEntityAdapter implements ComandaRepository {
 
 	@Autowired
 	private ClienteEntityConverter clienteEntityConverter;
+	
+	@Autowired
+	private CartaoEntityConverter cartaoEntityConverter;
 
 	@Override
 	public Comanda criar(Comanda comanda) {
@@ -56,8 +62,9 @@ public class ComandaEntityAdapter implements ComandaRepository {
 	}
 
 	@Override
-	public Optional<Comanda> buscarPeloCartao(String cartao, Boolean aberta) {
-		Optional<ComandaEntity> entity = repository.findByCartaoAndAberta(cartao, aberta);
+	public Optional<Comanda> buscarPeloCartao(String codigoCartao, Boolean aberta) {
+		CartaoEntity cartaoEntity = cartaoEntityConverter.converterParaCartaoEntity(new Cartao(codigoCartao));
+		Optional<ComandaEntity> entity = repository.findByCartaoAndAberta(cartaoEntity, aberta);
 		if (entity.isPresent()) {
 			return Optional.of(comandaEntityConverter.converterParaComanda(entity.get()));
 		}

@@ -18,7 +18,7 @@ public interface ComandaRepository {
 
 	Optional<Comanda> buscarPeloId(Long id);
 
-	Optional<Comanda> buscarPeloCartao(String cartao, Boolean aberta);
+	Optional<Comanda> buscarPeloCartao(String codigoCartao, Boolean aberta);
 
 	Page<Comanda> buscarPeloCliente(Pageable paginacao, Cliente cliente);
 
