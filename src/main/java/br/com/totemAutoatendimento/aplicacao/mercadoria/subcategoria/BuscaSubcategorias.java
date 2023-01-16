@@ -3,6 +3,7 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 import java.util.List;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategoriaPeloId;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDeSubcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
@@ -19,10 +20,11 @@ public class BuscaSubcategorias {
 		this.categoriaRepository = categoriaRepository;
 	}
 
-	public List<Subcategoria> buscarPelaCategoria(Long categoriaId) {
+	public List<DadosDeSubcategoria> buscarPelaCategoria(Long categoriaId) {
 		BuscaCategoriaPeloId buscaCategoriaPeloId = new BuscaCategoriaPeloId(categoriaRepository);
 		Categoria categoria = buscaCategoriaPeloId.buscar(categoriaId);
-		return repository.buscarPelaCategoria(categoria);
+		List<Subcategoria> subcategorias = repository.buscarPelaCategoria(categoria);
+		return subcategorias.stream().map(DadosDeSubcategoria::new).toList();
 	}
 
 	public List<Subcategoria> buscarTodas() {

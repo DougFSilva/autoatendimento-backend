@@ -81,12 +81,12 @@ public class MercadoriaController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping
+	@PutMapping(value = "/{id}")
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Editar mercadoria", description = "Edita alguma mercadoria existente")
-	public ResponseEntity<DadosDeMercadoria> editarMercadoria(@RequestBody @Valid DadosEditarMercadoria dados) {
-		return ResponseEntity.ok().body(editaMercadoria.editar(dados));
+	public ResponseEntity<DadosDeMercadoria> editarMercadoria(@PathVariable Long id, @RequestBody @Valid DadosEditarMercadoria dados) {
+		return ResponseEntity.ok().body(editaMercadoria.editar(id, dados));
 	}
 
 	@GetMapping(value = "/{id}")
@@ -101,7 +101,7 @@ public class MercadoriaController {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloCodigo(codigo));
 	}
 
-	@GetMapping(value = "/subcategoria/{subcategoria}")
+	@GetMapping(value = "/subcategoria/{subcategoriaId}")
 	@Cacheable(value = "buscarMercadoriasPorSubcategoria")
 	@Operation(summary = "Buscar mercadorias por subcategoria", description = "Busca mercadorias pela subcategoria")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPelaSubcategoria(Pageable paginacao,

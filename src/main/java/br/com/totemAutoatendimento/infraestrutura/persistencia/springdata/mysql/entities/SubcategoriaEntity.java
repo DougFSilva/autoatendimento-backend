@@ -25,7 +25,7 @@ public class SubcategoriaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private CategoriaEntity categoria;
 
 	private String nome;

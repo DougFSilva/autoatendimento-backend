@@ -30,9 +30,9 @@ public class CriaMercadoria {
 					"Mercadoria com código " + dados.codigo() + " já cadastrada!");
 		}
 		BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(subcategoriaRepository);
-		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(dados.idSubcategoria());
+		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(dados.subcategoriaId());
 		Mercadoria mercadoria = new Mercadoria(null, dados.codigo(), subcategoria, dados.descricao(), dados.preco(),
-				dados.promocao(), dados.precoPromocional(), true, null);
+				dados.promocao(), dados.precoPromocional(), true, "Sem imagem");
 		return repository.criar(mercadoria);
 	}
 

@@ -11,9 +11,6 @@ import br.com.totemAutoatendimento.dominio.usuario.TipoPerfil;
 
 public record DadosEditarUsuario(
 		
-		@NotNull
-		Long id,
-		
 		@NotBlank
 		String nome,
 

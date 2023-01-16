@@ -28,16 +28,16 @@ public class EditaMercadoria {
 	}
 
 	@Transactional
-	public DadosDeMercadoria editar(DadosEditarMercadoria dados) {
+	public DadosDeMercadoria editar(Long id, DadosEditarMercadoria dados) {
 		Optional<Mercadoria> mercadoriaPorCodigo = repository.buscarPeloCodigo(dados.codigo());
-		if (mercadoriaPorCodigo.isPresent() && mercadoriaPorCodigo.get().getId() != dados.id()) {
+		if (mercadoriaPorCodigo.isPresent() && mercadoriaPorCodigo.get().getId() != id) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					"Mercadoria com código " + dados.codigo() + " já cadastrada!");
 		}
 		BuscaMercadoriaPeloId buscarMercadoriaPeloId = new BuscaMercadoriaPeloId(repository);
 		BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(subcategoriaRepository);
-		Mercadoria mercadoria = buscarMercadoriaPeloId.buscar(dados.id());
-		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(dados.idSubcategoria());
+		Mercadoria mercadoria = buscarMercadoriaPeloId.buscar(id);
+		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(dados.subcategoriaId());
 		mercadoria.setCodigo(dados.codigo());
 		mercadoria.setSubcategoria(subcategoria);
 		mercadoria.setDescricao(dados.descricao());

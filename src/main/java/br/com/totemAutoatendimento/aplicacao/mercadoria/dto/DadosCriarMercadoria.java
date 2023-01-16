@@ -9,7 +9,7 @@ public record DadosCriarMercadoria(
 
 		@NotBlank String codigo,
 
-		@NotBlank Long idSubcategoria,
+		@NotNull Long subcategoriaId,
 
 		@NotBlank String descricao,
 

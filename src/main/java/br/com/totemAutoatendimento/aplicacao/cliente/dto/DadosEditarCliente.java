@@ -9,9 +9,6 @@ import br.com.totemAutoatendimento.dominio.cliente.Estado;
 
 public record DadosEditarCliente(
 		
-		@NotNull
-		Long id,
-		
 		@NotBlank
 		String nome, 
 		

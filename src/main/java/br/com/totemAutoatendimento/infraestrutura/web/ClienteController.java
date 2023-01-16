@@ -50,7 +50,7 @@ public class ClienteController {
 
 
 	@PostMapping
-	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
+	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
 		Cliente cliente = criaCliente.criar(dados);
@@ -60,18 +60,18 @@ public class ClienteController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
+	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
 	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
 		removeCliente.remover(id);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping
+	@PutMapping(value = "/{id}")
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
 	@Operation(summary = "Editar cliente", description = "Edita algum cliente existente")
-	public ResponseEntity<DadosDeCliente> editarCliente(@RequestBody @Valid DadosEditarCliente dados) {
-		return ResponseEntity.ok().body(editaCliente.editar(dados));
+	public ResponseEntity<DadosDeCliente> editarCliente(@PathVariable Long id, @RequestBody @Valid DadosEditarCliente dados) {
+		return ResponseEntity.ok().body(editaCliente.editar(id, dados));
 	}
 
 	@GetMapping(value = "/{id}")

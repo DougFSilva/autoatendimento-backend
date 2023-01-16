@@ -17,15 +17,15 @@ public class EditaCategoria {
 		this.repository = repository;
 	}
 	
-	public Categoria editar(Categoria categoriaAtualizada) {
+	public Categoria editar(Long id, String nome) {
 		BuscaCategoriaPeloId buscarCategoriaPeloId = new BuscaCategoriaPeloId(repository);
-		Categoria categoria = buscarCategoriaPeloId.buscar(categoriaAtualizada.getId());
-		Optional<Categoria> categoriaPorNome = repository.buscarPorNome(categoriaAtualizada.getNome());
-		if (categoriaPorNome.isPresent() && categoriaPorNome.get().getId() != categoriaAtualizada.getId()) {
+		Categoria categoria = buscarCategoriaPeloId.buscar(id);
+		Optional<Categoria> categoriaPorNome = repository.buscarPorNome(nome);
+		if (categoriaPorNome.isPresent() && categoriaPorNome.get().getId() != id) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
-					"Categoria com nome " + categoriaAtualizada.getNome() + " já cadastrada!");
+					"Categoria com nome " + nome + " já cadastrada!");
 		}
-		categoria.setNome(categoriaAtualizada.getNome());
+		categoria.setNome(nome);
 		return repository.criar(categoria);
 	}
 }

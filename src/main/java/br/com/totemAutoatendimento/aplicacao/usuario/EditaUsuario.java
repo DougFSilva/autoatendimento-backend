@@ -24,18 +24,18 @@ public class EditaUsuario {
 	}
 	
 	@Transactional
-	public DadosDeUsuario editar(DadosEditarUsuario dados) {
-		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
-		Usuario usuario = buscaUsuarioPeloId.buscar(dados.id());
+	public DadosDeUsuario editar(Long id, DadosEditarUsuario dados) {
 		Optional<Usuario> usuarioPeloCpf = repository.buscarPeloCpf(dados.cpf());
-		if (usuarioPeloCpf.isPresent() && usuarioPeloCpf.get().getId() != usuario.getId()) {
+		if (usuarioPeloCpf.isPresent() && usuarioPeloCpf.get().getId() != id) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Usuário com cpf " + dados.cpf() + " já cadastrado!");
 		}
 		Optional<Usuario> usuarioPeloRegistro = repository.buscarPeloRegistro(dados.registro());
-		if (usuarioPeloRegistro.isPresent() && usuarioPeloRegistro.get().getRegistro() != usuario.getRegistro()) {
+		if (usuarioPeloRegistro.isPresent() && usuarioPeloRegistro.get().getId() != id) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					"Usuário com registro " + dados.registro() + " já cadastrado!");
 		}
+		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
+		Usuario usuario = buscaUsuarioPeloId.buscar(id);
 		usuario.setNome(dados.nome());
 		usuario.setCpf(dados.cpf());
 		usuario.setRegistro(dados.registro());

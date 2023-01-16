@@ -23,13 +23,13 @@ public class EditaCliente {
 	}
 	
 	@Transactional
-	public DadosDeCliente editar(DadosEditarCliente dados) {
+	public DadosDeCliente editar(Long id, DadosEditarCliente dados) {
 		Optional<Cliente> clientePorCpf = repository.buscarClientePorCpf(dados.cpf());
-		if(clientePorCpf.isPresent() && clientePorCpf.get().getId() != dados.id()) {
+		if(clientePorCpf.isPresent() && clientePorCpf.get().getId() != id) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Cliente com cpf " + dados.cpf() + " já cadastrado!");
 		}
 		BuscaClientePeloId buscaClientePeloId = new BuscaClientePeloId(repository);
-		Cliente cliente = buscaClientePeloId.buscar(dados.id());
+		Cliente cliente = buscaClientePeloId.buscar(id);
 		cliente.setNome(dados.nome());
 		cliente.setCpf(dados.cpf());
 		cliente.setTelefone(dados.telefone());

@@ -37,7 +37,7 @@ public class SubcategoriaBeanConfiguration {
 
 	@Bean
 	public EditaSubcategoria editaSubcategoria() {
-		return new EditaSubcategoria(subcategoriaEntityAdapter);
+		return new EditaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter);
 	}
 
 	@Bean

@@ -1,7 +1,6 @@
 package br.com.totemAutoatendimento.aplicacao.usuario;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosAlterarSenhaDeUsuario;
 import br.com.totemAutoatendimento.dominio.exception.VerificacaoDeSenhaException;
@@ -22,10 +21,9 @@ public class AlteraSenhaDeUsuario {
 		this.codificador = codificador;
 	}
 	
-	public void alterar(DadosAlterarSenhaDeUsuario dados) {
-		Usuario usuarioAutenticado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public void alterar(Long id, DadosAlterarSenhaDeUsuario dados) {
 		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
-		Usuario usuario = buscaUsuarioPeloId.buscar(usuarioAutenticado.getId());
+		Usuario usuario = buscaUsuarioPeloId.buscar(id);
 		if(!codificador.comparar(dados.senhaAtual(), usuario.getPassword())) {
 			throw new VerificacaoDeSenhaException("Senha atual não confere!");
 		}

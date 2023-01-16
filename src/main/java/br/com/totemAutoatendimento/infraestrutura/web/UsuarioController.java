@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,16 +68,16 @@ public class UsuarioController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping
+	@PutMapping(value = "/{id}")
 	@Operation(summary = "Editar usuário", description = "Edita algum usuário existente")
-	public ResponseEntity<DadosDeUsuario> editarUsuario(@RequestBody @Valid DadosEditarUsuario dados) {
-		return ResponseEntity.ok().body(editaUsuario.editar(dados));
+	public ResponseEntity<DadosDeUsuario> editarUsuario(@PathVariable Long id,  @RequestBody @Valid DadosEditarUsuario dados) {
+		return ResponseEntity.ok().body(editaUsuario.editar(id, dados));
 	}
 
-	@PutMapping(value = "/alterar-senha")
+	@PatchMapping(value = "/{id}/alterar-senha")
 	@Operation(summary = "Alterar senha de usuário", description = "Atera a senha de algum usuário existente")
-	public ResponseEntity<Void> alterarSenhaDeUsuario(@RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
-		alteraSenhaDeUsuario.alterar(dados);
+	public ResponseEntity<Void> alterarSenhaDeUsuario(@PathVariable Long id, @RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
+		alteraSenhaDeUsuario.alterar(id, dados);
 		return ResponseEntity.ok().build();
 	}
 

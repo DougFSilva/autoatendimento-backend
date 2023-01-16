@@ -7,11 +7,9 @@ import javax.validation.constraints.NotNull;
 
 public record DadosEditarMercadoria(
 
-		@NotNull Long id,
-
 		@NotBlank String codigo,
 
-		@NotBlank Long idSubcategoria,
+		@NotNull Long subcategoriaId,
 
 		@NotBlank String descricao,
 

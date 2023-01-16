@@ -1,5 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.usuario.dto;
 
-public record DadosAlterarSenhaDeUsuario(String senhaAtual, String novaSenha) {
+import javax.validation.constraints.NotBlank;
+
+public record DadosAlterarSenhaDeUsuario(@NotBlank String senhaAtual, @NotBlank String novaSenha) {
 
 }

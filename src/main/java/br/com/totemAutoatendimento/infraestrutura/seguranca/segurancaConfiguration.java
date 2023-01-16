@@ -35,7 +35,7 @@ public class SegurancaConfiguration {
                 http.cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login", "/pedido/cartao/*").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/pedido").permitAll()
-                .antMatchers(HttpMethod.GET, "/comanda/aberta/cartao/*", "/v3/**", "/swagger-ui/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/comanda/aberta/cartao/*", "/mercadoria/imagem/**" , "/v3/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .httpBasic();

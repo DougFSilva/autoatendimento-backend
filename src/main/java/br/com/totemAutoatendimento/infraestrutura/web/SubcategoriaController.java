@@ -3,6 +3,8 @@ package br.com.totemAutoatendimento.infraestrutura.web;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
@@ -29,11 +31,13 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriaSubcate
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditaSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoveSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.UploadImagemDaSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDeSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosEditarSubcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping(value = "mercadoria/subcategoria")
+@RequestMapping(value = "/mercadoria/subcategoria")
 @EnableCaching
 public class SubcategoriaController {
 
@@ -73,17 +77,17 @@ public class SubcategoriaController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping
+    @PutMapping(value = "/{id}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
-    public ResponseEntity<Subcategoria> editarSubcategoria(@RequestBody Subcategoria subcategoriaAtualizada) {
-        return ResponseEntity.ok().body(editaSubcategoria.editar(subcategoriaAtualizada));
+    public ResponseEntity<DadosDeSubcategoria> editarSubcategoria(@PathVariable Long id, @RequestBody @Valid DadosEditarSubcategoria dados) {
+        return ResponseEntity.ok().body(editaSubcategoria.editar(id, dados));
     }
     
     @GetMapping(value = "/categoria/{categoriaId}")
     @Cacheable(value = "buscarSubcategoriasPelaCategoria")
     @Operation(summary = "Buscar subcategorias pela categoria", description = "Busca todas subcategorias pertencentes à uma categoria")
-    public ResponseEntity<List<Subcategoria>> buscarSubcategoriasPelaCategoria(@PathVariable Long categoriaId) {
+    public ResponseEntity<List<DadosDeSubcategoria>> buscarSubcategoriasPelaCategoria(@PathVariable Long categoriaId) {
         return ResponseEntity.ok().body(buscarSubcategorias.buscarPelaCategoria(categoriaId));
     }
 

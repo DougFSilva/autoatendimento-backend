@@ -33,7 +33,7 @@ public class MercadoriaEntity {
 	@Column(unique = true)
 	private String codigo;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private SubcategoriaEntity subcategoria;
 
 	private String descricao;

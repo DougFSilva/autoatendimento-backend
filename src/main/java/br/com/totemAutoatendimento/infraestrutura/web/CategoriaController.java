@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,11 +72,11 @@ public class CategoriaController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping
+	@PutMapping(value = "/{id}/nome/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
-	public ResponseEntity<Categoria> editarCategoria(@RequestBody Categoria categoria) {
-		return ResponseEntity.ok().body(editaCategoria.editar(categoria));
+	public ResponseEntity<Categoria> editarCategoria(@PathVariable Long id, @PathVariable String nome) {
+		return ResponseEntity.ok().body(editaCategoria.editar(id, nome));
 	}
 
 	@GetMapping
