@@ -66,13 +66,19 @@ public class PedidoController {
 
     @GetMapping(value = "/{id}")
     @Operation(summary = "Buscar pedido", description = "Busca algum pedido existente pelo id")
-    public ResponseEntity<DadosDePedido> buscarDadosDePedido(@PathVariable Long id) {
+    public ResponseEntity<DadosDePedido> buscarPedido(@PathVariable Long id) {
         return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPeloId(id));
+    }
+    
+    @GetMapping(value = "/comanda/{comandaId}")
+    @Operation(summary = "Buscar pedidos pela comanda", description = "Busca pedidos existente pelo comanda")
+    public ResponseEntity<List<DadosDePedido>> buscarPedidosPelaComanda(@PathVariable Long comandaId) {
+        return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPelaComanda(comandaId));
     }
 
     @GetMapping(value = "/data/{dataInicial}/{dataFinal}")
     @Operation(summary = "Buscar pedidos por data", description = "Busca pedidos pela data inicial e final definidas")
-    public ResponseEntity<Page<DadosDePedido>> buscarPedidosPorData(Pageable paginacao,
+    public ResponseEntity<Page<DadosDePedido>> buscarPedidosPelaData(Pageable paginacao,
             @PathVariable String dataInicial, @PathVariable String dataFinal) {
         return ResponseEntity.ok().body(
         		buscaDadosDePedidos.buscarPorData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));

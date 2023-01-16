@@ -1,7 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.usuario;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +25,17 @@ public class EditaUsuario {
 	
 	@Transactional
 	public DadosDeUsuario editar(DadosEditarUsuario dados) {
-		if (repository.buscarPeloCpf(dados.cpf()).isPresent()) {
+		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
+		Usuario usuario = buscaUsuarioPeloId.buscar(dados.id());
+		Optional<Usuario> usuarioPeloCpf = repository.buscarPeloCpf(dados.cpf());
+		if (usuarioPeloCpf.isPresent() && usuarioPeloCpf.get().getId() != usuario.getId()) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Usuário com cpf " + dados.cpf() + " já cadastrado!");
 		}
-		if (repository.buscarPeloRegistro(dados.registro()).isPresent()) {
+		Optional<Usuario> usuarioPeloRegistro = repository.buscarPeloRegistro(dados.registro());
+		if (usuarioPeloRegistro.isPresent() && usuarioPeloRegistro.get().getRegistro() != usuario.getRegistro()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					"Usuário com registro " + dados.registro() + " já cadastrado!");
 		}
-		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
-		Usuario usuario = buscaUsuarioPeloId.buscar(dados.id());
 		usuario.setNome(dados.nome());
 		usuario.setCpf(dados.cpf());
 		usuario.setRegistro(dados.registro());

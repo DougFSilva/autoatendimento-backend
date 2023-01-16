@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.dominio.pedido;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ public interface PedidoRepository {
 
 	Optional<Pedido> buscarPeloId(Long id);
 
-	Page<Pedido> buscarPelaComanda(Pageable paginacao, Comanda comanda);
+	List<Pedido> buscarPelaComanda(Comanda comanda);
 
 	Page<Pedido> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 

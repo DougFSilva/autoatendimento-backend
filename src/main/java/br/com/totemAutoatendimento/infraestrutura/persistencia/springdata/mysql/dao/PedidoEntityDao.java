@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.dao;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,6 @@ public interface PedidoEntityDao extends JpaRepository<PedidoEntity, Long> {
 
     Page<PedidoEntity> findAllByEntregue(Pageable paginacao, Boolean entregue);
 
-	Page<PedidoEntity> findAllByComanda(Pageable paginacao, ComandaEntity entity);
+	List<PedidoEntity> findAllByComanda(ComandaEntity entity);
 
 }

@@ -74,25 +74,25 @@ public class ComandaController {
 
 	@GetMapping(value = "/{id}")
 	@Operation(summary = "Buscar comanda", description = "Busca alguma comanda pelo id")
-	public ResponseEntity<DadosDeComanda> buscarDadosDeComanda(@PathVariable Long id) {
+	public ResponseEntity<DadosDeComanda> buscarComanda(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloId(id));
 	}
 
 	@GetMapping(value = "/aberta/cartao/{cartao}")
 	@Operation(summary = "Buscar comanda pelo cartão", description = "Busca alguma comanda aberta pelo cartão")
-	public ResponseEntity<DadosDeComanda> buscarComandaAbertaPorCartao(@PathVariable String cartao) {
+	public ResponseEntity<DadosDeComanda> buscarComandaAbertaPeloCartao(@PathVariable String cartao) {
 		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertasPeloCartao(cartao));
 	}
 
 	@GetMapping(value = "/cliente/{id}")
 	@Operation(summary = "Buscar comandas por cliente", description = "Busca comandas pelo cliente")
-	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorCliente(Pageable paginacao, @PathVariable Long id) {
+	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPeloCliente(Pageable paginacao, @PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloCliente(paginacao, id));
 	}
 
 	@GetMapping(value = "/data/{dataInicial}/{dataFinal}")
 	@Operation(summary = "Buscar comandas por data", description = "Busca comandas por data inicial e final definidas")
-	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorData(Pageable paginacao,
+	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPelaData(Pageable paginacao,
 			@PathVariable String dataInicial, @PathVariable String dataFinal) {
 		return ResponseEntity.ok().body(
 				buscaDadosDeComandas.buscarPelaData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
@@ -100,7 +100,7 @@ public class ComandaController {
 
 	@GetMapping(value = "/tipo-pagamento/{tipoPagamento}")
 	@Operation(summary = "Buscar comandas por tipo de pagamento", description = "Busca as comandas pelo tipo de pagamento")
-	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPorTipoDePagamento(Pageable paginacao,
+	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPeloTipoDePagamento(Pageable paginacao,
 			@PathVariable String tipoPagamento) {
 
 		return ResponseEntity.ok()

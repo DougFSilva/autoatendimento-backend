@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +56,9 @@ public class PedidoEntityAdapter implements PedidoRepository {
 	}
 
 	@Override
-	public Page<Pedido> buscarPelaComanda(Pageable paginacao, Comanda comanda) {
-		return repository.findAllByComanda(paginacao, comandaEntityConverter.converterParaComandaEntity(comanda))
-				.map(pedidoEntityConverter::converterParaPedido);
+	public List<Pedido> buscarPelaComanda(Comanda comanda) {
+		return repository.findAllByComanda(comandaEntityConverter.converterParaComandaEntity(comanda))
+				.stream().map(pedidoEntityConverter::converterParaPedido).toList();
 	}
 
 	@Override

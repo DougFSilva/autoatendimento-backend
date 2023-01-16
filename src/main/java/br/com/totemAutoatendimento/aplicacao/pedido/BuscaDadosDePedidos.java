@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.aplicacao.pedido;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,10 +29,10 @@ public class BuscaDadosDePedidos {
 		return new DadosDePedido(buscaPedidoPeloId.buscar(id));
 	}
 
-	public Page<DadosDePedido> buscarPelaComanda(Pageable paginacao, Long comandaId) {
+	public List<DadosDePedido> buscarPelaComanda(Long comandaId) {
 	BuscaComandaPeloId buscaComandaPeloId = new BuscaComandaPeloId(comandaRepository);
 	Comanda comanda = buscaComandaPeloId.buscar(comandaId);
-		return repository.buscarPelaComanda(paginacao, comanda).map(DadosDePedido::new);
+		return repository.buscarPelaComanda(comanda).stream().map(DadosDePedido::new).toList();
 	}
 
 	@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")

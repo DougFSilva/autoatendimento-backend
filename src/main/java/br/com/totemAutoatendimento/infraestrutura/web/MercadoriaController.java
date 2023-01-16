@@ -97,14 +97,14 @@ public class MercadoriaController {
 
 	@GetMapping(value = "/codigo/{codigo}")
 	@Operation(summary = "Buscar mercadoria por codigo", description = "Busca alguma mercadoria pelo codigo")
-	public ResponseEntity<DadosDeMercadoria> buscarMercadoriaPorCodigo(@PathVariable String codigo) {
+	public ResponseEntity<DadosDeMercadoria> buscarMercadoriaPeloCodigo(@PathVariable String codigo) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloCodigo(codigo));
 	}
 
 	@GetMapping(value = "/subcategoria/{subcategoria}")
 	@Cacheable(value = "buscarMercadoriasPorSubcategoria")
 	@Operation(summary = "Buscar mercadorias por subcategoria", description = "Busca mercadorias pela subcategoria")
-	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorSubcategoria(Pageable paginacao,
+	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPelaSubcategoria(Pageable paginacao,
 			@PathVariable Long subcategoriaId) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPelaSubcategoria(paginacao, subcategoriaId));
 	}

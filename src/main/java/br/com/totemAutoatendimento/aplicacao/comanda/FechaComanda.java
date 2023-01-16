@@ -3,7 +3,6 @@ package br.com.totemAutoatendimento.aplicacao.comanda;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,7 @@ public class FechaComanda {
         if(!comanda.getAberta()){
             throw new ViolacaoDeIntegridadeDeDadosException("Comanda com id " + comanda.getId() + " já está fechada!");
         }
-        List<Pedido> pedidos = pedidoRepository.buscarPelaComanda(Pageable.unpaged(), comanda).getContent();
+        List<Pedido> pedidos = pedidoRepository.buscarPelaComanda(comanda);
         pedidos.forEach(pedido -> {
             if (!pedido.getEntregue()) {
                 throw new RegrasDeNegocioException("Não é possível fechar comanda pois há pedidos não entregues!");
