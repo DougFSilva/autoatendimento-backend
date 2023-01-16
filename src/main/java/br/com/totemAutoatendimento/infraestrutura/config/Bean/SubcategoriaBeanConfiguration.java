@@ -4,45 +4,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscarTodasSubcategorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriarSubcategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditarSubcategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoverSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscaSubcategorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriaSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditaSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoveSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.UploadImagemDaSubcategoria;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.subcategoria.SubcategoriaEntityRepository;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CategoriaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
 @Configuration
 public class SubcategoriaBeanConfiguration {
-    
-    @Autowired
-    private SubcategoriaEntityRepository repository;
 
-    @Autowired
-    private MercadoriaEntityRepository mercadoriaRepository;
+	@Autowired
+	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
 
-    @Bean
-    public CriarSubcategoria criarSubcategoria() {
-        return new CriarSubcategoria(repository);
-    }
+	@Autowired
+	private CategoriaEntityAdapter categoriaEntityAdapter;
 
-    @Bean
-    public RemoverSubcategoria removerSubcategoria() {
-        return new RemoverSubcategoria(repository, mercadoriaRepository);
-    }
+	@Autowired
+	private MercadoriaEntityAdapter mercadoriaEntityAdapter;
 
-    @Bean
-    public EditarSubcategoria editarSubcategoria() {
-        return new EditarSubcategoria(repository);
-    }
+	@Bean
+	public CriaSubcategoria criaSubcategoria() {
+		return new CriaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter);
+	}
 
-    @Bean
-    public BuscarTodasSubcategorias buscarTodasSubcategorias() {
-        return new BuscarTodasSubcategorias(repository);
-    }
+	@Bean
+	public RemoveSubcategoria removeSubcategoria() {
+		return new RemoveSubcategoria(subcategoriaEntityAdapter, mercadoriaEntityAdapter);
+	}
 
-    @Bean
-    public UploadImagemDaSubcategoria uploadImagemDaSubcategoria() {
-        return new UploadImagemDaSubcategoria(repository);
-    }
+	@Bean
+	public EditaSubcategoria editaSubcategoria() {
+		return new EditaSubcategoria(subcategoriaEntityAdapter);
+	}
+
+	@Bean
+	public BuscaSubcategorias buscaSubcategorias() {
+		return new BuscaSubcategorias(subcategoriaEntityAdapter, categoriaEntityAdapter);
+	}
+
+	@Bean
+	public UploadImagemDaSubcategoria uploadImagemDaSubcategoria() {
+		return new UploadImagemDaSubcategoria(subcategoriaEntityAdapter);
+	}
 }

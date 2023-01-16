@@ -13,22 +13,22 @@ import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDado
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
 
+@PreAuthorize("hasRole('ADMIN')")
 public class UploadImagemDaCategoria {
     
-    private CategoriaRepository repository;
+    private final CategoriaRepository repository;
 
     public UploadImagemDaCategoria(CategoriaRepository repository){
         this.repository = repository;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public void executar(Long id, MultipartFile file, String pathLocal, String urlServidor) {
         String extensao = file.getContentType();
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){
             throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
         }
-        BuscarCategoria buscarCategoria = new BuscarCategoria(repository);
-        Categoria categoria = buscarCategoria.executar(id);
+        BuscaCategoriaPeloId buscarCategoriaPeloId = new BuscaCategoriaPeloId(repository);
+        Categoria categoria = buscarCategoriaPeloId.buscar(id);
         try {
             Files.copy(file.getInputStream(), Path.of(pathLocal), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

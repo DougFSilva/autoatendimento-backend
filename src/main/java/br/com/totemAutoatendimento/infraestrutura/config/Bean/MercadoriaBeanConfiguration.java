@@ -4,80 +4,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarDadosDeMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriaPorCodigo;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasEmPromocao;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorSubcategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarTodasMercadorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.CriarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaDadosDeMercadorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.CriaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.EditaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoveMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria.CategoriaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.subcategoria.SubcategoriaEntityRepository;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
 @Configuration
 public class MercadoriaBeanConfiguration {
 
-    @Autowired
-    private MercadoriaEntityRepository repository;
+	@Autowired
+	private MercadoriaEntityAdapter mercadoriaEntityAdapter;
 
-    @Autowired
-    private CategoriaEntityRepository categoriaRepository;
+	@Autowired
+	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
 
-    @Autowired
-    private SubcategoriaEntityRepository subcategoriaRepository;
+	@Bean
+	public CriaMercadoria criaMercadoria() {
+		return new CriaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter);
+	}
 
-    @Bean
-    public CriarMercadoria criarMercadoria() {
-        return new CriarMercadoria(repository, categoriaRepository, subcategoriaRepository);
-    }
+	@Bean
+	public RemoveMercadoria removeMercadoria() {
+		return new RemoveMercadoria(mercadoriaEntityAdapter);
+	}
 
-    @Bean
-    public RemoverMercadoria removerMercadoria() {
-        return new RemoverMercadoria(repository);
-    }
+	@Bean
+	public EditaMercadoria editaMercadoria() {
+		return new EditaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter);
+	}
 
-    @Bean
-    public EditarMercadoria editarMercadoria() {
-        return new EditarMercadoria(repository, categoriaRepository, subcategoriaRepository);
-    }
+	@Bean
+	public BuscaDadosDeMercadorias buscaDadosDeMercadorias() {
+		return new BuscaDadosDeMercadorias(mercadoriaEntityAdapter, subcategoriaEntityAdapter);
+	}
 
-    @Bean
-    public BuscarDadosDeMercadoria buscarDadosDeMercadoria() {
-        return new BuscarDadosDeMercadoria(repository);
-    }
-
-    @Bean
-    public BuscarMercadoriaPorCodigo buscarMercadoriaPorCodigo() {
-        return new BuscarMercadoriaPorCodigo(repository);
-    }
-
-    @Bean
-    public BuscarMercadoriasPorCategoria buscarMercadoriasPorCategoria() {
-        return new BuscarMercadoriasPorCategoria(repository, categoriaRepository);
-    }
-
-    @Bean
-    public BuscarMercadoriasPorSubcategoria buscarMercadoriasPorSubcategoria() {
-        return new BuscarMercadoriasPorSubcategoria(repository, subcategoriaRepository);
-    }
-
-    @Bean
-    public BuscarMercadoriasEmPromocao buscarMercadoriasEmPromocao() {
-        return new BuscarMercadoriasEmPromocao(repository);
-    }
-
-    @Bean
-    public BuscarTodasMercadorias buscarTodasMercadorias() {
-        return new BuscarTodasMercadorias(repository);
-    }
-
-    @Bean
-    public UploadImagemMercadoria uploadImagemDeMercadoria() {
-        return new UploadImagemMercadoria(repository);
-    }
+	@Bean
+	public UploadImagemMercadoria uploadImagemDeMercadoria() {
+		return new UploadImagemMercadoria(mercadoriaEntityAdapter);
+	}
 
 }

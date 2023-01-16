@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,49 +21,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.cliente.BuscarClientePorCpf;
-import br.com.totemAutoatendimento.aplicacao.cliente.BuscarClientesPorCidade;
-import br.com.totemAutoatendimento.aplicacao.cliente.BuscarDadosDeCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.BuscarTodosClientes;
-import br.com.totemAutoatendimento.aplicacao.cliente.CriarCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.DadosCriarCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.DadosDeCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.DadosEditarCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.EditarCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.RemoverCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.BuscaDadosDeClientes;
+import br.com.totemAutoatendimento.aplicacao.cliente.CriaCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.EditaCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.RemoveCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosCriarCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosEditarCliente;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/cliente")
+@EnableCaching
 public class ClienteController {
 
 	@Autowired
-	private CriarCliente criarCliente;
+	private CriaCliente criaCliente;
 
 	@Autowired
-	private RemoverCliente removerCliente;
+	private RemoveCliente removeCliente;
 
 	@Autowired
-	private EditarCliente editarCliente;
+	private EditaCliente editaCliente;
 
 	@Autowired
-	private BuscarDadosDeCliente buscarDadosDeCliente;
+	private BuscaDadosDeClientes buscaDadosDeClientes;
 
-	@Autowired
-	private BuscarClientePorCpf buscarClientePorCpf;
-
-	@Autowired
-	private BuscarClientesPorCidade buscarClientesPorCidade;
-
-	@Autowired
-	private BuscarTodosClientes buscarTodosClientes;
 
 	@PostMapping
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
 	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
-		Cliente cliente = criarCliente.executar(dados);
+		Cliente cliente = criaCliente.criar(dados);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -70,43 +61,43 @@ public class ClienteController {
 
 	@DeleteMapping(value = "/{id}")
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
-		@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
+	@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
 	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
-		removerCliente.executar(id);
+		removeCliente.remover(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
-		@Operation(summary = "Editar cliente", description = "Edita algum cliente existente")
+	@Operation(summary = "Editar cliente", description = "Edita algum cliente existente")
 	public ResponseEntity<DadosDeCliente> editarCliente(@RequestBody @Valid DadosEditarCliente dados) {
-		return ResponseEntity.ok().body(editarCliente.executar(dados));
+		return ResponseEntity.ok().body(editaCliente.editar(dados));
 	}
 
 	@GetMapping(value = "/{id}")
-		@Operation(summary = "Buscar cliente", description = "Busca algum cliente existente pelo id")
+	@Operation(summary = "Buscar cliente", description = "Busca algum cliente existente pelo id")
 	public ResponseEntity<DadosDeCliente> buscarCliente(@PathVariable Long id) {
-		return ResponseEntity.ok().body(buscarDadosDeCliente.executar(id));
+		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarPeloId(id));
 	}
 
 	@GetMapping(value = "/cpf/{cpf}")
-		@Operation(summary = "Buscar cliente por cpf", description = "Busca algum cliente existente por cpf")
+	@Operation(summary = "Buscar cliente por cpf", description = "Busca algum cliente existente por cpf")
 	public ResponseEntity<DadosDeCliente> buscarClientePorCpf(@PathVariable String cpf) {
-		return ResponseEntity.ok().body(buscarClientePorCpf.executar(cpf));
+		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarPeloCpf(cpf));
 	}
 
 	@GetMapping(value = "/cidade/{cidade}")
 	@Cacheable(value = "buscarClientesPorCidade")
-		@Operation(summary = "Buscar clientes por cidade", description = "Busca clientes pela cidade")
+	@Operation(summary = "Buscar clientes por cidade", description = "Busca clientes pela cidade")
 	public ResponseEntity<Page<DadosDeCliente>> buscarClientesPorCidade(Pageable paginacao,
 			@PathVariable String cidade) {
-		return ResponseEntity.ok().body(buscarClientesPorCidade.executar(paginacao, cidade));
+		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarPelaCidade(paginacao, cidade));
 	}
 
 	@GetMapping
 	@Cacheable(value = "buscarTodosClientes")
-		@Operation(summary = "Buscar todos clientes", description = "Busca todos os clientes existentes")
+	@Operation(summary = "Buscar todos clientes", description = "Busca todos os clientes existentes")
 	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscarTodosClientes.executar(paginacao));
+		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarTodos(paginacao));
 	}
 }

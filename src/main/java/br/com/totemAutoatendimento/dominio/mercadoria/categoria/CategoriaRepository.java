@@ -13,7 +13,7 @@ public interface CategoriaRepository {
 	
 	Categoria editar(Categoria categoriaAtualizada);
 	
-	Optional<Categoria> buscar(Long id);
+	Optional<Categoria> buscarPeloId(Long id);
 	
 	Optional<Categoria> buscarPorNome(String nome);
 	

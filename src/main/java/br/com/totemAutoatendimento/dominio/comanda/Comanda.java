@@ -3,8 +3,6 @@ package br.com.totemAutoatendimento.dominio.comanda;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
@@ -27,8 +25,6 @@ public class Comanda {
 	private String cartao;
 
 	private Cliente cliente;
-
-	private List<Pedido> pedidos = new ArrayList<>();
 
 	private LocalDateTime abertura;
 
@@ -53,42 +49,42 @@ public class Comanda {
 		this.desconto = 0f;
 	}
 
-	public void adicionarPedido(Pedido pedido) {
-		BigDecimal valor = BigDecimal.ZERO;
-		if(pedido.getMercadoria().getPromocao()){
-			valor = pedido.getMercadoria().getPrecoPromocional().multiply(new BigDecimal(pedido.getQuantidade().toString()));
-		}else {
-			valor = pedido.getMercadoria().getPreco().multiply(new BigDecimal(pedido.getQuantidade().toString()));
-		}
-		this.valor = this.valor.add(valor);
-		this.pedidos.add(pedido);
-	}
-
-	public void removerPedido(Pedido pedido) {
-		BigDecimal valor = BigDecimal.ZERO;
-		if(pedido.getMercadoria().getPromocao()){
-			valor = pedido.getMercadoria().getPrecoPromocional().multiply(new BigDecimal(pedido.getQuantidade().toString()));
-		}else {
-			valor = pedido.getMercadoria().getPreco().multiply(new BigDecimal(pedido.getQuantidade().toString()));
-		}
-		this.valor = this.valor.subtract(valor);
-		this.pedidos.remove(pedido);
-	}
-
 	public void aplicarDesconto(Float desconto) {
-		if(!this.aberta){
+		if (!this.aberta) {
 			throw new RegrasDeNegocioException("Não é possível aplicar desconto em comanda fechada!");
 		}
 		this.desconto = desconto;
 		Float descontoPercentual = ((100 - this.desconto) / 100);
-		this.valor = this.valor.multiply(new BigDecimal(descontoPercentual.toString())).setScale(2, RoundingMode.HALF_EVEN);
+		this.valor = this.valor.multiply(new BigDecimal(descontoPercentual.toString())).setScale(2,
+				RoundingMode.HALF_EVEN);
 	}
 
 	public void removerDesconto() {
-		if(!this.aberta){
+		if (!this.aberta) {
 			throw new RegrasDeNegocioException("Não é possível remover desconto de comanda fechada!");
 		}
 		Float descontoPercentual = (100 / (100 - this.desconto));
-		this.valor = this.valor.multiply(new BigDecimal(descontoPercentual.toString())).setScale(2, RoundingMode.HALF_EVEN);
+		this.valor = this.valor.multiply(new BigDecimal(descontoPercentual.toString())).setScale(2,
+				RoundingMode.HALF_EVEN);
+	}
+
+	public void adicionarValor(Pedido pedido) {
+		if(pedido.getMercadoria().getPromocao()) {
+			BigDecimal valorPromocional = pedido.getMercadoria().getPrecoPromocional().multiply(new BigDecimal(pedido.getQuantidade()));
+			this.valor = this.valor.add(valorPromocional);
+		}else {
+			BigDecimal valor = pedido.getMercadoria().getPreco().multiply(new BigDecimal(pedido.getQuantidade()));
+			this.valor = this.valor.add(valor);
+		}
+	}
+	
+	public void removerValor(Pedido pedido) {
+		if(pedido.getMercadoria().getPromocao()) {
+			BigDecimal valorPromocional = pedido.getMercadoria().getPrecoPromocional().multiply(new BigDecimal(pedido.getQuantidade()));
+			this.valor = this.valor.subtract(valorPromocional);
+		}else {
+			BigDecimal valor = pedido.getMercadoria().getPreco().multiply(new BigDecimal(pedido.getQuantidade()));
+			this.valor = this.valor.subtract(valor);
+		}
 	}
 }

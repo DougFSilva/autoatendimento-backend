@@ -4,46 +4,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarTodasCategorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriarCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditarCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoverCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.categoria.CategoriaEntityRepository;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CategoriaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
 @Configuration
 public class CategoriaBeanConfiguration {
-    
-    @Autowired
-    private CategoriaEntityRepository repository;
 
-    @Autowired
-    private MercadoriaEntityRepository mercadoriaRepository;
+	@Autowired
+	private CategoriaEntityAdapter categoriaEntityAdapter;
 
-    @Bean
-    public CriarCategoria criarCategoria() {
-        return new CriarCategoria(repository);
-    }
+	@Autowired
+	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
 
-    @Bean
-    public RemoverCategoria removerCategoria() {
-        return new RemoverCategoria(repository, mercadoriaRepository);
-    }
+	@Bean
+	public CriaCategoria criaCategoria() {
+		return new CriaCategoria(categoriaEntityAdapter);
+	}
 
-    @Bean
-    public EditarCategoria editarCategoria() {
-        return new EditarCategoria(repository);
-    }
+	@Bean
+	public RemoveCategoria removeCategoria() {
+		return new RemoveCategoria(categoriaEntityAdapter, subcategoriaEntityAdapter);
+	}
 
-    @Bean
-    public BuscarTodasCategorias buscarTodasCategorias() {
-        return new BuscarTodasCategorias(repository);
-    }
+	@Bean
+	public EditaCategoria editaCategoria() {
+		return new EditaCategoria(categoriaEntityAdapter);
+	}
 
-    @Bean
-    public UploadImagemDaCategoria uploadImagemDaCategoria() {
-        return new UploadImagemDaCategoria(repository);
-    }
+	@Bean
+	public BuscaCategorias buscarCategorias() {
+		return new BuscaCategorias(categoriaEntityAdapter);
+	}
+
+	@Bean
+	public UploadImagemDaCategoria uploadImagemDaCategoria() {
+		return new UploadImagemDaCategoria(categoriaEntityAdapter);
+	}
 
 }

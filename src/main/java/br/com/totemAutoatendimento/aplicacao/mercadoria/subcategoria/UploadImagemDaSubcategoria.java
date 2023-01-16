@@ -15,7 +15,7 @@ import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaR
 
 public class UploadImagemDaSubcategoria {
     
-    private SubcategoriaRepository repository;
+    private final SubcategoriaRepository repository;
 
     public UploadImagemDaSubcategoria(SubcategoriaRepository repository){
         this.repository = repository;
@@ -27,8 +27,8 @@ public class UploadImagemDaSubcategoria {
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){
             throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
         }
-        BuscarSubcategoria buscarSubcategoria = new BuscarSubcategoria(repository);
-        Subcategoria subcategoria = buscarSubcategoria.executar(id);
+        BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(repository);
+        Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(id);
         try {
             Files.copy(file.getInputStream(), Path.of(pathLocal), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

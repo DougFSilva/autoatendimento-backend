@@ -15,7 +15,7 @@ import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 
 public class UploadImagemMercadoria {
 
-    private MercadoriaRepository repository;
+    private final MercadoriaRepository repository;
 
     public UploadImagemMercadoria(MercadoriaRepository repository) {
         this.repository = repository;
@@ -27,8 +27,8 @@ public class UploadImagemMercadoria {
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){
             throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
         }
-        BuscarMercadoria buscarMercadoria = new BuscarMercadoria(repository);
-        Mercadoria mercadoria = buscarMercadoria.executar(id);
+        BuscaMercadoriaPeloId buscaMercadoriaPeloId = new BuscaMercadoriaPeloId(repository);
+        Mercadoria mercadoria = buscaMercadoriaPeloId.buscar(id);
         try {
             Files.copy(file.getInputStream(), Path.of(pathLocal), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -25,56 +26,37 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarDadosDeMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarImagem;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriaPorCodigo;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasEmPromocao;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarMercadoriasPorSubcategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarTodasMercadorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.CriarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosCriarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosDeMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.DadosEditarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.EditarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoverMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaDadosDeMercadorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaImagem;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.CriaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.EditaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoveMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/mercadoria")
+@EnableCaching
 public class MercadoriaController {
 
     @Value("${imagens.path}")
     private String path;
 
     @Autowired
-    private CriarMercadoria criarMercadoria;
+    private CriaMercadoria criaMercadoria;
 
     @Autowired
-    private RemoverMercadoria removerMercadoria;
+    private RemoveMercadoria removeMercadoria;
 
     @Autowired
-    private EditarMercadoria editarMercadoria;
+    private EditaMercadoria editaMercadoria;
 
     @Autowired
-    private BuscarDadosDeMercadoria buscarDadosDeMercadoria;
-
-    @Autowired
-    private BuscarMercadoriaPorCodigo buscarMercadoriaPorCodigo;
-
-    @Autowired
-    private BuscarMercadoriasPorCategoria buscarMercadoriasPorCategoria;
-
-    @Autowired
-    private BuscarMercadoriasPorSubcategoria buscarMercadoriasPorSubcategoria;
-
-    @Autowired
-    private BuscarMercadoriasEmPromocao buscarMercadoriasEmPromocao;
-
-    @Autowired
-    private BuscarTodasMercadorias buscarTodasMercadorias;
+    private BuscaDadosDeMercadorias buscaDadosDeMercadorias;
 
     @Autowired
     private UploadImagemMercadoria uploadImagemDeMercadoria;
@@ -85,7 +67,7 @@ public class MercadoriaController {
             "buscarTodasMercadorias" }, allEntries = true)
     @Operation(summary = "Criar mercadoria", description = "Cria uma mercadoria no sistema")
     public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
-        Mercadoria mercadoria = criarMercadoria.executar(dados);
+        Mercadoria mercadoria = criaMercadoria.criar(dados);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
                 .toUri();
         return ResponseEntity.created(uri).build();
@@ -97,7 +79,7 @@ public class MercadoriaController {
             "buscarTodasMercadorias" }, allEntries = true)
     @Operation(summary = "Remover mercadoria", description = "Remove alguma mercadoria existente")
     public ResponseEntity<Void> removerMercadoria(@PathVariable Long id) {
-        removerMercadoria.executar(id);
+        removeMercadoria.remover(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -107,56 +89,48 @@ public class MercadoriaController {
             "buscarTodasMercadorias" }, allEntries = true)
     @Operation(summary = "Editar mercadoria", description = "Edita alguma mercadoria existente")
     public ResponseEntity<DadosDeMercadoria> editarMercadoria(@RequestBody @Valid DadosEditarMercadoria dados) {
-        return ResponseEntity.ok().body(editarMercadoria.executar(dados));
+        return ResponseEntity.ok().body(editaMercadoria.editar(dados));
     }
 
     @GetMapping(value = "/{id}")
     @Operation(summary = "Buscar mercadoria", description = "Busca alguma mercadoria pelo id")
     public ResponseEntity<DadosDeMercadoria> buscarMercadoria(@PathVariable Long id) {
-        return ResponseEntity.ok().body(buscarDadosDeMercadoria.executar(id));
+        return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloId(id));
     }
 
     @GetMapping(value = "/codigo/{codigo}")
     @Operation(summary = "Buscar mercadoria por codigo", description = "Busca alguma mercadoria pelo codigo")
     public ResponseEntity<DadosDeMercadoria> buscarMercadoriaPorCodigo(@PathVariable String codigo) {
-        return ResponseEntity.ok().body(buscarMercadoriaPorCodigo.executar(codigo));
-    }
-
-    @GetMapping(value = "/categoria/{categoria}")
-    @Cacheable(value = "buscarMercadoriasPorCategoria")
-    @Operation(summary = "Buscar mercadorias por categoria", description = "Busca mercadorias pela categoria")
-    public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorCategoria(Pageable paginacao,
-            @PathVariable String categoria) {
-        return ResponseEntity.ok().body(buscarMercadoriasPorCategoria.executar(paginacao, categoria));
+        return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloCodigo(codigo));
     }
 
     @GetMapping(value = "/subcategoria/{subcategoria}")
     @Cacheable(value = "buscarMercadoriasPorSubcategoria")
     @Operation(summary = "Buscar mercadorias por subcategoria", description = "Busca mercadorias pela subcategoria")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPorSubcategoria(Pageable paginacao,
-            @PathVariable String subcategoria) {
-        return ResponseEntity.ok().body(buscarMercadoriasPorSubcategoria.executar(paginacao, subcategoria));
+            @PathVariable Long subcategoriaId) {
+        return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPelaSubcategoria(paginacao, subcategoriaId));
     }
 
     @GetMapping(value = "/com-promocao")
     @Cacheable(value = "buscarMercadoriasEmPromocao")
     @Operation(summary = "Buscar mercadorias em promoção", description = "Busca mercadorias que estão em promoção")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasEmPromocao(Pageable paginacao) {
-        return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, true));
+        return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, true));
     }
 
     @GetMapping(value = "/sem-promocao")
     @Cacheable(value = "buscarMercadoriasSemPromocao")
     @Operation(summary = "Buscar mercadorias sem promoção", description = "Busca mercadorias que estão sem promoção")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasSemPromocao(Pageable paginacao) {
-        return ResponseEntity.ok().body(buscarMercadoriasEmPromocao.executar(paginacao, false));
+        return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, false));
     }
 
     @GetMapping
     @Cacheable(value = "buscarTodasMercadorias")
     @Operation(summary = "Buscar todas mercadorias", description = "Busca todas mercadorias existentes")
     public ResponseEntity<Page<DadosDeMercadoria>> buscarTodasMercadorias(Pageable paginacao) {
-        return ResponseEntity.ok().body(buscarTodasMercadorias.executar(paginacao));
+        return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarTodas(paginacao));
     }
 
     @PostMapping(value = "/{id}/imagem")
@@ -179,8 +153,8 @@ public class MercadoriaController {
     @Operation(summary = "Buscar imagem da mercadoria", description = "Busca imagem da mercadoria")
     public ResponseEntity<byte[]> buscarImagemDaMercadoria(@PathVariable String nomeDaImagem) {
         String extensao = nomeDaImagem.split("\\.")[1];
-        BuscarImagem buscarImagem = new BuscarImagem();
-        byte[] imagem = buscarImagem.executar(path + "mercadoria/" + nomeDaImagem);
+        BuscaImagem buscarImagem = new BuscaImagem();
+        byte[] imagem = buscarImagem.buscar(path + "mercadoria/" + nomeDaImagem);
         HttpHeaders httpHeaders = new HttpHeaders();
         switch (extensao.toLowerCase()) {
             case "jpg":

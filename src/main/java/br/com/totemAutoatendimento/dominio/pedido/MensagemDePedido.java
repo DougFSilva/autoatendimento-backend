@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.dominio.pedido;
 
-import br.com.totemAutoatendimento.aplicacao.pedido.DadosDePedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

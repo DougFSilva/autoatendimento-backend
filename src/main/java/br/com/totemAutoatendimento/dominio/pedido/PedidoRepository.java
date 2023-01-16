@@ -6,19 +6,23 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import br.com.totemAutoatendimento.dominio.comanda.Comanda;
+
 public interface PedidoRepository {
 
-    Pedido criar(Pedido pedido);
+	Pedido criar(Pedido pedido);
 
-    void remover(Pedido pedido);
+	void remover(Pedido pedido);
 
-    Pedido editar(Pedido pedidoAtualizado);
+	Pedido editar(Pedido pedidoAtualizado);
 
-    Optional<Pedido> buscar(Long id);
+	Optional<Pedido> buscarPeloId(Long id);
 
-    Page<Pedido> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
+	Page<Pedido> buscarPelaComanda(Pageable paginacao, Comanda comanda);
 
-    Page<Pedido> buscarPorEntregue(Pageable paginacao, Boolean entregue);
+	Page<Pedido> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 
-    Page<Pedido> buscarTodos(Pageable paginacao);
+	Page<Pedido> buscarEntregue(Pageable paginacao, Boolean entregue);
+
+	Page<Pedido> buscarTodos(Pageable paginacao);
 }

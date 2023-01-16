@@ -2,9 +2,9 @@ package br.com.totemAutoatendimento.dominio.mercadoria;
 
 import java.math.BigDecimal;
 
-import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,14 +14,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode(of = { "id", "codigo" })
 @ToString
 public class Mercadoria {
 
 	private Long id;
 
 	private String codigo;
-
-	private Categoria categoria;
 
 	private Subcategoria subcategoria;
 
@@ -32,9 +31,10 @@ public class Mercadoria {
 	private Boolean promocao;
 
 	private BigDecimal precoPromocional;
+	
+	private Boolean disponivel;
 
 	private String imagem;
 
-	private Boolean disponivel;
 
 }

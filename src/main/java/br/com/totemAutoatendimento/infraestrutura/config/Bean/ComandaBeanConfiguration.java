@@ -4,94 +4,62 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.comanda.AplicarDescontoEmComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaAbertaPorCartao;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorCliente;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorData;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandaPorTipoDePagamento;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarComandasAbertas;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarDadosDeComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.BuscarTodasComandas;
-import br.com.totemAutoatendimento.aplicacao.comanda.CriarComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.FecharComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.ReabrirComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.RemoverComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.RemoverDescontoDaComanda;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.cliente.ClienteEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.ComandaEntityRepository;
+import br.com.totemAutoatendimento.aplicacao.comanda.AplicaDescontoEmComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.BuscaDadosDeComandas;
+import br.com.totemAutoatendimento.aplicacao.comanda.CriaComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.FechaComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.ReabreComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.RemoveComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.RemoveDescontoDaComanda;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ClienteEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ComandaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.PedidoEntityAdapter;
 
 @Configuration
 public class ComandaBeanConfiguration {
-    
-    @Autowired
-    private ComandaEntityRepository repository;
 
-    @Autowired
-    private ClienteEntityRepository clienteRepository;
+	@Autowired
+	private ComandaEntityAdapter comandaEntityAdapter;
 
-    @Bean
-    public BuscarComandaAbertaPorCartao buscarComandaAbertaPorCartao(){
-        return new BuscarComandaAbertaPorCartao(repository);
-    }
+	@Autowired
+	private ClienteEntityAdapter clienteEntityAdapter;
 
-    @Bean
-    public BuscarComandaPorCliente buscarComandaPorCliente(){
-        return new BuscarComandaPorCliente(repository, clienteRepository);
-    }
+	@Autowired
+	private PedidoEntityAdapter pedidoEntityAdapter;
 
-    @Bean
-    public BuscarComandaPorData buscarComandaPorData() {
-        return new BuscarComandaPorData(repository);
-    }
+	@Bean
+	public BuscaDadosDeComandas buscaDadosDeComandas() {
+		return new BuscaDadosDeComandas(comandaEntityAdapter, clienteEntityAdapter);
+	}
 
-    @Bean
-    public BuscarComandaPorTipoDePagamento buscarComandaPorTipoDePagamento() {
-        return new BuscarComandaPorTipoDePagamento(repository);
-    }
+	@Bean
+	public CriaComanda criaComanda() {
+		return new CriaComanda(comandaEntityAdapter, clienteEntityAdapter);
+	}
 
-    @Bean
-    public BuscarComandasAbertas buscarComandasAbertas() {
-        return new BuscarComandasAbertas(repository);
-    }
+	@Bean
+	public AplicaDescontoEmComanda aplicaDescontoEmComanda() {
+		return new AplicaDescontoEmComanda(comandaEntityAdapter);
+	}
 
-    @Bean
-    public BuscarDadosDeComanda buscarDadosDeComanda() {
-        return new BuscarDadosDeComanda(repository);
-    }
+	@Bean
+	public RemoveDescontoDaComanda removeDescontoDaComanda() {
+		return new RemoveDescontoDaComanda(comandaEntityAdapter);
+	}
 
-    @Bean
-    public BuscarTodasComandas buscarTodasComandas() {
-        return new BuscarTodasComandas(repository);
-    }
+	@Bean
+	public FechaComanda fechaComanda() {
+		return new FechaComanda(comandaEntityAdapter, pedidoEntityAdapter);
+	}
 
-    @Bean
-    public CriarComanda criarComanda() {
-        return new CriarComanda(repository, clienteRepository);
-    }
+	@Bean
+	public ReabreComanda reabreComanda() {
+		return new ReabreComanda(comandaEntityAdapter);
+	}
 
-    @Bean
-    public AplicarDescontoEmComanda aplicarDescontoEmComanda() {
-        return new AplicarDescontoEmComanda(repository);
-    }
-
-    @Bean
-    public RemoverDescontoDaComanda removerDescontoDaComanda() {
-        return new RemoverDescontoDaComanda(repository);
-    }
-
-    @Bean
-    public FecharComanda fecharComanda() {
-        return new FecharComanda(repository);
-    }
-
-    @Bean
-    public ReabrirComanda reabrirComanda() {
-        return new ReabrirComanda(repository);
-    }
-
-    @Bean
-    public RemoverComanda removerComanda() {
-        return new RemoverComanda(repository);
-    }
+	@Bean
+	public RemoveComanda removeComanda() {
+		return new RemoveComanda(comandaEntityAdapter);
+	}
 
 }

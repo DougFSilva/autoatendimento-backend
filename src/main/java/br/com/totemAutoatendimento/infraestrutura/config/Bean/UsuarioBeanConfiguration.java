@@ -4,58 +4,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.usuario.AlterarSenhaDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.BuscarDadosDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.BuscarTodosUsuarios;
-import br.com.totemAutoatendimento.aplicacao.usuario.BuscarUsuarioPorRegistro;
-import br.com.totemAutoatendimento.aplicacao.usuario.CriarUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.EditarUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.RemoverUsuario;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.usuario.UsuarioEntityRepository;
+import br.com.totemAutoatendimento.aplicacao.usuario.AlteraSenhaDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.BuscaDadosDeUsuarios;
+import br.com.totemAutoatendimento.aplicacao.usuario.CriaUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.EditaUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.RemoveUsuario;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.UsuarioEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.CodificadorBcrypt;
 
 @Configuration
 public class UsuarioBeanConfiguration {
-    
-    @Autowired
-    private UsuarioEntityRepository repository;
 
-    @Autowired
-    private CodificadorBcrypt codificador;
+	@Autowired
+	private UsuarioEntityAdapter usuarioEntityAdapter;
 
-    @Bean
-    public CriarUsuario criarUsuario() {
-        return new CriarUsuario(repository, codificador);
-    }
+	@Autowired
+	private CodificadorBcrypt codificador;
 
-    @Bean
-    public RemoverUsuario removerUsuario() {
-        return new RemoverUsuario(repository);
-    }
+	@Bean
+	public CriaUsuario criaUsuario() {
+		return new CriaUsuario(usuarioEntityAdapter, codificador);
+	}
 
-    @Bean
-    public EditarUsuario editarUsuario() {
-        return new EditarUsuario(repository);
-    }
+	@Bean
+	public RemoveUsuario removeUsuario() {
+		return new RemoveUsuario(usuarioEntityAdapter);
+	}
 
-    @Bean
-    public AlterarSenhaDeUsuario alterarSenhaDeUsuario() {
-        return new AlterarSenhaDeUsuario(repository, codificador);
-    }
+	@Bean
+	public EditaUsuario editaUsuario() {
+		return new EditaUsuario(usuarioEntityAdapter);
+	}
 
-    @Bean
-    public BuscarDadosDeUsuario buscarDadosDeUsuario() {
-        return new BuscarDadosDeUsuario(repository);
-    }
+	@Bean
+	public AlteraSenhaDeUsuario alteraSenhaDeUsuario() {
+		return new AlteraSenhaDeUsuario(usuarioEntityAdapter, codificador);
+	}
 
-    @Bean
-    public BuscarTodosUsuarios buscarTodosUsuarios() {
-        return new BuscarTodosUsuarios(repository);
-    }
+	@Bean
+	public BuscaDadosDeUsuarios buscaDadosDeUsuarios() {
+		return new BuscaDadosDeUsuarios(usuarioEntityAdapter);
+	}
 
-    @Bean
-    public BuscarUsuarioPorRegistro buscarUsuarioPorRegistro() {
-        return new BuscarUsuarioPorRegistro(repository);
-    }
-    
 }

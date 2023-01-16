@@ -17,16 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.usuario.AlterarSenhaDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.BuscarDadosDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.BuscarTodosUsuarios;
-import br.com.totemAutoatendimento.aplicacao.usuario.CriarUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.DadosAlterarSenhaDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.DadosCriarUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.DadosDeUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.DadosEditarUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.EditarUsuario;
-import br.com.totemAutoatendimento.aplicacao.usuario.RemoverUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.AlteraSenhaDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.BuscaDadosDeUsuarios;
+import br.com.totemAutoatendimento.aplicacao.usuario.CriaUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.EditaUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.RemoveUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosAlterarSenhaDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosCriarUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosDeUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosEditarUsuario;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -35,27 +34,24 @@ import io.swagger.v3.oas.annotations.Operation;
 public class UsuarioController {
 
 	@Autowired
-	private CriarUsuario criarUsuario;
+	private CriaUsuario criaUsuario;
 
 	@Autowired
-	private RemoverUsuario removerUsuario;
+	private RemoveUsuario removeUsuario;
 
 	@Autowired
-	private EditarUsuario editarUsuario;
+	private EditaUsuario editaUsuario;
 
 	@Autowired
-	private AlterarSenhaDeUsuario alterarSenhaDeUsuario;
+	private AlteraSenhaDeUsuario alteraSenhaDeUsuario;
 
 	@Autowired
-	private BuscarDadosDeUsuario buscarDadosDeUsuario;
-
-	@Autowired
-	private BuscarTodosUsuarios buscarTodosUsuarios;
+	private BuscaDadosDeUsuarios buscaDadosDeUsuarios;
 
 	@PostMapping
 	@Operation(summary = "Criar usuário", description = "Cria um usuário no sistema")
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid DadosCriarUsuario dados) {
-		Usuario usuario = criarUsuario.executar(dados);
+		Usuario usuario = criaUsuario.criar(dados);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/id={id}")
@@ -67,32 +63,32 @@ public class UsuarioController {
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Remover usuário", description = "Remove algum usuário existente")
 	public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
-		removerUsuario.executar(id);
+		removeUsuario.remover(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping
 	@Operation(summary = "Editar usuário", description = "Edita algum usuário existente")
 	public ResponseEntity<DadosDeUsuario> editarUsuario(@RequestBody @Valid DadosEditarUsuario dados) {
-		return ResponseEntity.ok().body(editarUsuario.executar(dados));
+		return ResponseEntity.ok().body(editaUsuario.editar(dados));
 	}
 
 	@PutMapping(value = "/alterar-senha")
 	@Operation(summary = "Alterar senha de usuário", description = "Atera a senha de algum usuário existente")
 	public ResponseEntity<Void> alterarSenhaDeUsuario(@RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
-		alterarSenhaDeUsuario.executar(dados);
+		alteraSenhaDeUsuario.alterar(dados);
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping(value = "/{id}")
 	@Operation(summary = "Buscar usuário", description = "Busca algum usuário existente pelo id")
 	public ResponseEntity<DadosDeUsuario> buscarUsuario(@PathVariable Long id) {
-		return ResponseEntity.ok().body(buscarDadosDeUsuario.executar(id));
+		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscarPeloId(id));
 	}
 
 	@GetMapping
 	@Operation(summary = "Buscar todos usuários", description = "Busca todos usuário existentes")
 	public ResponseEntity<List<DadosDeUsuario>> buscarTodosUsuarios() {
-		return ResponseEntity.ok().body(buscarTodosUsuarios.executar());
+		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscaTodos());
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -23,33 +24,34 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscarImagem;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscarTodasCategorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriarCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditarCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoverCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaImagem;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "/mercadoria/categoria")
+@EnableCaching
 public class CategoriaController {
 
 	@Value("${imagens.path}")
 	private String path;
 
 	@Autowired
-	private CriarCategoria criarCategoria;
+	private CriaCategoria criaCategoria;
 
 	@Autowired
-	private RemoverCategoria removerCategoria;
+	private RemoveCategoria removeCategoria;
 
 	@Autowired
-	private EditarCategoria editarCategoria;
+	private EditaCategoria editaCategoria;
 
 	@Autowired
-	private BuscarTodasCategorias buscarTodasCategorias;
+	private BuscaCategorias buscaCategorias;
 
 	@Autowired
 	private UploadImagemDaCategoria uploadImagemDaCategoria;
@@ -57,8 +59,8 @@ public class CategoriaController {
 	@PostMapping(value = "/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Criar categoria", description = "Cria uma categoria para cadastrar mercadorias")
-	public ResponseEntity<Categoria> criarCategoria(@PathVariable String nome) {
-		Categoria categoria = criarCategoria.executar(nome);
+	public ResponseEntity<Categoria> criaCategoria(@PathVariable String nome) {
+		Categoria categoria = criaCategoria.criar(nome);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -68,7 +70,7 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
-		removerCategoria.executar(id);
+		removeCategoria.remover(id);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -76,14 +78,14 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
 	public ResponseEntity<Categoria> editarCategoria(@RequestBody Categoria categoria) {
-		return ResponseEntity.ok().body(editarCategoria.executar(categoria));
+		return ResponseEntity.ok().body(editaCategoria.editar(categoria));
 	}
 
 	@GetMapping
 	@Cacheable(value = "buscarTodasCategorias")
 	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes")
 	public ResponseEntity<Page<Categoria>> buscarTodasCategorias(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscarTodasCategorias.executar(paginacao));
+		return ResponseEntity.ok().body(buscaCategorias.buscarTodas(paginacao));
 	}
 
 	@PostMapping(value = "/{id}/imagem")
@@ -103,8 +105,8 @@ public class CategoriaController {
 	@Operation(summary = "Buscar imagem", description = "Busca imagem da categoria")
 	public ResponseEntity<byte[]> buscarImagemDaCategoria(@PathVariable String nomeDaImagem) {
 		String extensao = nomeDaImagem.split("\\.")[1];
-		BuscarImagem buscarImagem = new BuscarImagem();
-		byte[] imagem = buscarImagem.executar(path + "mercadoria/categoria/" + nomeDaImagem);
+		BuscaImagem buscarImagem = new BuscaImagem();
+		byte[] imagem = buscarImagem.buscar(path + "mercadoria/categoria/" + nomeDaImagem);
 		HttpHeaders httpHeaders = new HttpHeaders();
 		switch (extensao.toLowerCase()) {
 			case "jpg":

@@ -4,66 +4,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.pedido.BuscarDadosDePedido;
-import br.com.totemAutoatendimento.aplicacao.pedido.BuscarPedidosEntregues;
-import br.com.totemAutoatendimento.aplicacao.pedido.BuscarPedidosPorData;
-import br.com.totemAutoatendimento.aplicacao.pedido.BuscarTodosPedidos;
-import br.com.totemAutoatendimento.aplicacao.pedido.EntregarPedido;
-import br.com.totemAutoatendimento.aplicacao.pedido.FazerPedido;
-import br.com.totemAutoatendimento.aplicacao.pedido.RemoverPedido;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.comanda.ComandaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.mercadoria.MercadoriaEntityRepository;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.pedido.PedidoEntityRepository;
+import br.com.totemAutoatendimento.aplicacao.pedido.BuscaDadosDePedidos;
+import br.com.totemAutoatendimento.aplicacao.pedido.EntregaPedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.FazPedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.RemovePedido;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ComandaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.PedidoEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.web.websocket.EnviarPedidoRecebidoWebsocket;
 
 @Configuration
 public class PedidoBeanConfiguration {
 
-    @Autowired
-    private PedidoEntityRepository repository;
+	@Autowired
+	private PedidoEntityAdapter pedidoEntityAdapter;
 
-    @Autowired
-    private ComandaEntityRepository comandaRepository;
+	@Autowired
+	private ComandaEntityAdapter comandaEntityAdapter;
 
-    @Autowired
-    private MercadoriaEntityRepository mercadoriaRepository;
+	@Autowired
+	private MercadoriaEntityAdapter mercadoriaEntityAdapter;
 
-    @Autowired 
-    private EnviarPedidoRecebidoWebsocket enviarPedidoRecebidoWebsocket;
+	@Autowired
+	private EnviarPedidoRecebidoWebsocket enviarPedidoRecebidoWebsocket;
 
-    @Bean
-    public FazerPedido fazerPedido() {
-        return new FazerPedido(repository, comandaRepository, mercadoriaRepository, enviarPedidoRecebidoWebsocket);
-    }
+	@Bean
+	public FazPedido fazPedido() {
+		return new FazPedido(pedidoEntityAdapter, comandaEntityAdapter, mercadoriaEntityAdapter,
+				enviarPedidoRecebidoWebsocket);
+	}
 
-    @Bean
-    public RemoverPedido removerPedido() {
-        return new RemoverPedido(repository, comandaRepository, enviarPedidoRecebidoWebsocket);
-    }
+	@Bean
+	public RemovePedido removePedido() {
+		return new RemovePedido(pedidoEntityAdapter, comandaEntityAdapter, enviarPedidoRecebidoWebsocket);
+	}
 
-    @Bean
-    public EntregarPedido entregarPedido() {
-        return new EntregarPedido(repository);
-    }
+	@Bean
+	public EntregaPedido entregaPedido() {
+		return new EntregaPedido(pedidoEntityAdapter);
+	}
 
-    @Bean
-    public BuscarDadosDePedido buscarDadosDePedido() {
-        return new BuscarDadosDePedido(repository);
-    }
-
-    @Bean
-    public BuscarPedidosEntregues buscarPedidosEntregues() {
-        return new BuscarPedidosEntregues(repository);
-    }
-
-    @Bean
-    public BuscarPedidosPorData buscarPedidosPorData() {
-        return new BuscarPedidosPorData(repository);
-    }
-
-    @Bean
-    public BuscarTodosPedidos buscarTodosPedidos() {
-        return new BuscarTodosPedidos(repository);
-    }
+	@Bean
+	public BuscaDadosDePedidos buscaDadosDePedidos() {
+		return new BuscaDadosDePedidos(pedidoEntityAdapter);
+	}
 
 }

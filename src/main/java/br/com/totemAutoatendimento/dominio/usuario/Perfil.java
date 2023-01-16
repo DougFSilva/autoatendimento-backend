@@ -14,6 +14,8 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(of = "tipo")
 public class Perfil implements GrantedAuthority {
+
+	private static final long serialVersionUID = 1L;
 	
 	private TipoPerfil tipo;
 

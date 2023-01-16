@@ -11,11 +11,11 @@ public interface UsuarioRepository {
 	
 	Usuario editar(Usuario usuarioAtualizado);
 	
-	Optional<Usuario> buscar(Long id);
+	Optional<Usuario> buscarPeloId(Long id);
 	
-	Optional<Usuario> buscarPorCpf(String cpf);
+	Optional<Usuario> buscarPeloCpf(String cpf);
 	
-	Optional<Usuario> buscarPorRegistro(String registro);
+	Optional<Usuario> buscarPeloRegistro(String registro);
 	
 	List<Usuario> buscarTodos();
 	
