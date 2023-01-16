@@ -24,10 +24,12 @@ public class BuscaDadosDeUsuarios {
 		return new DadosDeUsuario(buscaUsuarioPeloId.buscar(id));
 	}
 
-	public Usuario buscarPeloRegistro(String registro) {
+	public DadosDeUsuario buscarPeloRegistro(String registro) {
 		Optional<Usuario> usuario = repository.buscarPeloRegistro(registro);
-		return usuario.orElseThrow(
-				() -> new ObjetoNaoEncontradoException("Usuário com registro " + registro + " não encontrado!"));
+		if(usuario.isEmpty()) {
+			throw new ObjetoNaoEncontradoException("Usuário com registro " + registro + " não encontrado!");
+		}
+		return new DadosDeUsuario(usuario.get());
 	}
 
 	public List<DadosDeUsuario> buscaTodos() {

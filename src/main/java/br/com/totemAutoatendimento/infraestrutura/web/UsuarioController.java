@@ -81,9 +81,15 @@ public class UsuarioController {
 	}
 
 	@GetMapping(value = "/{id}")
-	@Operation(summary = "Buscar usuário", description = "Busca algum usuário existente pelo id")
+	@Operation(summary = "Buscar usuário pelo Id", description = "Busca algum usuário existente pelo id")
 	public ResponseEntity<DadosDeUsuario> buscarUsuario(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscarPeloId(id));
+	}
+	
+	@GetMapping(value = "/registro/{registro}")
+	@Operation(summary = "Buscar usuário pelo registro", description = "Busca algum usuário existente pelo registro")
+	public ResponseEntity<DadosDeUsuario> buscarUsuarioPeloRegistro(@PathVariable String registro) {
+		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscarPeloRegistro(registro));
 	}
 
 	@GetMapping

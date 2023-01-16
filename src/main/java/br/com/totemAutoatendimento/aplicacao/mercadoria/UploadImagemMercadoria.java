@@ -13,6 +13,7 @@ import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDado
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 
+@PreAuthorize("hasRole('ADMIN')")
 public class UploadImagemMercadoria {
 
     private final MercadoriaRepository repository;
@@ -21,7 +22,6 @@ public class UploadImagemMercadoria {
         this.repository = repository;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public void executar(Long id, MultipartFile file, String pathLocal, String urlServidor) {
         String extensao = file.getContentType();
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){

@@ -46,7 +46,7 @@ public class PedidoBeanConfiguration {
 
 	@Bean
 	public BuscaDadosDePedidos buscaDadosDePedidos() {
-		return new BuscaDadosDePedidos(pedidoEntityAdapter);
+		return new BuscaDadosDePedidos(pedidoEntityAdapter, comandaEntityAdapter);
 	}
 
 }
