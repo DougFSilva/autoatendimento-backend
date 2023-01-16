@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaTodasCategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
@@ -37,8 +37,8 @@ public class CategoriaBeanConfiguration {
 	}
 
 	@Bean
-	public BuscaCategorias buscarCategorias() {
-		return new BuscaCategorias(categoriaEntityAdapter);
+	public BuscaTodasCategorias buscarCategorias() {
+		return new BuscaTodasCategorias(categoriaEntityAdapter);
 	}
 
 	@Bean

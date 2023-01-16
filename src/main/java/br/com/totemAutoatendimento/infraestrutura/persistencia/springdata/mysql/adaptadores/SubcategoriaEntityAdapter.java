@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
@@ -74,8 +72,8 @@ public class SubcategoriaEntityAdapter implements SubcategoriaRepository {
 	}
 
 	@Override
-	public Page<Subcategoria> buscarTodas(Pageable paginacao) {
-		return repository.findAll(paginacao).map(subcategoriaEntityConverter::converterParaSubcategoria);
+	public List<Subcategoria> buscarTodas() {
+		return repository.findAll().stream().map(subcategoriaEntityConverter::converterParaSubcategoria).toList();
 	}
 
 }

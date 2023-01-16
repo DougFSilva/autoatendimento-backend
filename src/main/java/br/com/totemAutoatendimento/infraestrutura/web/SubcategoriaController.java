@@ -1,14 +1,13 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +56,7 @@ public class SubcategoriaController {
     private UploadImagemDaSubcategoria uploadImagemDaSubcategoria;
 
     @PostMapping(value = "/{nome}/categoria/{idCategoria}")
-    @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
+    @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Criar subcategoria", description = "Cria uma subcategoria para cadastrar as mercadorias")
     public ResponseEntity<Subcategoria> criarSubcategoria(@PathVariable Long idCategoria, @PathVariable String nome) {
         Subcategoria subcategoria = criaSubcategoria.criar(idCategoria, nome);
@@ -67,7 +66,7 @@ public class SubcategoriaController {
     }
 
     @DeleteMapping(value = "/{id}")
-    @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
+    @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
     public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
         removeSubcategoria.remover(id);
@@ -75,21 +74,28 @@ public class SubcategoriaController {
     }
 
     @PutMapping
-    @CacheEvict(value = "buscarTodasSubcategorias", allEntries = true)
+    @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
     public ResponseEntity<Subcategoria> editarSubcategoria(@RequestBody Subcategoria subcategoriaAtualizada) {
         return ResponseEntity.ok().body(editaSubcategoria.editar(subcategoriaAtualizada));
+    }
+    
+    @GetMapping(value = "/categoria/{categoriaId}")
+    @Cacheable(value = "buscarSubcategoriasPelaCategoria")
+    @Operation(summary = "Buscar subcategorias pela categoria", description = "Busca todas subcategorias pertencentes à uma categoria")
+    public ResponseEntity<List<Subcategoria>> buscarSubcategoriasPelaCategoria(@PathVariable Long categoriaId) {
+        return ResponseEntity.ok().body(buscarSubcategorias.buscarPelaCategoria(categoriaId));
     }
 
     @GetMapping
     @Cacheable(value = "buscarTodasSubcategorias")
     @Operation(summary = "Buscar todas subcategorias", description = "Busca todas subcategorias existentes")
-    public ResponseEntity<Page<Subcategoria>> buscarTodasSubcategorias(Pageable paginacao) {
-        return ResponseEntity.ok().body(buscarSubcategorias.buscarTodas(paginacao));
+    public ResponseEntity<List<Subcategoria>> buscarTodasSubcategorias() {
+        return ResponseEntity.ok().body(buscarSubcategorias.buscarTodas());
     }
 
     @PostMapping(value = "/{id}/imagem")
-    @CacheEvict(value = {"buscarTodasSubcategorias", "buscarImagemDaSubcategoria"}, allEntries = true)
+    @CacheEvict(value = {"buscarTodasSubcategorias", "buscarImagemDaSubcategoria", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
     public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {

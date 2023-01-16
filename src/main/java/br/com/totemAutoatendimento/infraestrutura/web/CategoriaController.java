@@ -1,14 +1,13 @@
 package br.com.totemAutoatendimento.infraestrutura.web;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaImagem;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategorias;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaTodasCategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
@@ -51,7 +50,7 @@ public class CategoriaController {
 	private EditaCategoria editaCategoria;
 
 	@Autowired
-	private BuscaCategorias buscaCategorias;
+	private BuscaTodasCategorias buscaTodasCategorias;
 
 	@Autowired
 	private UploadImagemDaCategoria uploadImagemDaCategoria;
@@ -84,8 +83,8 @@ public class CategoriaController {
 	@GetMapping
 	@Cacheable(value = "buscarTodasCategorias")
 	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes")
-	public ResponseEntity<Page<Categoria>> buscarTodasCategorias(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaCategorias.buscarTodas(paginacao));
+	public ResponseEntity<List<Categoria>> buscarTodasCategorias() {
+		return ResponseEntity.ok().body(buscaTodasCategorias.buscar());
 	}
 
 	@PostMapping(value = "/{id}/imagem")

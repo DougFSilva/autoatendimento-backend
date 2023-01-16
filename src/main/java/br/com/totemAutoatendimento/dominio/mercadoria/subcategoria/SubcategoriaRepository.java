@@ -3,9 +3,6 @@ package br.com.totemAutoatendimento.dominio.mercadoria.subcategoria;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 
 public interface SubcategoriaRepository {
@@ -22,5 +19,5 @@ public interface SubcategoriaRepository {
 	
 	List<Subcategoria> buscarPelaCategoria(Categoria categoria);
 
-	Page<Subcategoria> buscarTodas(Pageable paginacao);
+	List<Subcategoria> buscarTodas();
 }
