@@ -51,4 +51,5 @@ public class RemovePedido {
 				new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_REMOVIDO, new DadosDePedido(pedido.get())));
 		return new DadosDeComanda(comandaAtualizada);
 	}
+	
 }

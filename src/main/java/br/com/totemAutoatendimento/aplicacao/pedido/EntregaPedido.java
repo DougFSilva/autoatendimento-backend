@@ -24,4 +24,12 @@ public class EntregaPedido {
 		pedido.setTempoEntrega(LocalTime.now());
 		repository.editar(pedido);
 	}
+	
+	public void cancelarEntrega(Long id) {
+		BuscaPedidoPeloId buscaPedidoPeloId = new BuscaPedidoPeloId(repository);
+		Pedido pedido = buscaPedidoPeloId.buscar(id);
+		pedido.setEntregue(false);
+		pedido.setTempoEntrega(null);
+		repository.editar(pedido);
+	}
 }
