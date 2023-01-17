@@ -2,7 +2,6 @@ package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql
 
 import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +32,7 @@ public class MercadoriaEntity {
 	@Column(unique = true)
 	private String codigo;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private SubcategoriaEntity subcategoria;
 
 	private String descricao;

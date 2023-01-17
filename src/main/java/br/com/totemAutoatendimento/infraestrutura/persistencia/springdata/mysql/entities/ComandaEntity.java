@@ -3,7 +3,6 @@ package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -36,10 +35,10 @@ public class ComandaEntity {
 	private Long id;
 
 	@JoinColumn(name = "cartao")
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private CartaoEntity cartao;
 
-	@OneToOne(cascade = CascadeType.MERGE)
+	@OneToOne
 	private ClienteEntity cliente;
 
 	private LocalDateTime abertura;

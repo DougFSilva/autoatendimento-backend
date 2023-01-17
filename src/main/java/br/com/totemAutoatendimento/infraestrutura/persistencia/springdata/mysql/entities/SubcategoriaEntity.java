@@ -1,6 +1,5 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +24,7 @@ public class SubcategoriaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private CategoriaEntity categoria;
 
 	private String nome;

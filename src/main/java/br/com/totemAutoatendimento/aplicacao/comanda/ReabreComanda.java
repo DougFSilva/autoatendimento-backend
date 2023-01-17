@@ -25,6 +25,7 @@ public class ReabreComanda {
         comanda.setTipoPagamento(TipoPagamento.NAO_PAGO);
         comanda.removerDesconto();
         comanda.setDesconto(0f);
+        comanda.setFechamento(null);
         return new DadosDeComanda(repository.editar(comanda));
     }
     

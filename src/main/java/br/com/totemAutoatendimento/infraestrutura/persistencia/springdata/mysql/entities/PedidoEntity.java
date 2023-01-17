@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,10 +28,10 @@ public class PedidoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private ComandaEntity comanda;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private MercadoriaEntity mercadoria;
 	
 	private String mesa;

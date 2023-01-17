@@ -17,9 +17,9 @@ import br.com.totemAutoatendimento.dominio.usuario.UsuarioRepository;
 @PreAuthorize("hasRole('ADMIN')")
 public class CriaUsuario {
 
-	private UsuarioRepository repository;
+	private final UsuarioRepository repository;
 
-	private CodificadorDeSenha codificador;
+	private final CodificadorDeSenha codificador;
 
 	public CriaUsuario(UsuarioRepository repository, CodificadorDeSenha codificador) {
 		this.repository = repository;
