@@ -1,5 +1,6 @@
 package br.com.totemAutoatendimento.dominio.pedido;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -37,4 +38,25 @@ public class Pedido {
 	private LocalTime tempoEntrega;
 
 	private Boolean entregue;
+	
+	private BigDecimal valor;
+	
+	public Pedido(Comanda comanda, Mercadoria mercadoria, String mesa, Integer quantidade) {
+		this.comanda = comanda;
+		this.mercadoria = mercadoria;
+		this.mesa = mesa;
+		this.quantidade = quantidade;
+		this.data = LocalDate.now();
+		this.tempoPedido = LocalTime.now();
+		this.entregue = false;
+		this.valor = BigDecimal.ZERO;
+		if(mercadoria.getPromocao()) {
+			BigDecimal valorPromocional = mercadoria.getPrecoPromocional().multiply(new BigDecimal(quantidade));
+			this.valor = this.valor.add(valorPromocional);
+		}else {
+			BigDecimal valor = mercadoria.getPreco().multiply(new BigDecimal(quantidade));
+			this.valor = this.valor.add(valor);
+		}
+	}
+	
 }

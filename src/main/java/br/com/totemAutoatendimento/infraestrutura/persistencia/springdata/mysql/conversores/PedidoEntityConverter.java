@@ -30,7 +30,8 @@ public class PedidoEntityConverter {
 				entity.getData(),
 				entity.getTempoPedido(),
 				entity.getTempoEntrega(),
-				entity.getEntregue());
+				entity.getEntregue(),
+				entity.getValor());
 	}
 
 	public PedidoEntity converterParaPedidoEntity(Pedido pedido) {
@@ -44,6 +45,7 @@ public class PedidoEntityConverter {
 				pedido.getData(),
 				pedido.getTempoPedido(),
 				pedido.getTempoEntrega(),
-				pedido.getEntregue());
+				pedido.getEntregue(),
+				pedido.getValor());
 	}
 }

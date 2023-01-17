@@ -1,5 +1,6 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -45,5 +46,7 @@ public class PedidoEntity {
 	private LocalTime tempoEntrega;
 
 	private Boolean entregue;
+	
+	private BigDecimal valor;
 
 }

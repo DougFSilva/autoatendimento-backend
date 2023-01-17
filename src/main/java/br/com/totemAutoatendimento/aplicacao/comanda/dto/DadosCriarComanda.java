@@ -7,6 +7,6 @@ public record DadosCriarComanda(
 
 		@NotBlank String codigoCartao,
 
-		@NotNull Long idCliente) {
+		@NotNull Long clienteId) {
 
 }

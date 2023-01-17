@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.cartao.CartaoRepository;
-import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 
 @PreAuthorize("hasRole('ADMIN')")
 public class CriaCartao {
@@ -22,8 +22,9 @@ public class CriaCartao {
 	public Cartao criar(String codigo) {
 		Optional<Cartao> cartao = repository.buscarPeloCodigo(codigo);
 		if(cartao.isPresent()) {
-			throw new ObjetoNaoEncontradoException("Cartão com código " + codigo + " já cadastrado!");
+			throw new ViolacaoDeIntegridadeDeDadosException("Cartão com código " + codigo + " já cadastrado!");
 		}
-		return repository.criar(cartao.get());
+		Cartao novoCartao = new Cartao(codigo);
+		return repository.criar(novoCartao);
 	}
 }

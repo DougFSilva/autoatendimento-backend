@@ -1,7 +1,5 @@
 package br.com.totemAutoatendimento.aplicacao.pedido;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +27,7 @@ public class FazPedido {
 	private final ComandaRepository comandaRepository;
 
 	private final MercadoriaRepository mercadoriaRepository;
-	
+
 	private final EventoDePedido eventoDePedido;
 
 	public FazPedido(PedidoRepository repository, ComandaRepository comandaRepository,
@@ -51,17 +49,12 @@ public class FazPedido {
 					mercadoriaRepository);
 			Mercadoria mercadoria = verificaDisponibilidadeDeMercadoria.verificar(dado.codigoDaMercadoria());
 			Pedido pedido = new Pedido(
-					null, 
 					comanda.get(), 
 					mercadoria, 
 					dado.mesa(), 
-					dado.quantidade(), 
-					LocalDate.now(),
-					LocalTime.now(), 
-					null, 
-					false);
+					dado.quantidade());
 			Pedido pedidoCriado = repository.criar(pedido);
-			comanda.get().adicionarValor(pedidoCriado);
+			comanda.get().adicionarValor(pedidoCriado.getValor());
 			eventoDePedido.notificar(
 					new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, new DadosDePedido(pedidoCriado)));
 		});

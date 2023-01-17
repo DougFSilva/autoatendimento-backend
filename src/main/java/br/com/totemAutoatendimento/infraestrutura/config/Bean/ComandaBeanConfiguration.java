@@ -11,6 +11,7 @@ import br.com.totemAutoatendimento.aplicacao.comanda.FechaComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.ReabreComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoveComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoveDescontoDaComanda;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CartaoEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ClienteEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ComandaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.PedidoEntityAdapter;
@@ -26,6 +27,9 @@ public class ComandaBeanConfiguration {
 
 	@Autowired
 	private PedidoEntityAdapter pedidoEntityAdapter;
+	
+	@Autowired
+	private CartaoEntityAdapter cartaoEntityAdapter;
 
 	@Bean
 	public BuscaDadosDeComandas buscaDadosDeComandas() {
@@ -34,7 +38,7 @@ public class ComandaBeanConfiguration {
 
 	@Bean
 	public CriaComanda criaComanda() {
-		return new CriaComanda(comandaEntityAdapter, clienteEntityAdapter);
+		return new CriaComanda(comandaEntityAdapter, clienteEntityAdapter, cartaoEntityAdapter);
 	}
 
 	@Bean

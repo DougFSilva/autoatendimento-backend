@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.exception.RegrasDeNegocioException;
-import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -69,25 +68,14 @@ public class Comanda {
 		Float descontoPercentual = (100 / (100 - this.desconto));
 		this.valor = this.valor.multiply(new BigDecimal(descontoPercentual.toString())).setScale(2,
 				RoundingMode.HALF_EVEN);
+		this.desconto = 0f;
 	}
 
-	public void adicionarValor(Pedido pedido) {
-		if(pedido.getMercadoria().getPromocao()) {
-			BigDecimal valorPromocional = pedido.getMercadoria().getPrecoPromocional().multiply(new BigDecimal(pedido.getQuantidade()));
-			this.valor = this.valor.add(valorPromocional);
-		}else {
-			BigDecimal valor = pedido.getMercadoria().getPreco().multiply(new BigDecimal(pedido.getQuantidade()));
-			this.valor = this.valor.add(valor);
-		}
+	public void adicionarValor(BigDecimal valor) {
+		this.valor = this.valor.add(valor);
 	}
 	
-	public void removerValor(Pedido pedido) {
-		if(pedido.getMercadoria().getPromocao()) {
-			BigDecimal valorPromocional = pedido.getMercadoria().getPrecoPromocional().multiply(new BigDecimal(pedido.getQuantidade()));
-			this.valor = this.valor.subtract(valorPromocional);
-		}else {
-			BigDecimal valor = pedido.getMercadoria().getPreco().multiply(new BigDecimal(pedido.getQuantidade()));
-			this.valor = this.valor.subtract(valor);
-		}
+	public void removerValor(BigDecimal valor) {
+		this.valor = this.valor.subtract(valor);
 	}
 }

@@ -45,7 +45,7 @@ public class RemovePedido {
 			throw new RegrasDeNegocioException("Não é possível cancelar pedido que já foi entregue!");
 		}
 		repository.remover(pedido.get());
-		comanda.get().removerValor(pedido.get());
+		comanda.get().removerValor(pedido.get().getValor());
 		Comanda comandaAtualizada = comandaRepository.editar(comanda.get());
 		eventoDePedido.notificar(
 				new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_REMOVIDO, new DadosDePedido(pedido.get())));
