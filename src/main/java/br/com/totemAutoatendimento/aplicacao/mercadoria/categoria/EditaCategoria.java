@@ -2,30 +2,37 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria.categoria;
 
 import java.util.Optional;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
+import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-@PreAuthorize("hasRole('ADMIN')")
 public class EditaCategoria {
 
 	private final CategoriaRepository repository;
 
-	public EditaCategoria(CategoriaRepository repository) {
+	private final SystemLogger logger;
+
+	public EditaCategoria(CategoriaRepository repository, SystemLogger logger) {
 		this.repository = repository;
+		this.logger = logger;
 	}
-	
-	public Categoria editar(Long id, String nome) {
+
+	public Categoria editar(Long id, String nome, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		BuscaCategoriaPeloId buscarCategoriaPeloId = new BuscaCategoriaPeloId(repository);
 		Categoria categoria = buscarCategoriaPeloId.buscar(id);
 		Optional<Categoria> categoriaPorNome = repository.buscarPorNome(nome);
 		if (categoriaPorNome.isPresent() && categoriaPorNome.get().getId() != id) {
-			throw new ViolacaoDeIntegridadeDeDadosException(
-					"Categoria com nome " + nome + " já cadastrada!");
+			throw new ViolacaoDeIntegridadeDeDadosException(String.format("Categoria com nome %s já cadastrada!", nome));
 		}
 		categoria.setNome(nome);
-		return repository.criar(categoria);
+		Categoria categoriaEditada = repository.editar(categoria);
+		logger.info(
+				String.format("Usuário %s - Editada categoria de id %d!", usuarioAutenticado.getRegistro(), categoriaEditada.getId())
+		);
+		return categoriaEditada;
 	}
 }

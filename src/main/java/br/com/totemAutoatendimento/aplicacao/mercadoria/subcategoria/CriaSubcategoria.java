@@ -1,32 +1,40 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
+import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategoriaPeloId;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-@PreAuthorize("hasRole('ADMIN')")
 public class CriaSubcategoria {
 
 	private final SubcategoriaRepository repository;
 
 	private final CategoriaRepository categoriaRepository;
+	
+	private final SystemLogger logger;
 
-	public CriaSubcategoria(SubcategoriaRepository repository, CategoriaRepository categoriaRepository) {
+	public CriaSubcategoria(SubcategoriaRepository repository, CategoriaRepository categoriaRepository, SystemLogger logger) {
 		this.repository = repository;
 		this.categoriaRepository = categoriaRepository;
+		this.logger = logger;
 	}
 	
-	public Subcategoria criar(Long categoriaId, String nome) {
+	public Subcategoria criar(Long categoriaId, String nome, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		BuscaCategoriaPeloId buscaCategoriaPeloId = new BuscaCategoriaPeloId(categoriaRepository);
 		Categoria categoria = buscaCategoriaPeloId.buscar(categoriaId);
 		if (repository.buscarPeloNome(nome).isPresent()) {
-			throw new ViolacaoDeIntegridadeDeDadosException("Subcategoria com nome " + nome + " já cadastrada!");
+			throw new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com nome %s já cadastrada!", nome));
 		}
-		return repository.criar(new Subcategoria(null, categoria, nome, "Sem imagem"));
+		Subcategoria subcategoriaCriada = repository.criar(new Subcategoria(null, categoria, nome, "Sem imagem"));
+		logger.info(
+				String.format("Usuário %s - Subcategoria %s criada!", usuarioAutenticado.getRegistro(), subcategoriaCriada.getNome())
+		);
+		return subcategoriaCriada;
 	}
 }

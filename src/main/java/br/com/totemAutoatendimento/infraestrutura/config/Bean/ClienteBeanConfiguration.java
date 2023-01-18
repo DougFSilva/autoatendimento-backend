@@ -8,6 +8,7 @@ import br.com.totemAutoatendimento.aplicacao.cliente.BuscaDadosDeClientes;
 import br.com.totemAutoatendimento.aplicacao.cliente.CriaCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.EditaCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.RemoveCliente;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ClienteEntityAdapter;
 
 @Configuration
@@ -15,10 +16,13 @@ public class ClienteBeanConfiguration {
 
 	@Autowired
 	private ClienteEntityAdapter clienteEntityAdapter;
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public CriaCliente criaCliente() {
-		return new CriaCliente(clienteEntityAdapter);
+		return new CriaCliente(clienteEntityAdapter, loggerAdapter);
 	}
 
 	@Bean

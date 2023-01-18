@@ -17,6 +17,7 @@ import br.com.totemAutoatendimento.aplicacao.cartao.BuscaTodosCartoes;
 import br.com.totemAutoatendimento.aplicacao.cartao.CriaCartao;
 import br.com.totemAutoatendimento.aplicacao.cartao.RemoveCartao;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.RecuperaUsuarioAutenticado;
 
 @RestController
 @RequestMapping(value = "/cartao")
@@ -31,9 +32,12 @@ public class CartaoController {
 	@Autowired
 	private BuscaTodosCartoes buscaTodosCartoes;
 	
+	@Autowired
+	private RecuperaUsuarioAutenticado usuarioAutenticado;
+	
 	@PostMapping(value = "/{codigo}")
 	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
-		Cartao cartao = criaCartao.criar(codigo);
+		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado.recuperar());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").buildAndExpand(cartao.getCodigo()).toUri();
 		return ResponseEntity.created(uri).build();
 	}

@@ -5,24 +5,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-@PreAuthorize("hasRole('ADMIN')")
 public class UploadImagemDaCategoria {
     
-    private final CategoriaRepository repository;
+	private final CategoriaRepository repository;
 
-    public UploadImagemDaCategoria(CategoriaRepository repository){
-        this.repository = repository;
-    }
+	private final SystemLogger logger;
 
-    public void executar(Long id, MultipartFile file, String pathLocal, String urlServidor) {
+	public UploadImagemDaCategoria(CategoriaRepository repository, SystemLogger logger) {
+		this.repository = repository;
+		this.logger = logger;
+	}
+
+    public void executar(Long id, MultipartFile file, String pathLocal, String urlServidor, Usuario usuarioAutenticado) {
+    	AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
         String extensao = file.getContentType();
         if(extensao ==  null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))){
             throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
@@ -35,6 +40,10 @@ public class UploadImagemDaCategoria {
             throw new ErroNoUploadDeArquivoException("Erro no processo de upload do arquivo!", e.getCause());
         }
         categoria.setImagem(urlServidor);
-        repository.editar(categoria);
+        Categoria categoriaEditada = repository.editar(categoria);
+        logger.info(
+        		String.format("Usuário %s - Inserido imagem à categoria %s!", 
+        				usuarioAutenticado.getRegistro(), categoriaEditada.getNome())
+        );
     }
 }

@@ -29,6 +29,7 @@ import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosCriarCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosEditarCliente;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.RecuperaUsuarioAutenticado;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -47,13 +48,15 @@ public class ClienteController {
 
 	@Autowired
 	private BuscaDadosDeClientes buscaDadosDeClientes;
-
-
+	
+	@Autowired
+	private RecuperaUsuarioAutenticado usuarioAutenticado;
+	
 	@PostMapping
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
-		Cliente cliente = criaCliente.criar(dados);
+		Cliente cliente = criaCliente.criar(dados, usuarioAutenticado.recuperar());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -100,4 +103,5 @@ public class ClienteController {
 	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarTodos(paginacao));
 	}
+	
 }

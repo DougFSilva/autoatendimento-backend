@@ -12,9 +12,9 @@ import br.com.totemAutoatendimento.dominio.usuario.UsuarioRepository;
 @PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
 public class AlteraSenhaDeUsuario {
 
-	private UsuarioRepository repository;
+	private final UsuarioRepository repository;
 	
-	private CodificadorDeSenha codificador;
+	private final CodificadorDeSenha codificador;
 
 	public AlteraSenhaDeUsuario(UsuarioRepository repository, CodificadorDeSenha codificador) {
 		this.repository = repository;

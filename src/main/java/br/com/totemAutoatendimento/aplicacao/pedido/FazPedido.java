@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
+import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.VerificaDisponibilidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
@@ -30,33 +31,37 @@ public class FazPedido {
 
 	private final EventoDePedido eventoDePedido;
 
+	private final SystemLogger logger;
+
 	public FazPedido(PedidoRepository repository, ComandaRepository comandaRepository,
-			MercadoriaRepository mercadoriaRepository, EventoDePedido eventoDePedido) {
+			MercadoriaRepository mercadoriaRepository, EventoDePedido eventoDePedido, SystemLogger logger) {
 		this.repository = repository;
 		this.comandaRepository = comandaRepository;
 		this.mercadoriaRepository = mercadoriaRepository;
 		this.eventoDePedido = eventoDePedido;
+		this.logger = logger;
 	}
 
 	@Transactional
 	public DadosDeComanda fazer(String codigoCartao, List<DadosFazerPedido> dados) {
 		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
-			throw new ObjetoNaoEncontradoException("Comanda aberta com cartão " + codigoCartao + " não encontrada!");
+			throw new ObjetoNaoEncontradoException(
+					String.format("Comanda aberta com cartão de código %s não encontrada!", codigoCartao));
 		}
 		dados.forEach(dado -> {
 			VerificaDisponibilidadeDeMercadoria verificaDisponibilidadeDeMercadoria = new VerificaDisponibilidadeDeMercadoria(
 					mercadoriaRepository);
 			Mercadoria mercadoria = verificaDisponibilidadeDeMercadoria.verificar(dado.codigoDaMercadoria());
-			Pedido pedido = new Pedido(
-					comanda.get(), 
-					mercadoria, 
-					dado.mesa(), 
-					dado.quantidade());
+			Pedido pedido = new Pedido(comanda.get(), mercadoria, dado.mesa(), dado.quantidade());
 			Pedido pedidoCriado = repository.criar(pedido);
 			comanda.get().adicionarValor(pedidoCriado.getValor());
 			eventoDePedido.notificar(
-					new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, new DadosDePedido(pedidoCriado)));
+					new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, new DadosDePedido(pedidoCriado))
+			);
+			logger.info(
+					String.format("Pedido com id %d criado para comanda com id %d!", pedidoCriado.getId(), comanda.get().getId())
+			);
 		});
 		return new DadosDeComanda(comandaRepository.editar(comanda.get()));
 	}

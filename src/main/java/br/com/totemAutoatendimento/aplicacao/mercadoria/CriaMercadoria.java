@@ -1,39 +1,49 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscaSubcategoriaPeloId;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-@PreAuthorize("hasRole('ADMIN')")
 public class CriaMercadoria {
 
 	private final MercadoriaRepository repository;
 
 	private final SubcategoriaRepository subcategoriaRepository;
+	
+	private final SystemLogger logger;
 
-	public CriaMercadoria(MercadoriaRepository repository, SubcategoriaRepository subcategoriaRepository) {
+	public CriaMercadoria(MercadoriaRepository repository, SubcategoriaRepository subcategoriaRepository, SystemLogger logger) {
 		this.repository = repository;
 		this.subcategoriaRepository = subcategoriaRepository;
+		this.logger = logger;
 	}
 
 	@Transactional
-	public Mercadoria criar(DadosCriarMercadoria dados) {
+	public Mercadoria criar(DadosCriarMercadoria dados, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		if (repository.buscarPeloCodigo(dados.codigo()).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
-					"Mercadoria com código " + dados.codigo() + " já cadastrada!");
+					String.format("Mercadoria com código %s já cadastrada!", dados.codigo()));
 		}
 		BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(subcategoriaRepository);
 		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(dados.subcategoriaId());
 		Mercadoria mercadoria = new Mercadoria(null, dados.codigo(), subcategoria, dados.descricao(), dados.preco(),
 				dados.promocao(), dados.precoPromocional(), true, "Sem imagem");
-		return repository.criar(mercadoria);
+		Mercadoria mercadoriaCriada = repository.criar(mercadoria);
+		logger.info(
+				String.format("Usuário %s - Mercadoria com código %s criada!", 
+						usuarioAutenticado.getRegistro(), mercadoriaCriada.getCodigo())
+		);
+		return mercadoriaCriada;
 	}
 
 }

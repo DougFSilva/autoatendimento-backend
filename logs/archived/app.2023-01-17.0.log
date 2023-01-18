@@ -1,0 +1,28 @@
+14:38:47.136 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Starting TotemAutoatendimentoApplication using Java 17.0.1 on LAPTOP-USO2KRV7 with PID 29692 (C:\Users\dougl\Documents\codes\totem-autoatendimento\target\classes started by dougl in C:\Users\dougl\Documents\codes\totem-autoatendimento)
+14:38:47.137 [restartedMain] DEBUG b.c.t.TotemAutoatendimentoApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+14:38:47.137 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - The following 1 profile is active: "prod"
+14:38:53.346 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Started TotemAutoatendimentoApplication in 6.717 seconds (JVM running for 7.651)
+14:39:17.612 [http-nio-8080-exec-3] INFO  b.c.t.i.logger.LoggerAdapter - Teste de Log Samuel Nicolas
+14:39:21.972 [http-nio-8080-exec-5] INFO  b.c.t.i.logger.LoggerAdapter - Teste de Log Samuel Nicolas
+14:40:23.625 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Starting TotemAutoatendimentoApplication using Java 17.0.1 on LAPTOP-USO2KRV7 with PID 29692 (C:\Users\dougl\Documents\codes\totem-autoatendimento\target\classes started by dougl in C:\Users\dougl\Documents\codes\totem-autoatendimento)
+14:40:23.625 [restartedMain] DEBUG b.c.t.TotemAutoatendimentoApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+14:40:23.625 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - The following 1 profile is active: "prod"
+14:40:25.816 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Started TotemAutoatendimentoApplication in 2.227 seconds (JVM running for 100.121)
+14:40:34.760 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Starting TotemAutoatendimentoApplication using Java 17.0.1 on LAPTOP-USO2KRV7 with PID 29692 (C:\Users\dougl\Documents\codes\totem-autoatendimento\target\classes started by dougl in C:\Users\dougl\Documents\codes\totem-autoatendimento)
+14:40:34.760 [restartedMain] DEBUG b.c.t.TotemAutoatendimentoApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+14:40:34.760 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - The following 1 profile is active: "prod"
+14:40:36.794 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Started TotemAutoatendimentoApplication in 2.067 seconds (JVM running for 111.1)
+14:41:29.913 [http-nio-8080-exec-3] INFO  b.c.t.i.logger.LoggerAdapter - Teste de Log Samuel Nicolas
+14:41:29.929 [http-nio-8080-exec-3] ERROR b.c.t.i.logger.LoggerAdapter - Tentativa de criar cliente com cpf já existente
+14:55:01.323 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Starting TotemAutoatendimentoApplication using Java 17.0.1 on LAPTOP-USO2KRV7 with PID 40584 (C:\Users\dougl\Documents\codes\totem-autoatendimento\target\classes started by dougl in C:\Users\dougl\Documents\codes\totem-autoatendimento)
+14:55:01.323 [restartedMain] DEBUG b.c.t.TotemAutoatendimentoApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+14:55:01.324 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - The following 1 profile is active: "prod"
+14:55:08.415 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Started TotemAutoatendimentoApplication in 7.593 seconds (JVM running for 8.623)
+14:55:17.027 [http-nio-8080-exec-3] ERROR b.c.t.i.logger.LoggerAdapter - Usuario: 784512 - Tentativa de criar cliente com cpf já cadastrado
+14:55:20.376 [http-nio-8080-exec-5] INFO  b.c.t.i.logger.LoggerAdapter - Cliente com id 12 criado
+14:58:20.459 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Starting TotemAutoatendimentoApplication using Java 17.0.1 on LAPTOP-USO2KRV7 with PID 37396 (C:\Users\dougl\Documents\codes\totem-autoatendimento\target\classes started by dougl in C:\Users\dougl\Documents\codes\totem-autoatendimento)
+14:58:20.459 [restartedMain] DEBUG b.c.t.TotemAutoatendimentoApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+14:58:20.460 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - The following 1 profile is active: "prod"
+14:58:26.986 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication - Started TotemAutoatendimentoApplication in 7.074 seconds (JVM running for 8.04)
+14:58:31.825 [http-nio-8080-exec-3] ERROR b.c.t.i.logger.LoggerAdapter - Usuario: 784512 - Tentativa de criar cliente com cpf já cadastrado
+14:58:35.142 [http-nio-8080-exec-5] INFO  b.c.t.i.logger.LoggerAdapter - Cliente com id 13 criado

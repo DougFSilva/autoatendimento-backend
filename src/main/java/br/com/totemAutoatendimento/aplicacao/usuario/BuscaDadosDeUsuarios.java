@@ -13,7 +13,7 @@ import br.com.totemAutoatendimento.dominio.usuario.UsuarioRepository;
 @PreAuthorize("hasRole('ADMIN')")
 public class BuscaDadosDeUsuarios {
 
-	private UsuarioRepository repository;
+	private final UsuarioRepository repository;
 
 	public BuscaDadosDeUsuarios(UsuarioRepository repository) {
 		this.repository = repository;
