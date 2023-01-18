@@ -17,7 +17,8 @@ import br.com.totemAutoatendimento.aplicacao.cartao.BuscaTodosCartoes;
 import br.com.totemAutoatendimento.aplicacao.cartao.CriaCartao;
 import br.com.totemAutoatendimento.aplicacao.cartao.RemoveCartao;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.RecuperaUsuarioAutenticado;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 
 @RestController
 @RequestMapping(value = "/cartao")
@@ -33,18 +34,20 @@ public class CartaoController {
 	private BuscaTodosCartoes buscaTodosCartoes;
 	
 	@Autowired
-	private RecuperaUsuarioAutenticado usuarioAutenticado;
+	private AutenticacaoService autenticacaoService;
 	
 	@PostMapping(value = "/{codigo}")
 	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
-		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado.recuperar());
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado );
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").buildAndExpand(cartao.getCodigo()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping(value = "/{codigo}")
 	public ResponseEntity<Void> removerCartao(@PathVariable String codigo) {
-		removeCartao.remover(codigo);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		removeCartao.remover(codigo, usuarioAutenticado);
 		return ResponseEntity.noContent().build();
 	}
 	

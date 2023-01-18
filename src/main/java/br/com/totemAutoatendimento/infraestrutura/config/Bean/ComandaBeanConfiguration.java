@@ -11,6 +11,7 @@ import br.com.totemAutoatendimento.aplicacao.comanda.FechaComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.ReabreComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoveComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoveDescontoDaComanda;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CartaoEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ClienteEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ComandaEntityAdapter;
@@ -30,40 +31,43 @@ public class ComandaBeanConfiguration {
 	
 	@Autowired
 	private CartaoEntityAdapter cartaoEntityAdapter;
-
-	@Bean
-	public BuscaDadosDeComandas buscaDadosDeComandas() {
-		return new BuscaDadosDeComandas(comandaEntityAdapter, clienteEntityAdapter);
-	}
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public CriaComanda criaComanda() {
-		return new CriaComanda(comandaEntityAdapter, clienteEntityAdapter, cartaoEntityAdapter);
+		return new CriaComanda(comandaEntityAdapter, clienteEntityAdapter, cartaoEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public AplicaDescontoEmComanda aplicaDescontoEmComanda() {
-		return new AplicaDescontoEmComanda(comandaEntityAdapter);
+		return new AplicaDescontoEmComanda(comandaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public RemoveDescontoDaComanda removeDescontoDaComanda() {
-		return new RemoveDescontoDaComanda(comandaEntityAdapter);
+		return new RemoveDescontoDaComanda(comandaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public FechaComanda fechaComanda() {
-		return new FechaComanda(comandaEntityAdapter, pedidoEntityAdapter);
+		return new FechaComanda(comandaEntityAdapter, pedidoEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public ReabreComanda reabreComanda() {
-		return new ReabreComanda(comandaEntityAdapter);
+		return new ReabreComanda(comandaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public RemoveComanda removeComanda() {
-		return new RemoveComanda(comandaEntityAdapter);
+		return new RemoveComanda(comandaEntityAdapter, loggerAdapter);
+	}
+	
+	@Bean
+	public BuscaDadosDeComandas buscaDadosDeComandas() {
+		return new BuscaDadosDeComandas(comandaEntityAdapter, clienteEntityAdapter);
 	}
 
 }

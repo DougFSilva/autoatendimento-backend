@@ -36,6 +36,8 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -60,13 +62,17 @@ public class MercadoriaController {
 
 	@Autowired
 	private UploadImagemMercadoria uploadImagemDeMercadoria;
+	
+	@Autowired
+	private AutenticacaoService autenticacaoService;
 
 	@PostMapping
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Criar mercadoria", description = "Cria uma mercadoria no sistema")
 	public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
-		Mercadoria mercadoria = criaMercadoria.criar(dados);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		Mercadoria mercadoria = criaMercadoria.criar(dados, usuarioAutenticado);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -77,7 +83,8 @@ public class MercadoriaController {
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Remover mercadoria", description = "Remove alguma mercadoria existente")
 	public ResponseEntity<Void> removerMercadoria(@PathVariable Long id) {
-		removeMercadoria.remover(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		removeMercadoria.remover(id, usuarioAutenticado);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -86,7 +93,8 @@ public class MercadoriaController {
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Editar mercadoria", description = "Edita alguma mercadoria existente")
 	public ResponseEntity<DadosDeMercadoria> editarMercadoria(@PathVariable Long id, @RequestBody @Valid DadosEditarMercadoria dados) {
-		return ResponseEntity.ok().body(editaMercadoria.editar(id, dados));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(editaMercadoria.editar(id, dados, usuarioAutenticado));
 	}
 
 	@GetMapping(value = "/{id}")
@@ -136,12 +144,13 @@ public class MercadoriaController {
 	@Operation(summary = "Adicionar imagem à mercadoria", description = "Adiciona uma imagem em formato jpg ou png a alguma mercadoria existente")
 	public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
-		String nomeDaImagem = id + "-" + file.getOriginalFilename();
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		String nomeDaImagem = String.format("%d-%s", id, file.getOriginalFilename());
 		String pathLocal = this.path + "/mercadoria/" + nomeDaImagem;
 		String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
 				+ "/mercadoria/imagem/" + nomeDaImagem;
 
-		uploadImagemDeMercadoria.executar(id, file, pathLocal, urlServidor);
+		uploadImagemDeMercadoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado);
 		return ResponseEntity.ok().build();
 	}
 

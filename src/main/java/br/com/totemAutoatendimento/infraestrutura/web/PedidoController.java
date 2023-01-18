@@ -25,6 +25,8 @@ import br.com.totemAutoatendimento.aplicacao.pedido.FazPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.RemovePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -42,6 +44,9 @@ public class PedidoController {
 
 	@Autowired
 	public BuscaDadosDePedidos buscaDadosDePedidos;
+	
+	@Autowired
+	private AutenticacaoService autenticacaoService;
 
 	@PostMapping(value = "/cartao/{cartao}")
 	@Operation(summary = "Fazer pedido", description = "Cria um pedido para uma comanda aberta no sistema")
@@ -59,14 +64,16 @@ public class PedidoController {
 	@PatchMapping(value = "/{id}/entregar")
 	@Operation(summary = "Entregar pedido", description = "Atualiza o pedido como entregue")
 	public ResponseEntity<DadosDePedido> entregarPedido(@PathVariable Long id) {
-		entregaPedido.entregar(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		entregaPedido.entregar(id, usuarioAutenticado);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PatchMapping(value = "/{id}/cancelar-entrega")
 	@Operation(summary = "Cancelar entrega de pedido", description = "Atualiza o pedido como não entregue")
 	public ResponseEntity<DadosDePedido> CancelarEntregaDePedido(@PathVariable Long id) {
-		entregaPedido.cancelarEntrega(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		entregaPedido.cancelarEntrega(id, usuarioAutenticado);
 		return ResponseEntity.ok().build();
 	}
 

@@ -9,6 +9,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CategoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
@@ -20,20 +21,23 @@ public class CategoriaBeanConfiguration {
 
 	@Autowired
 	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public CriaCategoria criaCategoria() {
-		return new CriaCategoria(categoriaEntityAdapter);
+		return new CriaCategoria(categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public RemoveCategoria removeCategoria() {
-		return new RemoveCategoria(categoriaEntityAdapter, subcategoriaEntityAdapter);
+		return new RemoveCategoria(categoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public EditaCategoria editaCategoria() {
-		return new EditaCategoria(categoriaEntityAdapter);
+		return new EditaCategoria(categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
@@ -43,7 +47,7 @@ public class CategoriaBeanConfiguration {
 
 	@Bean
 	public UploadImagemDaCategoria uploadImagemDaCategoria() {
-		return new UploadImagemDaCategoria(categoriaEntityAdapter);
+		return new UploadImagemDaCategoria(categoriaEntityAdapter, loggerAdapter);
 	}
 
 }

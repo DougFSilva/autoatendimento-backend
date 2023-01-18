@@ -29,6 +29,8 @@ import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosCriarComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -55,11 +57,15 @@ public class ComandaController {
 
 	@Autowired
 	private ReabreComanda reabreComanda;
+	
+	@Autowired
+	private AutenticacaoService autenticacaoService;
 
 	@PostMapping
 	@Operation(summary = "Criar comanda", description = "Cria uma comanda no sistema")
 	public ResponseEntity<Comanda> criarComanda(@RequestBody @Valid DadosCriarComanda dados) {
-		Comanda comanda = criaComanda.criar(dados);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		Comanda comanda = criaComanda.criar(dados, usuarioAutenticado);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(comanda.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -68,7 +74,8 @@ public class ComandaController {
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Remover comanda", description = "Remove alguma comanda existente")
 	public ResponseEntity<Void> removerComanda(@PathVariable Long id) {
-		removeComanda.remover(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		removeComanda.remover(id, usuarioAutenticado);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -129,25 +136,29 @@ public class ComandaController {
 	@Operation(summary = "Aplicar desconto", description = "Aplica um desconto percentual na comanda")
 	public ResponseEntity<DadosDeComanda> aplicarDescontoEmComanda(@PathVariable Long id,
 			@PathVariable Float desconto) {
-		return ResponseEntity.ok().body(aplicaDescontoEmComanda.aplicar(id, desconto));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(aplicaDescontoEmComanda.aplicar(id, desconto, usuarioAutenticado));
 	}
 
 	@PostMapping(value = "/{id}/remover-desconto")
 	@Operation(summary = "Remover desconto", description = "Remove o desconto da comanda")
 	public ResponseEntity<DadosDeComanda> removerDescontoDaComanda(@PathVariable Long id) {
-		return ResponseEntity.ok().body(removeDescontoDaComanda.remover(id));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(removeDescontoDaComanda.remover(id, usuarioAutenticado));
 	}
 
 	@PostMapping(value = "/{id}/{tipoPagamento}")
 	@Operation(summary = "Fechar comanda", description = "Fecha alguma comanda aberta")
 	public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable String tipoPagamento) {
-		return ResponseEntity.ok().body(fechaComanda.fechar(id, TipoPagamento.toEnum(tipoPagamento)));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(fechaComanda.fechar(id, TipoPagamento.toEnum(tipoPagamento), usuarioAutenticado));
 	}
 
 	@PostMapping(value = "/{id}/reabrir")
 	@Operation(summary = "Reabrir comanda", description = "Reabre alguma comanda fechada")
 	public ResponseEntity<DadosDeComanda> reabrirComanda(@PathVariable Long id) {
-		return ResponseEntity.ok().body(reabreComanda.reabrir(id));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(reabreComanda.reabrir(id, usuarioAutenticado));
 	}
 
 }

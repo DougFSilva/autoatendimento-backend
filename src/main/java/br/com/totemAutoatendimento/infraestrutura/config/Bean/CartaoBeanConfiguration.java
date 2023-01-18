@@ -26,7 +26,7 @@ public class CartaoBeanConfiguration {
 	
 	@Bean
 	public RemoveCartao removeCartao() {
-		return new RemoveCartao(cartaoEntityAdapter);
+		return new RemoveCartao(cartaoEntityAdapter, loggerAdapter);
 	}
 	
 	@Bean

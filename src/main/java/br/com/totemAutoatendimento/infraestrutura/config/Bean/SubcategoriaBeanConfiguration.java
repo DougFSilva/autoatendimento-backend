@@ -9,6 +9,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriaSubcate
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditaSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoveSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.UploadImagemDaSubcategoria;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CategoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
@@ -24,20 +25,23 @@ public class SubcategoriaBeanConfiguration {
 
 	@Autowired
 	private MercadoriaEntityAdapter mercadoriaEntityAdapter;
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public CriaSubcategoria criaSubcategoria() {
-		return new CriaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter);
+		return new CriaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public RemoveSubcategoria removeSubcategoria() {
-		return new RemoveSubcategoria(subcategoriaEntityAdapter, mercadoriaEntityAdapter);
+		return new RemoveSubcategoria(subcategoriaEntityAdapter, mercadoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public EditaSubcategoria editaSubcategoria() {
-		return new EditaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter);
+		return new EditaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
@@ -47,6 +51,6 @@ public class SubcategoriaBeanConfiguration {
 
 	@Bean
 	public UploadImagemDaSubcategoria uploadImagemDaSubcategoria() {
-		return new UploadImagemDaSubcategoria(subcategoriaEntityAdapter);
+		return new UploadImagemDaSubcategoria(subcategoriaEntityAdapter, loggerAdapter);
 	}
 }

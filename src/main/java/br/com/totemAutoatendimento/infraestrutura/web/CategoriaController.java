@@ -29,6 +29,8 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -53,12 +55,16 @@ public class CategoriaController {
 
 	@Autowired
 	private UploadImagemDaCategoria uploadImagemDaCategoria;
+	
+	@Autowired
+	private AutenticacaoService autenticacaoService;
 
 	@PostMapping(value = "/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Criar categoria", description = "Cria uma categoria para cadastrar mercadorias")
 	public ResponseEntity<Categoria> criaCategoria(@PathVariable String nome) {
-		Categoria categoria = criaCategoria.criar(nome);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		Categoria categoria = criaCategoria.criar(nome, usuarioAutenticado);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -68,7 +74,8 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
-		removeCategoria.remover(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		removeCategoria.remover(id, usuarioAutenticado);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -76,7 +83,8 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
 	public ResponseEntity<Categoria> editarCategoria(@PathVariable Long id, @PathVariable String nome) {
-		return ResponseEntity.ok().body(editaCategoria.editar(id, nome));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(editaCategoria.editar(id, nome, usuarioAutenticado));
 	}
 
 	@GetMapping
@@ -91,11 +99,15 @@ public class CategoriaController {
 	@Operation(summary = "Adicionar imagem", description = "Adiciona uma imagem em formato jgp ou png a alguma categoria existente")
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
-		String nomeDaImagem = id + "-" + file.getOriginalFilename();
+		String nomeDaImagem = String.format("%d-%s", id, file.getOriginalFilename());
 		String pathLocal = this.path + "/mercadoria/categoria/" + nomeDaImagem;
-		String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+		String urlServidor = ServletUriComponentsBuilder
+				.fromCurrentContextPath()
+				.build()
+				.toUriString()
 				+ "/mercadoria/categoria/imagem/" + nomeDaImagem;
-		uploadImagemDaCategoria.executar(id, file, pathLocal, urlServidor);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		uploadImagemDaCategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado);
 		return ResponseEntity.ok().build();
 	}
 

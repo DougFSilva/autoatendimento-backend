@@ -29,7 +29,8 @@ import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosCriarCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosEditarCliente;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.RecuperaUsuarioAutenticado;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -50,13 +51,14 @@ public class ClienteController {
 	private BuscaDadosDeClientes buscaDadosDeClientes;
 	
 	@Autowired
-	private RecuperaUsuarioAutenticado usuarioAutenticado;
+	private AutenticacaoService autenticacaoService;
 	
 	@PostMapping
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
-		Cliente cliente = criaCliente.criar(dados, usuarioAutenticado.recuperar());
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		Cliente cliente = criaCliente.criar(dados, usuarioAutenticado);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -66,7 +68,8 @@ public class ClienteController {
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
 	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
-		removeCliente.remover(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		removeCliente.remover(id, usuarioAutenticado);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -74,7 +77,8 @@ public class ClienteController {
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
 	@Operation(summary = "Editar cliente", description = "Edita algum cliente existente")
 	public ResponseEntity<DadosDeCliente> editarCliente(@PathVariable Long id, @RequestBody @Valid DadosEditarCliente dados) {
-		return ResponseEntity.ok().body(editaCliente.editar(id, dados));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(editaCliente.editar(id, dados, usuarioAutenticado));
 	}
 
 	@GetMapping(value = "/{id}")

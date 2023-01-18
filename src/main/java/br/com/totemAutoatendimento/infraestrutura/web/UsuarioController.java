@@ -28,6 +28,7 @@ import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosCriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosEditarUsuario;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -48,11 +49,15 @@ public class UsuarioController {
 
 	@Autowired
 	private BuscaDadosDeUsuarios buscaDadosDeUsuarios;
+	
+	@Autowired
+	private AutenticacaoService autenticacaoService;
 
 	@PostMapping
 	@Operation(summary = "Criar usuário", description = "Cria um usuário no sistema")
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid DadosCriarUsuario dados) {
-		Usuario usuario = criaUsuario.criar(dados);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		Usuario usuario = criaUsuario.criar(dados, usuarioAutenticado);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/id={id}")
@@ -64,20 +69,23 @@ public class UsuarioController {
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Remover usuário", description = "Remove algum usuário existente")
 	public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
-		removeUsuario.remover(id);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		removeUsuario.remover(id, usuarioAutenticado);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping(value = "/{id}")
 	@Operation(summary = "Editar usuário", description = "Edita algum usuário existente")
 	public ResponseEntity<DadosDeUsuario> editarUsuario(@PathVariable Long id,  @RequestBody @Valid DadosEditarUsuario dados) {
-		return ResponseEntity.ok().body(editaUsuario.editar(id, dados));
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		return ResponseEntity.ok().body(editaUsuario.editar(id, dados, usuarioAutenticado));
 	}
 
 	@PatchMapping(value = "/{id}/alterar-senha")
 	@Operation(summary = "Alterar senha de usuário", description = "Atera a senha de algum usuário existente")
 	public ResponseEntity<Void> alterarSenhaDeUsuario(@PathVariable Long id, @RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
-		alteraSenhaDeUsuario.alterar(id, dados);
+		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
+		alteraSenhaDeUsuario.alterar(id, dados, usuarioAutenticado);
 		return ResponseEntity.ok().build();
 	}
 

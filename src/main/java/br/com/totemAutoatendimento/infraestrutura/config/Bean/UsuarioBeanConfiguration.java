@@ -9,6 +9,7 @@ import br.com.totemAutoatendimento.aplicacao.usuario.BuscaDadosDeUsuarios;
 import br.com.totemAutoatendimento.aplicacao.usuario.CriaUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.EditaUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.RemoveUsuario;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.UsuarioEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.CodificadorBcrypt;
 
@@ -20,20 +21,23 @@ public class UsuarioBeanConfiguration {
 
 	@Autowired
 	private CodificadorBcrypt codificador;
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public CriaUsuario criaUsuario() {
-		return new CriaUsuario(usuarioEntityAdapter, codificador);
+		return new CriaUsuario(usuarioEntityAdapter, codificador, loggerAdapter);
 	}
 
 	@Bean
 	public RemoveUsuario removeUsuario() {
-		return new RemoveUsuario(usuarioEntityAdapter);
+		return new RemoveUsuario(usuarioEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public EditaUsuario editaUsuario() {
-		return new EditaUsuario(usuarioEntityAdapter);
+		return new EditaUsuario(usuarioEntityAdapter, loggerAdapter);
 	}
 
 	@Bean

@@ -8,6 +8,7 @@ import br.com.totemAutoatendimento.aplicacao.pedido.BuscaDadosDePedidos;
 import br.com.totemAutoatendimento.aplicacao.pedido.EntregaPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.FazPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.RemovePedido;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ComandaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.PedidoEntityAdapter;
@@ -27,21 +28,24 @@ public class PedidoBeanConfiguration {
 
 	@Autowired
 	private EnviarPedidoRecebidoWebsocket enviarPedidoRecebidoWebsocket;
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public FazPedido fazPedido() {
 		return new FazPedido(pedidoEntityAdapter, comandaEntityAdapter, mercadoriaEntityAdapter, 
-				enviarPedidoRecebidoWebsocket);
+				enviarPedidoRecebidoWebsocket, loggerAdapter);
 	}
 
 	@Bean
 	public RemovePedido removePedido() {
-		return new RemovePedido(pedidoEntityAdapter, comandaEntityAdapter, enviarPedidoRecebidoWebsocket);
+		return new RemovePedido(pedidoEntityAdapter, comandaEntityAdapter, enviarPedidoRecebidoWebsocket, loggerAdapter);
 	}
 
 	@Bean
 	public EntregaPedido entregaPedido() {
-		return new EntregaPedido(pedidoEntityAdapter);
+		return new EntregaPedido(pedidoEntityAdapter, loggerAdapter);
 	}
 
 	@Bean

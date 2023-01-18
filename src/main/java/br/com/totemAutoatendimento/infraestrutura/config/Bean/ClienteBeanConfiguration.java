@@ -27,12 +27,12 @@ public class ClienteBeanConfiguration {
 
 	@Bean
 	public RemoveCliente removeCliente() {
-		return new RemoveCliente(clienteEntityAdapter);
+		return new RemoveCliente(clienteEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public EditaCliente editaCliente() {
-		return new EditaCliente(clienteEntityAdapter);
+		return new EditaCliente(clienteEntityAdapter, loggerAdapter);
 	}
 
 	@Bean

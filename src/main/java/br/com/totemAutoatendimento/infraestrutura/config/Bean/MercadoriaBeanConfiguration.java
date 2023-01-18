@@ -9,6 +9,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.CriaMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditaMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoveMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
+import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
@@ -20,20 +21,23 @@ public class MercadoriaBeanConfiguration {
 
 	@Autowired
 	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
+	
+	@Autowired
+	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	public CriaMercadoria criaMercadoria() {
-		return new CriaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter);
+		return new CriaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public RemoveMercadoria removeMercadoria() {
-		return new RemoveMercadoria(mercadoriaEntityAdapter);
+		return new RemoveMercadoria(mercadoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
 	public EditaMercadoria editaMercadoria() {
-		return new EditaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter);
+		return new EditaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
@@ -43,7 +47,7 @@ public class MercadoriaBeanConfiguration {
 
 	@Bean
 	public UploadImagemMercadoria uploadImagemDeMercadoria() {
-		return new UploadImagemMercadoria(mercadoriaEntityAdapter);
+		return new UploadImagemMercadoria(mercadoriaEntityAdapter, loggerAdapter);
 	}
 
 }
