@@ -63,8 +63,7 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Criar categoria", description = "Cria uma categoria para cadastrar mercadorias")
 	public ResponseEntity<Categoria> criaCategoria(@PathVariable String nome) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		Categoria categoria = criaCategoria.criar(nome, usuarioAutenticado);
+		Categoria categoria = criaCategoria.criar(nome, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -74,8 +73,7 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		removeCategoria.remover(id, usuarioAutenticado);
+		removeCategoria.remover(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
@@ -83,8 +81,7 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
 	public ResponseEntity<Categoria> editarCategoria(@PathVariable Long id, @PathVariable String nome) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		return ResponseEntity.ok().body(editaCategoria.editar(id, nome, usuarioAutenticado));
+		return ResponseEntity.ok().body(editaCategoria.editar(id, nome, usuarioAutenticado()));
 	}
 
 	@GetMapping
@@ -106,8 +103,7 @@ public class CategoriaController {
 				.build()
 				.toUriString()
 				+ "/mercadoria/categoria/imagem/" + nomeDaImagem;
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		uploadImagemDaCategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado);
+		uploadImagemDaCategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
@@ -128,5 +124,9 @@ public class CategoriaController {
 				break;
 		}
 		return ResponseEntity.ok().headers(httpHeaders).body(imagem);
+	}
+	
+	private Usuario usuarioAutenticado() {
+		return autenticacaoService.recuperarAutenticado();
 	}
 }

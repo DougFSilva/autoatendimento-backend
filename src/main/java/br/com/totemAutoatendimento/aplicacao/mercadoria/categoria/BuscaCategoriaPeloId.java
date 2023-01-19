@@ -16,6 +16,6 @@ public class BuscaCategoriaPeloId {
 	
 	public Categoria buscar(Long id) {
 		Optional<Categoria> categoria = repository.buscarPeloId(id);
-		return categoria.orElseThrow(() -> new ObjetoNaoEncontradoException("Categoria com id " + id + " não encontrada!"));
+		return categoria.orElseThrow(() -> new ObjetoNaoEncontradoException(String.format("Categoria com id %d não encontrada!", id)));
 	}
 }

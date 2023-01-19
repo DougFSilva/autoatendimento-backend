@@ -32,7 +32,7 @@ public class BuscaDadosDeMercadorias {
 	public DadosDeMercadoria buscarPeloCodigo(String codigo) {
 		Optional<Mercadoria> mercadoria = repository.buscarPeloCodigo(codigo);
 		if (mercadoria.isEmpty()) {
-			throw new ObjetoNaoEncontradoException("Mercadoria com código " + codigo + " não encontrada!");
+			throw new ObjetoNaoEncontradoException(String.format("Mercadoria com código %s não encontrada!", codigo));
 		}
 		return new DadosDeMercadoria(mercadoria.get());
 	}

@@ -64,16 +64,14 @@ public class PedidoController {
 	@PatchMapping(value = "/{id}/entregar")
 	@Operation(summary = "Entregar pedido", description = "Atualiza o pedido como entregue")
 	public ResponseEntity<DadosDePedido> entregarPedido(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		entregaPedido.entregar(id, usuarioAutenticado);
+		entregaPedido.entregar(id, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 	
 	@PatchMapping(value = "/{id}/cancelar-entrega")
 	@Operation(summary = "Cancelar entrega de pedido", description = "Atualiza o pedido como não entregue")
 	public ResponseEntity<DadosDePedido> CancelarEntregaDePedido(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		entregaPedido.cancelarEntrega(id, usuarioAutenticado);
+		entregaPedido.cancelarEntrega(id, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
@@ -94,25 +92,29 @@ public class PedidoController {
 	public ResponseEntity<Page<DadosDePedido>> buscarPedidosPelaData(Pageable paginacao,
 			@PathVariable String dataInicial, @PathVariable String dataFinal) {
 		return ResponseEntity.ok().body(
-				buscaDadosDePedidos.buscarPorData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
+				buscaDadosDePedidos.buscarPorData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal), usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/entregues")
 	@Operation(summary = "Buscar pedidos entregues", description = "Busca os pedidos que foram entregues")
 	public ResponseEntity<Page<DadosDePedido>> buscarPedidosEntregues(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarEntregues(paginacao, true));
+		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarEntregues(paginacao, true, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/nao-entregues")
 	@Operation(summary = "Buscar pedidos não entregues", description = "Busca os pedidos que não foram entregues")
 	public ResponseEntity<Page<DadosDePedido>> buscarPedidosNaoEntregues(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarEntregues(paginacao, false));
+		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarEntregues(paginacao, false, usuarioAutenticado()));
 	}
 
 	@GetMapping
 	@Operation(summary = "Buscar todos pedidos", description = "Busca todos pedidos existentes")
 	public ResponseEntity<Page<DadosDePedido>> buscarTodosPedidos(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarTodos(paginacao));
+		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarTodos(paginacao, usuarioAutenticado()));
+	}
+	
+	private Usuario usuarioAutenticado() {
+		return autenticacaoService.recuperarAutenticado();
 	}
 
 }

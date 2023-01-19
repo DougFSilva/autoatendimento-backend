@@ -14,6 +14,6 @@ public class BuscaMercadoriaPeloId {
 
 	public Mercadoria buscar(Long id) {
 		return repository.buscarPeloId(id)
-				.orElseThrow(() -> new ObjetoNaoEncontradoException("Mercadoria com id " + id + " não encontrada!"));
+				.orElseThrow(() -> new ObjetoNaoEncontradoException(String.format("Mercadoria com id %d não encontrada!", id)));
 	}
 }

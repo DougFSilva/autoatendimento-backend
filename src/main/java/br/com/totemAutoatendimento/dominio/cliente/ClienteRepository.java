@@ -13,7 +13,7 @@ public interface ClienteRepository {
 	
 	Cliente editar(Cliente clienteAtualizado);
 	
-	Optional<Cliente> buscar(Long id);
+	Optional<Cliente> buscarPeloId(Long id);
 	
 	Optional<Cliente> buscarClientePorCpf(String cpf);
 	

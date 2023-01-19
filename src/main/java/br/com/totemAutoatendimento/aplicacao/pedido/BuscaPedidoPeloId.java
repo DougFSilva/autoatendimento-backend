@@ -14,6 +14,6 @@ public class BuscaPedidoPeloId {
 
 	public Pedido buscar(Long id) {
 		return repository.buscarPeloId(id)
-				.orElseThrow(() -> new ObjetoNaoEncontradoException("Pedido com id " + id + " não encontrado!"));
+				.orElseThrow(() -> new ObjetoNaoEncontradoException(String.format("Pedido com id %d não encontrado!", id)));
 	}
 }

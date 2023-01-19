@@ -38,22 +38,24 @@ public class CartaoController {
 	
 	@PostMapping(value = "/{codigo}")
 	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado );
+		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").buildAndExpand(cartao.getCodigo()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping(value = "/{codigo}")
 	public ResponseEntity<Void> removerCartao(@PathVariable String codigo) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		removeCartao.remover(codigo, usuarioAutenticado);
+		removeCartao.remover(codigo, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Cartao>> buscarTodosCartoes() {
-		List<Cartao> cartoes = buscaTodosCartoes.buscar();
+		List<Cartao> cartoes = buscaTodosCartoes.buscar(usuarioAutenticado());
 		return ResponseEntity.ok().body(cartoes);
+	}
+	
+	private Usuario usuarioAutenticado() {
+		return autenticacaoService.recuperarAutenticado();
 	}
 }

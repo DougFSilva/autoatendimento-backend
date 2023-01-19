@@ -4,14 +4,14 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.cliente.ClienteRepository;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
 public class BuscaDadosDeClientes {
 
 	private final ClienteRepository repository;
@@ -19,25 +19,33 @@ public class BuscaDadosDeClientes {
 	public BuscaDadosDeClientes(ClienteRepository repository) {
 		this.repository = repository;
 	}
-	
-	public DadosDeCliente buscarPeloId(Long id) {
-		BuscaClientePeloId buscaClientePeloId = new BuscaClientePeloId(repository);
-		return new DadosDeCliente(buscaClientePeloId.buscar(id));
+
+	public DadosDeCliente buscarPeloId(Long id, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Cliente> cliente = repository.buscarPeloId(id);
+		if (cliente.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", id));
+		}
+		return new DadosDeCliente(cliente.get());
 	}
-	
-    public DadosDeCliente buscarPeloCpf(String cpf) {
-        Optional<Cliente> cliente = repository.buscarClientePorCpf(cpf);
-        if (cliente.isEmpty()) {
-            throw new ObjetoNaoEncontradoException("Cliente com cpf :" + cpf + " não encontrado!");
-        }
-        return new DadosDeCliente(cliente.get());
-    }
-    
-	public Page<DadosDeCliente> buscarPelaCidade(Pageable paginacao, String cidade) {
+
+	public DadosDeCliente buscarPeloCpf(String cpf, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Cliente> cliente = repository.buscarClientePorCpf(cpf);
+		if (cliente.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Cliente com cpf %s não encontrado!", cpf));
+		}
+		return new DadosDeCliente(cliente.get());
+	}
+
+	public Page<DadosDeCliente> buscarPelaCidade(Pageable paginacao, String cidade, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return this.repository.buscarPorCidade(paginacao, cidade).map(DadosDeCliente::new);
 	}
-	
-	public Page<DadosDeCliente> buscarTodos(Pageable paginacao) {
+
+	public Page<DadosDeCliente> buscarTodos(Pageable paginacao, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return this.repository.buscarTodos(paginacao).map(DadosDeCliente::new);
 	}
+
 }

@@ -64,8 +64,7 @@ public class ComandaController {
 	@PostMapping
 	@Operation(summary = "Criar comanda", description = "Cria uma comanda no sistema")
 	public ResponseEntity<Comanda> criarComanda(@RequestBody @Valid DadosCriarComanda dados) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		Comanda comanda = criaComanda.criar(dados, usuarioAutenticado);
+		Comanda comanda = criaComanda.criar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(comanda.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -74,15 +73,14 @@ public class ComandaController {
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Remover comanda", description = "Remove alguma comanda existente")
 	public ResponseEntity<Void> removerComanda(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		removeComanda.remover(id, usuarioAutenticado);
+		removeComanda.remover(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping(value = "/{id}")
 	@Operation(summary = "Buscar comanda", description = "Busca alguma comanda pelo id")
 	public ResponseEntity<DadosDeComanda> buscarComanda(@PathVariable Long id) {
-		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloId(id));
+		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloId(id, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/aberta/cartao/{cartao}")
@@ -94,7 +92,7 @@ public class ComandaController {
 	@GetMapping(value = "/cliente/{id}")
 	@Operation(summary = "Buscar comandas por cliente", description = "Busca comandas pelo cliente")
 	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPeloCliente(Pageable paginacao, @PathVariable Long id) {
-		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloCliente(paginacao, id));
+		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloCliente(paginacao, id, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/data/{dataInicial}/{dataFinal}")
@@ -102,63 +100,62 @@ public class ComandaController {
 	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPelaData(Pageable paginacao,
 			@PathVariable String dataInicial, @PathVariable String dataFinal) {
 		return ResponseEntity.ok().body(
-				buscaDadosDeComandas.buscarPelaData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal)));
+				buscaDadosDeComandas.buscarPelaData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal), usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/tipo-pagamento/{tipoPagamento}")
 	@Operation(summary = "Buscar comandas por tipo de pagamento", description = "Busca as comandas pelo tipo de pagamento")
 	public ResponseEntity<Page<DadosDeComanda>> buscarComandasPeloTipoDePagamento(Pageable paginacao,
 			@PathVariable String tipoPagamento) {
-
 		return ResponseEntity.ok()
-				.body(buscaDadosDeComandas.buscarPeloTipoDePagamento(paginacao, TipoPagamento.toEnum(tipoPagamento)));
+				.body(buscaDadosDeComandas.buscarPeloTipoDePagamento(paginacao, TipoPagamento.toEnum(tipoPagamento), usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/abertas")
 	@Operation(summary = "Buscar comandas abertas", description = "Busca as comandas que estão abertas")
 	public ResponseEntity<Page<DadosDeComanda>> buscarComandasAbertas(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertas(paginacao, true));
+		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertas(paginacao, true, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/fechadas")
 	@Operation(summary = "Buscar comandas fechadas", description = "Busca as comandas que estão fechadas")
 	public ResponseEntity<Page<DadosDeComanda>> buscarComandasFechadas(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertas(paginacao, false));
+		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertas(paginacao, false, usuarioAutenticado()));
 	}
 
 	@GetMapping
 	@Operation(summary = "Buscar todas comandas", description = "Busca todas as comandas existntes")
 	public ResponseEntity<Page<DadosDeComanda>> buscarTodasComandas(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarTodas(paginacao));
+		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarTodas(paginacao, usuarioAutenticado()));
 	}
 
 	@PostMapping(value = "/{id}/aplicar-desconto/{desconto}")
 	@Operation(summary = "Aplicar desconto", description = "Aplica um desconto percentual na comanda")
 	public ResponseEntity<DadosDeComanda> aplicarDescontoEmComanda(@PathVariable Long id,
 			@PathVariable Float desconto) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		return ResponseEntity.ok().body(aplicaDescontoEmComanda.aplicar(id, desconto, usuarioAutenticado));
+		return ResponseEntity.ok().body(aplicaDescontoEmComanda.aplicar(id, desconto, usuarioAutenticado()));
 	}
 
 	@PostMapping(value = "/{id}/remover-desconto")
 	@Operation(summary = "Remover desconto", description = "Remove o desconto da comanda")
 	public ResponseEntity<DadosDeComanda> removerDescontoDaComanda(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		return ResponseEntity.ok().body(removeDescontoDaComanda.remover(id, usuarioAutenticado));
+		return ResponseEntity.ok().body(removeDescontoDaComanda.remover(id, usuarioAutenticado()));
 	}
 
 	@PostMapping(value = "/{id}/{tipoPagamento}")
 	@Operation(summary = "Fechar comanda", description = "Fecha alguma comanda aberta")
 	public ResponseEntity<DadosDeComanda> fecharComanda(@PathVariable Long id, @PathVariable String tipoPagamento) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		return ResponseEntity.ok().body(fechaComanda.fechar(id, TipoPagamento.toEnum(tipoPagamento), usuarioAutenticado));
+		return ResponseEntity.ok().body(fechaComanda.fechar(id, TipoPagamento.toEnum(tipoPagamento), usuarioAutenticado()));
 	}
 
 	@PostMapping(value = "/{id}/reabrir")
 	@Operation(summary = "Reabrir comanda", description = "Reabre alguma comanda fechada")
 	public ResponseEntity<DadosDeComanda> reabrirComanda(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		return ResponseEntity.ok().body(reabreComanda.reabrir(id, usuarioAutenticado));
+		return ResponseEntity.ok().body(reabreComanda.reabrir(id, usuarioAutenticado()));
+	}
+	
+	private Usuario usuarioAutenticado() {
+		return autenticacaoService.recuperarAutenticado();
 	}
 
 }

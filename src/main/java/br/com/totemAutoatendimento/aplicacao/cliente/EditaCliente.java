@@ -11,6 +11,7 @@ import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.cliente.ClienteRepository;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
@@ -33,18 +34,20 @@ public class EditaCliente {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					String.format("Cliente com cpf %s já cadastrado!", dados.cpf()));
 		}
-		BuscaClientePeloId buscaClientePeloId = new BuscaClientePeloId(repository);
-		Cliente cliente = buscaClientePeloId.buscar(id);
-		cliente.setNome(dados.nome());
-		cliente.setCpf(dados.cpf());
-		cliente.setTelefone(dados.telefone());
-		cliente.setEmail(new Email(dados.email()));
-		cliente.getEndereco().setEstado(dados.estado());
-		cliente.getEndereco().setCidade(dados.cidade());
-		cliente.getEndereco().setBairro(dados.bairro());
-		cliente.getEndereco().setRua(dados.numero());
-		cliente.getEndereco().setNumero(dados.numero());
-		Cliente clienteEditado = repository.editar(cliente);
+		Optional<Cliente> cliente = repository.buscarPeloId(id);
+		if (cliente.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", id));
+		}
+		cliente.get().setNome(dados.nome());
+		cliente.get().setCpf(dados.cpf());
+		cliente.get().setTelefone(dados.telefone());
+		cliente.get().setEmail(new Email(dados.email()));
+		cliente.get().getEndereco().setEstado(dados.estado());
+		cliente.get().getEndereco().setCidade(dados.cidade());
+		cliente.get().getEndereco().setBairro(dados.bairro());
+		cliente.get().getEndereco().setRua(dados.numero());
+		cliente.get().getEndereco().setNumero(dados.numero());
+		Cliente clienteEditado = repository.editar(cliente.get());
 		logger.info(
 				String.format("Usuário %s - Cliente com cpf %s editado!", usuarioAutenticado.getRegistro(),clienteEditado.getCpf())
 		);

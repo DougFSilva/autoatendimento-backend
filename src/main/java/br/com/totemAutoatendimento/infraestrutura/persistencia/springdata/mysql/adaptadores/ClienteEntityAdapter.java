@@ -41,7 +41,7 @@ public class ClienteEntityAdapter implements ClienteRepository{
 	}
 
 	@Override
-	public Optional<Cliente> buscar(Long id) {
+	public Optional<Cliente> buscarPeloId(Long id) {
 		Optional<ClienteEntity> entity = repository.findById(id);
 		if(entity.isPresent()) {
 			return Optional.of(clienteEntityConverter.converterParaCliente(entity.get()));

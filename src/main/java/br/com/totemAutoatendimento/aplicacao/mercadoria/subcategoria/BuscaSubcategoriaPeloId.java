@@ -14,6 +14,6 @@ public class BuscaSubcategoriaPeloId {
 	
 	public Subcategoria buscar(Long id) {
 		return repository.buscarPeloId(id).orElseThrow(
-				() -> new ViolacaoDeIntegridadeDeDadosException("Subcategoria com id " + id + " não encontrada!"));
+				() -> new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", id)));
 	}
 }

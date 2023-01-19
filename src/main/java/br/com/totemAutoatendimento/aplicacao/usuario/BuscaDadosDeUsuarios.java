@@ -20,8 +20,11 @@ public class BuscaDadosDeUsuarios {
 	}
 
 	public DadosDeUsuario buscarPeloId(Long id) {
-		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
-		return new DadosDeUsuario(buscaUsuarioPeloId.buscar(id));
+		Optional<Usuario> usuario = repository.buscarPeloId(id);
+		if(usuario.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Usuário com id %d não encontrado!", id));
+		}
+		return new DadosDeUsuario(usuario.get());
 	}
 
 	public DadosDeUsuario buscarPeloRegistro(String registro) {

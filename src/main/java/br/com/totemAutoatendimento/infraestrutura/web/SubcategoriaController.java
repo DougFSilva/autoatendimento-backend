@@ -68,8 +68,7 @@ public class SubcategoriaController {
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Criar subcategoria", description = "Cria uma subcategoria para cadastrar as mercadorias")
     public ResponseEntity<Subcategoria> criarSubcategoria(@PathVariable Long idCategoria, @PathVariable String nome) {
-    	Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-        Subcategoria subcategoria = criaSubcategoria.criar(idCategoria, nome, usuarioAutenticado);
+        Subcategoria subcategoria = criaSubcategoria.criar(idCategoria, nome, usuarioAutenticado());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{nome}").buildAndExpand(subcategoria.getId())
                 .toUri();
         return ResponseEntity.created(uri).build();
@@ -79,8 +78,7 @@ public class SubcategoriaController {
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
     public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
-    	Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-        removeSubcategoria.remover(id, usuarioAutenticado);
+        removeSubcategoria.remover(id, usuarioAutenticado());
         return ResponseEntity.noContent().build();
     }
 
@@ -88,8 +86,7 @@ public class SubcategoriaController {
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
     public ResponseEntity<DadosDeSubcategoria> editarSubcategoria(@PathVariable Long id, @RequestBody @Valid DadosEditarSubcategoria dados) {
-    	Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-    	return ResponseEntity.ok().body(editaSubcategoria.editar(id, dados, usuarioAutenticado));
+    	return ResponseEntity.ok().body(editaSubcategoria.editar(id, dados, usuarioAutenticado()));
     }
     
     @GetMapping(value = "/categoria/{categoriaId}")
@@ -111,12 +108,11 @@ public class SubcategoriaController {
     @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
     public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
-    	Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
     	String nomeDaImagem = String.format("%d-%s", id, file.getOriginalFilename());
         String pathLocal = this.path + "/mercadoria/subcategoria/" + nomeDaImagem;
         String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
                 + "/mercadoria/subcategoria/imagem/" + nomeDaImagem;
-        uploadImagemDaSubcategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado);
+        uploadImagemDaSubcategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado());
         return ResponseEntity.ok().build();
     }
 
@@ -138,5 +134,9 @@ public class SubcategoriaController {
         }
         return ResponseEntity.ok().headers(httpHeaders).body(imagem);
     }
+    
+    private Usuario usuarioAutenticado() {
+		return autenticacaoService.recuperarAutenticado();
+	}
 
 }

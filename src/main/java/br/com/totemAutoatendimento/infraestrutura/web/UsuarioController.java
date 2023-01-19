@@ -56,8 +56,7 @@ public class UsuarioController {
 	@PostMapping
 	@Operation(summary = "Criar usuário", description = "Cria um usuário no sistema")
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid DadosCriarUsuario dados) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		Usuario usuario = criaUsuario.criar(dados, usuarioAutenticado);
+		Usuario usuario = criaUsuario.criar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/id={id}")
@@ -69,23 +68,20 @@ public class UsuarioController {
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Remover usuário", description = "Remove algum usuário existente")
 	public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		removeUsuario.remover(id, usuarioAutenticado);
+		removeUsuario.remover(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping(value = "/{id}")
 	@Operation(summary = "Editar usuário", description = "Edita algum usuário existente")
 	public ResponseEntity<DadosDeUsuario> editarUsuario(@PathVariable Long id,  @RequestBody @Valid DadosEditarUsuario dados) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		return ResponseEntity.ok().body(editaUsuario.editar(id, dados, usuarioAutenticado));
+		return ResponseEntity.ok().body(editaUsuario.editar(id, dados, usuarioAutenticado()));
 	}
 
 	@PatchMapping(value = "/{id}/alterar-senha")
 	@Operation(summary = "Alterar senha de usuário", description = "Atera a senha de algum usuário existente")
 	public ResponseEntity<Void> alterarSenhaDeUsuario(@PathVariable Long id, @RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
-		Usuario usuarioAutenticado = autenticacaoService.recuperarAutenticado();
-		alteraSenhaDeUsuario.alterar(id, dados, usuarioAutenticado);
+		alteraSenhaDeUsuario.alterar(id, dados, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
@@ -106,4 +102,8 @@ public class UsuarioController {
 	public ResponseEntity<List<DadosDeUsuario>> buscarTodosUsuarios() {
 		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscaTodos());
 	}
+	
+	 private Usuario usuarioAutenticado() {
+			return autenticacaoService.recuperarAutenticado();
+		}
 }

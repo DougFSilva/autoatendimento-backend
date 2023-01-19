@@ -7,16 +7,16 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 
-import br.com.totemAutoatendimento.aplicacao.cliente.BuscaClientePeloId;
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.cliente.ClienteRepository;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
 public class BuscaDadosDeComandas {
 
@@ -29,46 +29,50 @@ public class BuscaDadosDeComandas {
 		this.clienteRepository = clienteRepository;
 	}
 
-	@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-	public DadosDeComanda buscarPeloId(Long id) {
-		BuscaComandaPeloId buscarComandaPeloId = new BuscaComandaPeloId(repository);
-		Comanda comanda = buscarComandaPeloId.buscar(id);
-		return new DadosDeComanda(comanda);
+	public DadosDeComanda buscarPeloId(Long id, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Comanda> comanda = repository.buscarPeloId(id);
+    	if(comanda.isEmpty()) {
+    		throw new ObjetoNaoEncontradoException(String.format("Comanda com id %d não encontrada!", id));
+    	}
+		return new DadosDeComanda(comanda.get());
 	}
 
 	public DadosDeComanda buscarAbertasPeloCartao(String codigoCartao) {
 		Optional<Comanda> comanda = repository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
-			throw new ObjetoNaoEncontradoException("Comanda com cartão " + codigoCartao + " não encontrada!");
+			throw new ObjetoNaoEncontradoException(String.format("Comanda com cartão %s não encontrada!", codigoCartao));
 		}
 		return new DadosDeComanda(comanda.get());
 	}
 
-	@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-	public Page<DadosDeComanda> buscarPeloCliente(Pageable paginacao, Long id) {
-		BuscaClientePeloId buscarClientePeloId = new BuscaClientePeloId(clienteRepository);
-		Cliente cliente = buscarClientePeloId.buscar(id);
-		return repository.buscarPeloCliente(paginacao, cliente).map(DadosDeComanda::new);
+	public Page<DadosDeComanda> buscarPeloCliente(Pageable paginacao, Long id, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Cliente> cliente = clienteRepository.buscarPeloId(id);
+		if (cliente.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", id));
+		}
+		return repository.buscarPeloCliente(paginacao, cliente.get()).map(DadosDeComanda::new);
 	}
 
-	@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-	public Page<DadosDeComanda> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
+	public Page<DadosDeComanda> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarPelaData(paginacao, LocalDateTime.of(dataInicial, LocalTime.MIN),
 				LocalDateTime.of(dataFinal, LocalTime.MAX)).map(DadosDeComanda::new);
 	}
 
-	@PreAuthorize("hasAnyRole('OPERATOR','ADMIN')")
-	public Page<DadosDeComanda> buscarPeloTipoDePagamento(Pageable paginacao, TipoPagamento tipoPagamento) {
+	public Page<DadosDeComanda> buscarPeloTipoDePagamento(Pageable paginacao, TipoPagamento tipoPagamento, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarPeloTipoDePagamento(paginacao, tipoPagamento).map(DadosDeComanda::new);
 	}
 
-	@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-	public Page<DadosDeComanda> buscarAbertas(Pageable paginacao, Boolean aberta) {
+	public Page<DadosDeComanda> buscarAbertas(Pageable paginacao, Boolean aberta, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarAbertas(paginacao, aberta).map(DadosDeComanda::new);
 	}
 
-	@PreAuthorize("hasAnyRole('FUNCIONARIO','ADMIN')")
-	public Page<DadosDeComanda> buscarTodas(Pageable paginacao) {
+	public Page<DadosDeComanda> buscarTodas(Pageable paginacao, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarTodas(paginacao).map(DadosDeComanda::new);
 	}
 }

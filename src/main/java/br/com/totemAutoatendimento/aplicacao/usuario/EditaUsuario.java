@@ -10,6 +10,7 @@ import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosEditarUsuario;
 import br.com.totemAutoatendimento.dominio.Email;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
@@ -38,15 +39,17 @@ public class EditaUsuario {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					String.format("Usuário com registro %s já cadastrado!", dados.registro()));
 		}
-		BuscaUsuarioPeloId buscaUsuarioPeloId = new BuscaUsuarioPeloId(repository);
-		Usuario usuario = buscaUsuarioPeloId.buscar(id);
-		usuario.setNome(dados.nome());
-		usuario.setCpf(dados.cpf());
-		usuario.setRegistro(dados.registro());
-		usuario.setEmail(new Email(dados.email()));
+		Optional<Usuario> usuario = repository.buscarPeloId(id);
+		if(usuario.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Usuário com id %d não encontrado!", id));
+		}
+		usuario.get().setNome(dados.nome());
+		usuario.get().setCpf(dados.cpf());
+		usuario.get().setRegistro(dados.registro());
+		usuario.get().setEmail(new Email(dados.email()));
 		List<Perfil> perfis = dados.tipoPerfil().stream().map(Perfil::new).toList();
-		usuario.setPerfis(perfis);
-		Usuario usuarioEditado = repository.editar(usuario);
+		usuario.get().setPerfis(perfis);
+		Usuario usuarioEditado = repository.editar(usuario.get());
 		logger.info(
 				String.format("Usuario %s - Usuario com id %d editado!", usuarioAutenticado.getRegistro(), usuarioEditado.getId())
 		);
