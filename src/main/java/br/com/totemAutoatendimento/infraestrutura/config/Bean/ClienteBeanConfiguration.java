@@ -21,22 +21,22 @@ public class ClienteBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaCliente criaCliente() {
+	CriaCliente criaCliente() {
 		return new CriaCliente(clienteEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveCliente removeCliente() {
+	RemoveCliente removeCliente() {
 		return new RemoveCliente(clienteEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public EditaCliente editaCliente() {
+	EditaCliente editaCliente() {
 		return new EditaCliente(clienteEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public BuscaDadosDeClientes buscaDadosDeClientes() {
+	BuscaDadosDeClientes buscaDadosDeClientes() {
 		return new BuscaDadosDeClientes(clienteEntityAdapter);
 	}
 

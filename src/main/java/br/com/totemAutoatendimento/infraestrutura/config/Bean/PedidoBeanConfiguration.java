@@ -33,23 +33,23 @@ public class PedidoBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public FazPedido fazPedido() {
+	FazPedido fazPedido() {
 		return new FazPedido(pedidoEntityAdapter, comandaEntityAdapter, mercadoriaEntityAdapter, 
 				enviarPedidoRecebidoWebsocket, loggerAdapter);
 	}
 
 	@Bean
-	public RemovePedido removePedido() {
+	RemovePedido removePedido() {
 		return new RemovePedido(pedidoEntityAdapter, comandaEntityAdapter, enviarPedidoRecebidoWebsocket, loggerAdapter);
 	}
 
 	@Bean
-	public EntregaPedido entregaPedido() {
+	EntregaPedido entregaPedido() {
 		return new EntregaPedido(pedidoEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public BuscaDadosDePedidos buscaDadosDePedidos() {
+	BuscaDadosDePedidos buscaDadosDePedidos() {
 		return new BuscaDadosDePedidos(pedidoEntityAdapter, comandaEntityAdapter);
 	}
 

@@ -36,37 +36,37 @@ public class ComandaBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaComanda criaComanda() {
+	 CriaComanda criaComanda() {
 		return new CriaComanda(comandaEntityAdapter, clienteEntityAdapter, cartaoEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public AplicaDescontoEmComanda aplicaDescontoEmComanda() {
+	AplicaDescontoEmComanda aplicaDescontoEmComanda() {
 		return new AplicaDescontoEmComanda(comandaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveDescontoDaComanda removeDescontoDaComanda() {
+	RemoveDescontoDaComanda removeDescontoDaComanda() {
 		return new RemoveDescontoDaComanda(comandaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public FechaComanda fechaComanda() {
+	FechaComanda fechaComanda() {
 		return new FechaComanda(comandaEntityAdapter, pedidoEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public ReabreComanda reabreComanda() {
+	ReabreComanda reabreComanda() {
 		return new ReabreComanda(comandaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveComanda removeComanda() {
+	RemoveComanda removeComanda() {
 		return new RemoveComanda(comandaEntityAdapter, loggerAdapter);
 	}
 	
 	@Bean
-	public BuscaDadosDeComandas buscaDadosDeComandas() {
+	BuscaDadosDeComandas buscaDadosDeComandas() {
 		return new BuscaDadosDeComandas(comandaEntityAdapter, clienteEntityAdapter);
 	}
 

@@ -26,27 +26,27 @@ public class CategoriaBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaCategoria criaCategoria() {
+	CriaCategoria criaCategoria() {
 		return new CriaCategoria(categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveCategoria removeCategoria() {
+	RemoveCategoria removeCategoria() {
 		return new RemoveCategoria(categoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public EditaCategoria editaCategoria() {
+	EditaCategoria editaCategoria() {
 		return new EditaCategoria(categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public BuscaTodasCategorias buscarCategorias() {
+	BuscaTodasCategorias buscarCategorias() {
 		return new BuscaTodasCategorias(categoriaEntityAdapter);
 	}
 
 	@Bean
-	public UploadImagemDaCategoria uploadImagemDaCategoria() {
+	UploadImagemDaCategoria uploadImagemDaCategoria() {
 		return new UploadImagemDaCategoria(categoriaEntityAdapter, loggerAdapter);
 	}
 

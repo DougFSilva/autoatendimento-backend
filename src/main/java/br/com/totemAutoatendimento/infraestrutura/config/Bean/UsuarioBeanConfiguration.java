@@ -26,27 +26,27 @@ public class UsuarioBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaUsuario criaUsuario() {
+	CriaUsuario criaUsuario() {
 		return new CriaUsuario(usuarioEntityAdapter, codificador, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveUsuario removeUsuario() {
+	RemoveUsuario removeUsuario() {
 		return new RemoveUsuario(usuarioEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public EditaUsuario editaUsuario() {
+	EditaUsuario editaUsuario() {
 		return new EditaUsuario(usuarioEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public AlteraSenhaDeUsuario alteraSenhaDeUsuario() {
+	AlteraSenhaDeUsuario alteraSenhaDeUsuario() {
 		return new AlteraSenhaDeUsuario(usuarioEntityAdapter, codificador);
 	}
 
 	@Bean
-	public BuscaDadosDeUsuarios buscaDadosDeUsuarios() {
+	BuscaDadosDeUsuarios buscaDadosDeUsuarios() {
 		return new BuscaDadosDeUsuarios(usuarioEntityAdapter);
 	}
 

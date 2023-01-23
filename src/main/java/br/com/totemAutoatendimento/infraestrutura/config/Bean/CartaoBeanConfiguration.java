@@ -20,17 +20,17 @@ public class CartaoBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaCartao criaCartao() {
+	CriaCartao criaCartao() {
 		return new CriaCartao(cartaoEntityAdapter, loggerAdapter);
 	}
 	
 	@Bean
-	public RemoveCartao removeCartao() {
+	RemoveCartao removeCartao() {
 		return new RemoveCartao(cartaoEntityAdapter, loggerAdapter);
 	}
 	
 	@Bean
-	public BuscaTodosCartoes buscaTodosCartoes() {
+	BuscaTodosCartoes buscaTodosCartoes() {
 		return new BuscaTodosCartoes(cartaoEntityAdapter);
 	}
 }

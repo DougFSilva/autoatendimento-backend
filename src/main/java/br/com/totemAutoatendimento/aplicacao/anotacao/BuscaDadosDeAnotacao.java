@@ -30,9 +30,9 @@ public class BuscaDadosDeAnotacao {
 		return new DadosDeAnotacao(anotacao.get());
 	}
 
-	public Page<DadosDeAnotacao> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal, Usuario usuarioAutenticado) {
+	public Page<DadosDeAnotacao> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
-		return repository.buscarPorData(paginacao, dataInicial, dataFinal).map(DadosDeAnotacao::new);
+		return repository.buscarPelaData(paginacao, dataInicial, dataFinal).map(DadosDeAnotacao::new);
 	}
 
 	public Page<DadosDeAnotacao> buscarTodas(Pageable paginacao, Usuario usuarioAutenticado) {

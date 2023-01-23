@@ -30,27 +30,27 @@ public class SubcategoriaBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaSubcategoria criaSubcategoria() {
+	CriaSubcategoria criaSubcategoria() {
 		return new CriaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveSubcategoria removeSubcategoria() {
+	RemoveSubcategoria removeSubcategoria() {
 		return new RemoveSubcategoria(subcategoriaEntityAdapter, mercadoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public EditaSubcategoria editaSubcategoria() {
+	EditaSubcategoria editaSubcategoria() {
 		return new EditaSubcategoria(subcategoriaEntityAdapter, categoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public BuscaSubcategorias buscaSubcategorias() {
+	BuscaSubcategorias buscaSubcategorias() {
 		return new BuscaSubcategorias(subcategoriaEntityAdapter, categoriaEntityAdapter);
 	}
 
 	@Bean
-	public UploadImagemDaSubcategoria uploadImagemDaSubcategoria() {
+	UploadImagemDaSubcategoria uploadImagemDaSubcategoria() {
 		return new UploadImagemDaSubcategoria(subcategoriaEntityAdapter, loggerAdapter);
 	}
 }

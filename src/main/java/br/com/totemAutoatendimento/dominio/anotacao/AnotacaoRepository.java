@@ -16,7 +16,7 @@ public interface AnotacaoRepository {
 	
 	Optional<Anotacao> buscarPeloId(Long id);
 	
-	Page<Anotacao> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
+	Page<Anotacao> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 	
 	Page<Anotacao> buscarTodas(Pageable paginacao);
 }

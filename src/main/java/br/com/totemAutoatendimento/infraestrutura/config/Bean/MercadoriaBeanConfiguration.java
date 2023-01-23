@@ -26,27 +26,27 @@ public class MercadoriaBeanConfiguration {
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
-	public CriaMercadoria criaMercadoria() {
+	CriaMercadoria criaMercadoria() {
 		return new CriaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public RemoveMercadoria removeMercadoria() {
+	RemoveMercadoria removeMercadoria() {
 		return new RemoveMercadoria(mercadoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public EditaMercadoria editaMercadoria() {
+	EditaMercadoria editaMercadoria() {
 		return new EditaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
 	}
 
 	@Bean
-	public BuscaDadosDeMercadorias buscaDadosDeMercadorias() {
+	BuscaDadosDeMercadorias buscaDadosDeMercadorias() {
 		return new BuscaDadosDeMercadorias(mercadoriaEntityAdapter, subcategoriaEntityAdapter);
 	}
 
 	@Bean
-	public UploadImagemMercadoria uploadImagemDeMercadoria() {
+	UploadImagemMercadoria uploadImagemDeMercadoria() {
 		return new UploadImagemMercadoria(mercadoriaEntityAdapter, loggerAdapter);
 	}
 
