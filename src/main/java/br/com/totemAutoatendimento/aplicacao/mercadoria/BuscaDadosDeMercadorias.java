@@ -6,12 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscaSubcategoriaPeloId;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
 public class BuscaDadosDeMercadorias {
 
@@ -24,12 +26,17 @@ public class BuscaDadosDeMercadorias {
 		this.subcategoriaRepository = subcategoriaRepository;
 	}
 
-	public DadosDeMercadoria buscarPeloId(Long id) {
-		BuscaMercadoriaPeloId buscaMercadoriaPeloId = new BuscaMercadoriaPeloId(repository);
-		return new DadosDeMercadoria(buscaMercadoriaPeloId.buscar(id));
+	public DadosDeMercadoria buscarPeloId(Long id, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Mercadoria> mercadoria = repository.buscarPeloId(id);
+		if(mercadoria.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Mercadoria com id %d não encontrada!", id));
+		}
+		return new DadosDeMercadoria(mercadoria.get());
 	}
 
-	public DadosDeMercadoria buscarPeloCodigo(String codigo) {
+	public DadosDeMercadoria buscarPeloCodigo(String codigo, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Mercadoria> mercadoria = repository.buscarPeloCodigo(codigo);
 		if (mercadoria.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Mercadoria com código %s não encontrada!", codigo));
@@ -37,17 +44,22 @@ public class BuscaDadosDeMercadorias {
 		return new DadosDeMercadoria(mercadoria.get());
 	}
 
-	public Page<DadosDeMercadoria> buscarEmPromocao(Pageable paginacao, Boolean promocao) {
+	public Page<DadosDeMercadoria> buscarEmPromocao(Pageable paginacao, Boolean promocao, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarEmPromocao(paginacao, promocao).map(DadosDeMercadoria::new);
 	}
 
-	public Page<DadosDeMercadoria> buscarPelaSubcategoria(Pageable paginacao, Long idSubcategoria) {
-		BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(subcategoriaRepository);
-		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(idSubcategoria);
-		return repository.buscarPelaSubcategoria(paginacao, subcategoria).map(DadosDeMercadoria::new);
+	public Page<DadosDeMercadoria> buscarPelaSubcategoria(Pageable paginacao, Long idSubcategoria, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Subcategoria> subcategoria = subcategoriaRepository.buscarPeloId(idSubcategoria);
+    	if(subcategoria.isEmpty()) {
+    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", idSubcategoria));
+    	}
+		return repository.buscarPelaSubcategoria(paginacao, subcategoria.get()).map(DadosDeMercadoria::new);
 	}
 
-	public Page<DadosDeMercadoria> buscarTodas(Pageable paginacao) {
+	public Page<DadosDeMercadoria> buscarTodas(Pageable paginacao, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarTodas(paginacao).map(DadosDeMercadoria::new);
 	}
 }

@@ -24,11 +24,30 @@ public class AutorizacaoDeAcesso {
 					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
 		}
 	}
+	
+	public static void requerirPerfilTotem(Usuario usuario) {
+		List<Perfil> perfis = usuario.getPerfis();
+		if (!perfis.contains(new Perfil(TipoPerfil.TOTEM))) {
+			throw new UsuarioSemPermissaoException(
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+		}
+	}
 
-	public static void requerirQualquerPerfil(Usuario usuario) {
+
+	public static void requerirPerfilAdministradorOuFuncionario(Usuario usuario) {
 		List<Perfil> perfis = usuario.getPerfis();
 		if (!perfis.contains(new Perfil(TipoPerfil.ADMINISTRADOR))
 				&& !perfis.contains(new Perfil(TipoPerfil.FUNCIONARIO))) {
+			throw new UsuarioSemPermissaoException(
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+		}
+	}
+	
+	public static void requerirQualquerPerfil(Usuario usuario) {
+		List<Perfil> perfis = usuario.getPerfis();
+		if (!perfis.contains(new Perfil(TipoPerfil.ADMINISTRADOR)) 
+				&& !perfis.contains(new Perfil(TipoPerfil.FUNCIONARIO))
+				&& !perfis.contains(new Perfil(TipoPerfil.TOTEM))) {
 			throw new UsuarioSemPermissaoException(
 					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
 		}

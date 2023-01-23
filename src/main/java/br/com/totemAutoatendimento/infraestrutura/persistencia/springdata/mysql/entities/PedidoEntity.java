@@ -36,7 +36,7 @@ public class PedidoEntity {
 	
 	private String mesa;
 
-	private Integer quantidade;
+	private Float quantidade;
 
 	private LocalDate data;
 

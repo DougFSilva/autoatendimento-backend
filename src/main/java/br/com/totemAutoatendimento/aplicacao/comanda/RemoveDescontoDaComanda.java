@@ -25,7 +25,7 @@ public class RemoveDescontoDaComanda {
 
 	@Transactional
 	public DadosDeComanda remover(Long id, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Comanda> comanda = repository.buscarPeloId(id);
     	if(comanda.isEmpty()) {
     		throw new ObjetoNaoEncontradoException(String.format("Comanda com id %d não encontrada!", id));

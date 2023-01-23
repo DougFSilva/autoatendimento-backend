@@ -12,6 +12,7 @@ import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
+import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
@@ -27,8 +28,11 @@ public class BuscaDadosDePedidos {
 	}
 
 	public DadosDePedido buscarPeloId(Long id) {
-		BuscaPedidoPeloId buscaPedidoPeloId = new BuscaPedidoPeloId(repository);
-		return new DadosDePedido(buscaPedidoPeloId.buscar(id));
+		Optional<Pedido> pedido = repository.buscarPeloId(id);
+		if(pedido.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Pedido com id %d não encontrado", id));
+		}
+		return new DadosDePedido(pedido.get());
 	}
 
 	public List<DadosDePedido> buscarPelaComanda(Long comandaId) {
@@ -40,17 +44,17 @@ public class BuscaDadosDePedidos {
 	}
 
 	public Page<DadosDePedido> buscarEntregues(Pageable paginacao, Boolean entregue, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		return repository.buscarEntregue(paginacao, entregue).map(DadosDePedido::new);
 	}
 
 	public Page<DadosDePedido> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		return repository.buscarPelaData(paginacao, dataInicial, dataFinal).map(DadosDePedido::new);
 	}
 
 	public Page<DadosDePedido> buscarTodos(Pageable paginacao, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		return repository.buscarTodos(paginacao).map(DadosDePedido::new);
 	}
 }

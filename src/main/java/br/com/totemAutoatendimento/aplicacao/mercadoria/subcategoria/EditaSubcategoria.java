@@ -3,10 +3,10 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 import java.util.Optional;
 
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategoriaPeloId;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDeSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosEditarSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
@@ -30,17 +30,21 @@ public class EditaSubcategoria {
 
     public DadosDeSubcategoria editar(Long id, DadosEditarSubcategoria dados, Usuario usuarioAutenticado) {
     	AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
-        BuscaSubcategoriaPeloId buscarSubcategoriaPeloId = new BuscaSubcategoriaPeloId(repository);
-        Subcategoria subcategoria = buscarSubcategoriaPeloId.buscar(id);
+    	Optional<Subcategoria> subcategoria = repository.buscarPeloId(id);
+    	if(subcategoria.isEmpty()) {
+    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", id));
+    	}
         Optional<Subcategoria> subcategoriaPorNome = repository.buscarPeloNome(dados.nome());
         if (subcategoriaPorNome.isPresent() && subcategoriaPorNome.get().getId() != id) {
         	throw new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com nome %s já cadastrada!", dados.nome()));
         }
-        BuscaCategoriaPeloId buscaCategoriaPeloId = new BuscaCategoriaPeloId(categoriaRepository);
-        Categoria categoria = buscaCategoriaPeloId.buscar(dados.categoriaId());
-        subcategoria.setNome(dados.nome());
-        subcategoria.setCategoria(categoria);
-        Subcategoria subcategoriaEditada = repository.editar(subcategoria);
+        Optional<Categoria> categoria = categoriaRepository.buscarPeloId(dados.categoriaId());
+		if(categoria.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Categoria com id %d não encontrada!", dados.categoriaId()));
+		}
+        subcategoria.get().setNome(dados.nome());
+        subcategoria.get().setCategoria(categoria.get());
+        Subcategoria subcategoriaEditada = repository.editar(subcategoria.get());
         logger.info(
         		String.format("Usuário %s - Subcategoria de id %d editada!", 
         				usuarioAutenticado.getRegistro(), subcategoriaEditada.getId())

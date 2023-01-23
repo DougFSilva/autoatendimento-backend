@@ -93,7 +93,7 @@ public class SubcategoriaController {
     @Cacheable(value = "buscarSubcategoriasPelaCategoria")
     @Operation(summary = "Buscar subcategorias pela categoria", description = "Busca todas subcategorias pertencentes à uma categoria")
     public ResponseEntity<List<DadosDeSubcategoria>> buscarSubcategoriasPelaCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok().body(buscarSubcategorias.buscarPelaCategoria(categoriaId));
+        return ResponseEntity.ok().body(buscarSubcategorias.buscarPelaCategoria(categoriaId, usuarioAutenticado()));
     }
 
     @GetMapping

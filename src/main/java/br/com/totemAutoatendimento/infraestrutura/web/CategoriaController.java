@@ -88,7 +88,7 @@ public class CategoriaController {
 	@Cacheable(value = "buscarTodasCategorias")
 	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes")
 	public ResponseEntity<List<Categoria>> buscarTodasCategorias() {
-		return ResponseEntity.ok().body(buscaTodasCategorias.buscar());
+		return ResponseEntity.ok().body(buscaTodasCategorias.buscar(usuarioAutenticado()));
 	}
 
 	@PostMapping(value = "/{id}/imagem")

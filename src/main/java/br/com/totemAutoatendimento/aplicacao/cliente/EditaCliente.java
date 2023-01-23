@@ -28,7 +28,7 @@ public class EditaCliente {
 
 	@Transactional
 	public DadosDeCliente editar(Long id, DadosEditarCliente dados, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Cliente> clientePorCpf = repository.buscarClientePorCpf(dados.cpf());
 		if (clientePorCpf.isPresent() && clientePorCpf.get().getId() != id) {
 			throw new ViolacaoDeIntegridadeDeDadosException(

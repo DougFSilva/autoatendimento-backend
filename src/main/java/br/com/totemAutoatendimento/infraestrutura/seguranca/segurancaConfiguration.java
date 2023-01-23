@@ -20,8 +20,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SegurancaConfiguration {
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder,
-            AutenticacaoService autenticacaoService)
+    AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder,
+                                                          AutenticacaoService autenticacaoService)
             throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(autenticacaoService)
@@ -31,11 +31,10 @@ public class SegurancaConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http.cors().and().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login", "/pedido/cartao/*").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/pedido").permitAll()
-                .antMatchers(HttpMethod.GET, "/comanda/aberta/cartao/*", "/mercadoria/imagem/**" , "/v3/**", "/swagger-ui/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET,  "/v3/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .httpBasic();
@@ -44,7 +43,7 @@ public class SegurancaConfiguration {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("*"));
@@ -55,7 +54,7 @@ public class SegurancaConfiguration {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

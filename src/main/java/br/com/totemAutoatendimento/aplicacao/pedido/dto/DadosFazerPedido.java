@@ -12,7 +12,7 @@ public record DadosFazerPedido(
     String mesa,
 
     @NotNull
-    Integer quantidade
+    Float quantidade
 
 )
 {

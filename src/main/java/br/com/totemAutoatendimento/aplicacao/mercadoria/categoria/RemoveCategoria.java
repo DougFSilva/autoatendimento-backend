@@ -1,7 +1,10 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.categoria;
 
+import java.util.Optional;
+
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
@@ -25,15 +28,19 @@ public class RemoveCategoria {
 
 	public void remover(Long id, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
-		BuscaCategoriaPeloId buscaCategoriaPeloId = new BuscaCategoriaPeloId(repository);
-		Categoria categoria = buscaCategoriaPeloId.buscar(id);
-		if (subcategoriaRepository.buscarPelaCategoria(categoria).size() > 0) {
+		Optional<Categoria> categoria = repository.buscarPeloId(id);
+		if(categoria.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Categoria com id %d não encontrada!", id));
+		}
+		if (subcategoriaRepository.buscarPelaCategoria(categoria.get()).size() > 0) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					"Impossível remover categoria pois existem subcategorias pertencentes a ela!");
 		}
-		repository.remover(categoria);
+		repository.remover(categoria.get());
 		logger.info(
-				String.format("Usuário %s - Categoria %s removida!", usuarioAutenticado.getRegistro(), categoria.getNome())
+				String.format("Usuário %s - Categoria %s removida!", 
+						usuarioAutenticado.getRegistro(), 
+						categoria.get().getNome())
 		);
 	}
 }

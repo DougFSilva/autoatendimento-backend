@@ -23,7 +23,7 @@ public class AlteraSenhaDeUsuario {
 	}
 	
 	public void alterar(Long id, DadosAlterarSenhaDeUsuario dados, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Usuario> usuario = repository.buscarPeloId(id);
 		if(usuario.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Usuário com id %d não encontrado!", id));

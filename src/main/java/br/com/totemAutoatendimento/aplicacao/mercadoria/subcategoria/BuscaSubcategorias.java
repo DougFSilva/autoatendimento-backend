@@ -1,13 +1,16 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
 import java.util.List;
+import java.util.Optional;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaCategoriaPeloId;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDeSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.CategoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
 public class BuscaSubcategorias {
 
@@ -20,10 +23,13 @@ public class BuscaSubcategorias {
 		this.categoriaRepository = categoriaRepository;
 	}
 
-	public List<DadosDeSubcategoria> buscarPelaCategoria(Long categoriaId) {
-		BuscaCategoriaPeloId buscaCategoriaPeloId = new BuscaCategoriaPeloId(categoriaRepository);
-		Categoria categoria = buscaCategoriaPeloId.buscar(categoriaId);
-		List<Subcategoria> subcategorias = repository.buscarPelaCategoria(categoria);
+	public List<DadosDeSubcategoria> buscarPelaCategoria(Long categoriaId, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		Optional<Categoria> categoria = categoriaRepository.buscarPeloId(categoriaId);
+		if(categoria.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Categoria com id %d não encontrada!", categoriaId));
+		}
+		List<Subcategoria> subcategorias = repository.buscarPelaCategoria(categoria.get());
 		return subcategorias.stream().map(DadosDeSubcategoria::new).toList();
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,16 +33,18 @@ public class UploadImagemDaSubcategoria {
 		if (extensao == null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))) {
 			throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
 		}
-		BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(repository);
-		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(id);
+		Optional<Subcategoria> subcategoria = repository.buscarPeloId(id);
+    	if(subcategoria.isEmpty()) {
+    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", id));
+    	}
 		try {
 			Files.copy(file.getInputStream(), Path.of(pathLocal), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new ErroNoUploadDeArquivoException("Erro no processo de upload do arquivo!", e.getCause());
 		}
-		subcategoria.setImagem(urlServidor);
-		Subcategoria subcategoriaEditada = repository.editar(subcategoria);
+		subcategoria.get().setImagem(urlServidor);
+		Subcategoria subcategoriaEditada = repository.editar(subcategoria.get());
 		logger.info(
 				String.format("Usuário %s - Inserido imagem à subcategoria %s!", 
 						usuarioAutenticado.getRegistro(), subcategoriaEditada.getNome())

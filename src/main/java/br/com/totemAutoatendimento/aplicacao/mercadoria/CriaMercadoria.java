@@ -1,10 +1,11 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
+import java.util.Optional;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscaSubcategoriaPeloId;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
@@ -34,9 +35,11 @@ public class CriaMercadoria {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					String.format("Mercadoria com código %s já cadastrada!", dados.codigo()));
 		}
-		BuscaSubcategoriaPeloId buscaSubcategoriaPeloId = new BuscaSubcategoriaPeloId(subcategoriaRepository);
-		Subcategoria subcategoria = buscaSubcategoriaPeloId.buscar(dados.subcategoriaId());
-		Mercadoria mercadoria = new Mercadoria(null, dados.codigo(), subcategoria, dados.descricao(), dados.preco(),
+		Optional<Subcategoria> subcategoria = subcategoriaRepository.buscarPeloId(dados.subcategoriaId());
+    	if(subcategoria.isEmpty()) {
+    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", dados.subcategoriaId()));
+    	}
+		Mercadoria mercadoria = new Mercadoria(null, dados.codigo(), subcategoria.get(), dados.descricao(), dados.preco(),
 				dados.promocao(), dados.precoPromocional(), true, "Sem imagem");
 		Mercadoria mercadoriaCriada = repository.criar(mercadoria);
 		logger.info(

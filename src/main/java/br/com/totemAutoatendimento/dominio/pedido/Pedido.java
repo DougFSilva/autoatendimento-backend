@@ -29,7 +29,7 @@ public class Pedido {
 	
 	private String mesa;
 
-	private Integer quantidade;
+	private Float quantidade;
 
 	private LocalDate data;
 
@@ -41,7 +41,7 @@ public class Pedido {
 	
 	private BigDecimal valor;
 	
-	public Pedido(Comanda comanda, Mercadoria mercadoria, String mesa, Integer quantidade) {
+	public Pedido(Comanda comanda, Mercadoria mercadoria, String mesa, Float quantidade) {
 		this.comanda = comanda;
 		this.mercadoria = mercadoria;
 		this.mesa = mesa;

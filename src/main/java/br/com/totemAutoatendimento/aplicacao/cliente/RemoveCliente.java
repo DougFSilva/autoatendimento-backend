@@ -24,7 +24,7 @@ public class RemoveCliente {
 	
 	@Transactional
 	public void remover(Long id, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Cliente> cliente = repository.buscarPeloId(id);
 		if (cliente.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", id));

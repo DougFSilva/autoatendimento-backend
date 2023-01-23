@@ -97,13 +97,13 @@ public class MercadoriaController {
 	@GetMapping(value = "/{id}")
 	@Operation(summary = "Buscar mercadoria", description = "Busca alguma mercadoria pelo id")
 	public ResponseEntity<DadosDeMercadoria> buscarMercadoria(@PathVariable Long id) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloId(id));
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloId(id, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/codigo/{codigo}")
 	@Operation(summary = "Buscar mercadoria por codigo", description = "Busca alguma mercadoria pelo codigo")
 	public ResponseEntity<DadosDeMercadoria> buscarMercadoriaPeloCodigo(@PathVariable String codigo) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloCodigo(codigo));
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloCodigo(codigo, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/subcategoria/{subcategoriaId}")
@@ -111,28 +111,28 @@ public class MercadoriaController {
 	@Operation(summary = "Buscar mercadorias por subcategoria", description = "Busca mercadorias pela subcategoria")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPelaSubcategoria(Pageable paginacao,
 			@PathVariable Long subcategoriaId) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPelaSubcategoria(paginacao, subcategoriaId));
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPelaSubcategoria(paginacao, subcategoriaId, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/com-promocao")
 	@Cacheable(value = "buscarMercadoriasEmPromocao")
 	@Operation(summary = "Buscar mercadorias em promoção", description = "Busca mercadorias que estão em promoção")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasEmPromocao(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, true));
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, true, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/sem-promocao")
 	@Cacheable(value = "buscarMercadoriasSemPromocao")
 	@Operation(summary = "Buscar mercadorias sem promoção", description = "Busca mercadorias que estão sem promoção")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasSemPromocao(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, false));
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, false, usuarioAutenticado()));
 	}
 
 	@GetMapping
 	@Cacheable(value = "buscarTodasMercadorias")
 	@Operation(summary = "Buscar todas mercadorias", description = "Busca todas mercadorias existentes")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarTodasMercadorias(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarTodas(paginacao));
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarTodas(paginacao, usuarioAutenticado()));
 	}
 
 	@PostMapping(value = "/{id}/imagem")

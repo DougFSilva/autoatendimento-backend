@@ -25,7 +25,7 @@ public class CriaCliente {
 	
 	@Transactional
 	public Cliente criar(DadosCriarCliente dados, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);;
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);;
 		if(repository.buscarClientePorCpf(dados.cpf()).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(String.format("Cliente com cpf %s já cadastrado!", dados.cpf()));
 		}

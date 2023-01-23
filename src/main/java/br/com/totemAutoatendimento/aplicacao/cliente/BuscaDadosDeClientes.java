@@ -21,7 +21,7 @@ public class BuscaDadosDeClientes {
 	}
 
 	public DadosDeCliente buscarPeloId(Long id, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Cliente> cliente = repository.buscarPeloId(id);
 		if (cliente.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", id));
@@ -30,7 +30,7 @@ public class BuscaDadosDeClientes {
 	}
 
 	public DadosDeCliente buscarPeloCpf(String cpf, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Cliente> cliente = repository.buscarClientePorCpf(cpf);
 		if (cliente.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Cliente com cpf %s não encontrado!", cpf));
@@ -39,12 +39,12 @@ public class BuscaDadosDeClientes {
 	}
 
 	public Page<DadosDeCliente> buscarPelaCidade(Pageable paginacao, String cidade, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		return this.repository.buscarPorCidade(paginacao, cidade).map(DadosDeCliente::new);
 	}
 
 	public Page<DadosDeCliente> buscarTodos(Pageable paginacao, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		return this.repository.buscarTodos(paginacao).map(DadosDeCliente::new);
 	}
 

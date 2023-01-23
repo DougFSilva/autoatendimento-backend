@@ -17,7 +17,7 @@ public class DadosDePedido {
 
     private String descricaoDaMercadoria;
 
-    private Integer quantidade;
+    private Float quantidade;
 	
 	private LocalDate data;
 	

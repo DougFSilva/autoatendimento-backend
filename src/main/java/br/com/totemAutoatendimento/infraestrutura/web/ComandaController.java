@@ -86,7 +86,7 @@ public class ComandaController {
 	@GetMapping(value = "/aberta/cartao/{cartao}")
 	@Operation(summary = "Buscar comanda pelo cartão", description = "Busca alguma comanda aberta pelo cartão")
 	public ResponseEntity<DadosDeComanda> buscarComandaAbertaPeloCartao(@PathVariable String cartao) {
-		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertasPeloCartao(cartao));
+		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertaPeloCartao(cartao, usuarioAutenticado()));
 	}
 
 	@GetMapping(value = "/cliente/{id}")

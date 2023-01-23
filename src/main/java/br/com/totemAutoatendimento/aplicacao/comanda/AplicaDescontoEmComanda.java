@@ -23,7 +23,7 @@ public class AplicaDescontoEmComanda {
 	}
 
 	public DadosDeComanda aplicar(Long id, Float desconto, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Comanda> comanda = repository.buscarPeloId(id);
     	if(comanda.isEmpty()) {
     		throw new ObjetoNaoEncontradoException(String.format("Comanda com id %d não encontrada!", id));

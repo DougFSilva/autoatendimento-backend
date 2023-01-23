@@ -37,7 +37,7 @@ public class CriaComanda {
 
 	@Transactional
 	public Comanda criar(DadosCriarComanda dados, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		if (repository.buscarPeloCartao(dados.codigoCartao(), true).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Comanda aberta existente para esse cartão!");
 		}
