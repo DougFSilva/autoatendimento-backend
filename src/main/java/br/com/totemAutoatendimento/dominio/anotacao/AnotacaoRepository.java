@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.dominio.anotacao;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ public interface AnotacaoRepository {
 	
 	Anotacao editar(Anotacao anotacaoAtualizada);
 	
-	Anotacao buscarPeloId(Long id);
+	Optional<Anotacao> buscarPeloId(Long id);
 	
 	Page<Anotacao> buscarPorData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 	

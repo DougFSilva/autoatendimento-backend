@@ -25,4 +25,5 @@ public class Anotacao {
 	private String descricao;
 	
 	private NivelDeImportancia nivelDeImportancia;
+	
 }
