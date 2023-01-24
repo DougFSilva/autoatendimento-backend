@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 	
-	@Value("${frontend.origem}")
+	@Value("${app.frontend.origem}")
 	private String frontOrigen;
 
 	/**

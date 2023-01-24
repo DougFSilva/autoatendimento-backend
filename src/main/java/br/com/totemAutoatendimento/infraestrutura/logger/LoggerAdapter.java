@@ -11,7 +11,6 @@ public class LoggerAdapter implements SystemLogger {
 
 	private Logger logger = LoggerFactory.getLogger("autoatendimento.logger");
 
-
 	@Override
 	public void error(String mensagem) {
 		logger.error(mensagem);

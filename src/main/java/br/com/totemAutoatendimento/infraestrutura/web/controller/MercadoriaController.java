@@ -45,7 +45,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @SecurityRequirement(name = "api-security")
 public class MercadoriaController {
 
-	@Value("${imagens.path}")
+	@Value("${app.imagens.path}")
 	private String pathPastaImagens;
 
 	@Autowired

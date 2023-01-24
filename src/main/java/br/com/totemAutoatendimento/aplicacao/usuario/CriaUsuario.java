@@ -19,13 +19,13 @@ public class CriaUsuario {
 
 	private final UsuarioRepository repository;
 
-	private final CodificadorDeSenha codificador;
+	private final CodificadorDeSenha codificadorDeSenha;
 	
 	private final SystemLogger logger;
 
-	public CriaUsuario(UsuarioRepository repository, CodificadorDeSenha codificador, final SystemLogger logger) {
+	public CriaUsuario(UsuarioRepository repository, CodificadorDeSenha codificadorDeSenha, final SystemLogger logger) {
 		this.repository = repository;
-		this.codificador = codificador;
+		this.codificadorDeSenha = codificadorDeSenha;
 		this.logger = logger;
 	}
 	
@@ -40,7 +40,7 @@ public class CriaUsuario {
 					String.format("Usuário com registro %s já cadastrado!", dados.registro()));
 		}
 		Email email = new Email(dados.email());
-		Password password = new Password(dados.senha(), this.codificador);
+		Password password = new Password(dados.senha(), this.codificadorDeSenha);
 		List<Perfil> perfis = dados.tipoPerfil().stream().map(Perfil::new).toList();
 		Usuario usuario = new Usuario(null, dados.nome(), dados.cpf(), dados.registro(), email, password, perfis);
 		Usuario usuarioCriado = repository.criar(usuario);

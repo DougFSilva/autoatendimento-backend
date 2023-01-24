@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import br.com.totemAutoatendimento.aplicacao.usuario.AlteraSenhaDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.BuscaDadosDeUsuarios;
 import br.com.totemAutoatendimento.aplicacao.usuario.CriaUsuario;
+import br.com.totemAutoatendimento.aplicacao.usuario.CriaUsuarioMaster;
 import br.com.totemAutoatendimento.aplicacao.usuario.EditaUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.RemoveUsuario;
 import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
@@ -20,14 +21,19 @@ public class UsuarioBeanConfiguration {
 	private UsuarioEntityAdapter usuarioEntityAdapter;
 
 	@Autowired
-	private CodificadorBcrypt codificador;
+	private CodificadorBcrypt codificadorBcrypt;
 	
 	@Autowired
 	private LoggerAdapter loggerAdapter;
 
 	@Bean
 	CriaUsuario criaUsuario() {
-		return new CriaUsuario(usuarioEntityAdapter, codificador, loggerAdapter);
+		return new CriaUsuario(usuarioEntityAdapter, codificadorBcrypt, loggerAdapter);
+	}
+	
+	@Bean
+	CriaUsuarioMaster criaUsuarioMaster() {
+		return new CriaUsuarioMaster(usuarioEntityAdapter, codificadorBcrypt, loggerAdapter);
 	}
 
 	@Bean
@@ -42,7 +48,7 @@ public class UsuarioBeanConfiguration {
 
 	@Bean
 	AlteraSenhaDeUsuario alteraSenhaDeUsuario() {
-		return new AlteraSenhaDeUsuario(usuarioEntityAdapter, codificador);
+		return new AlteraSenhaDeUsuario(usuarioEntityAdapter, codificadorBcrypt);
 	}
 
 	@Bean
