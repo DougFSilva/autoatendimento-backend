@@ -3,6 +3,7 @@ package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,6 +40,6 @@ public class AnotacaoEntity {
 
 	private String descricao;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private NivelDeImportancia nivelDeImportancia;
 }

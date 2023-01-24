@@ -33,6 +33,7 @@ public class DadosDeAnotacao {
 		this.timestamp = anotacao.getTimestamp();
 		this.registroDoRegistrador = anotacao.getRegistrador().getRegistro();
 		this.nomeDoRegistrador = anotacao.getRegistrador().getNome();
+		this.descricao = anotacao.getDescricao();
 		this.nivelDeImportancia = anotacao.getNivelDeImportancia();
 	}
 }
