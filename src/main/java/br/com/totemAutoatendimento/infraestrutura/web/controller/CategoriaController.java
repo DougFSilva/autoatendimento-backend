@@ -31,9 +31,11 @@ import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping(value = "/mercadoria/categoria")
+@RequestMapping("/mercadoria/categoria")
+@SecurityRequirement(name = "api-security")
 public class CategoriaController {
 
 	@Value("${imagens.path}")
@@ -57,7 +59,7 @@ public class CategoriaController {
 	@Autowired
 	private AutenticacaoService autenticacaoService;
 
-	@PostMapping(value = "/{nome}")
+	@PostMapping("/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Criar categoria", description = "Cria uma categoria para cadastrar mercadorias")
 	public ResponseEntity<Categoria> criaCategoria(@PathVariable String nome) {
@@ -67,7 +69,7 @@ public class CategoriaController {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("/{id}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
@@ -75,7 +77,7 @@ public class CategoriaController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping(value = "/{id}/nome/{nome}")
+	@PutMapping("/{id}/nome/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
 	public ResponseEntity<Categoria> editarCategoria(@PathVariable Long id, @PathVariable String nome) {
@@ -83,13 +85,13 @@ public class CategoriaController {
 	}
 
 	@GetMapping
-	@Cacheable(value = "buscarTodasCategorias")
+	@Cacheable("buscarTodasCategorias")
 	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes")
 	public ResponseEntity<List<Categoria>> buscarTodasCategorias() {
 		return ResponseEntity.ok().body(buscaTodasCategorias.buscar(usuarioAutenticado()));
 	}
 
-	@PostMapping(value = "/{id}/imagem")
+	@PostMapping("/{id}/imagem")
 	@CacheEvict(value = {"buscarTodasCategorias","buscarImagemDaCategoria"}, allEntries = true)
 	@Operation(summary = "Adicionar imagem", description = "Adiciona uma imagem em formato jgp ou png a alguma categoria existente")
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
@@ -103,8 +105,8 @@ public class CategoriaController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping(value = "/imagem/{nomeDaImagem}")
-	@Cacheable(value = "buscarImagemDaCategoria")
+	@GetMapping("/imagem/{nomeDaImagem}")
+	@Cacheable("buscarImagemDaCategoria")
 	@Operation(summary = "Buscar imagem", description = "Busca imagem da categoria")
 	public ResponseEntity<byte[]> buscarImagemDaCategoria(@PathVariable String nomeDaImagem) {
 		BuscaImagem buscaImagem = new BuscaImagem();

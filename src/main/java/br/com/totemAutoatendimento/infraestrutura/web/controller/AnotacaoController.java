@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping(value = "/anotacao")
+@RequestMapping("/anotacao")
 @SecurityRequirement(name = "api-security")
 public class AnotacaoController {
 
@@ -64,7 +64,7 @@ public class AnotacaoController {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("/{id}")
 	@CacheEvict(value = "buscarTodasAnotacoes", allEntries = true)
 	@Operation(summary = "Remover anotação", description = "Remove alguma anotações existente")
 	public ResponseEntity<Void> removerAnotacao(@PathVariable Long id) {
@@ -72,7 +72,7 @@ public class AnotacaoController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping(value = "/{id}")
+	@PutMapping("/{id}")
 	@CacheEvict(value = "buscarTodasAnotacoes", allEntries = true)
 	@Operation(summary = "Editar anotação", description = "Edita alguma anotações existente")
 	public ResponseEntity<DadosDeAnotacao> editarAnotacao(@PathVariable Long id,
@@ -81,14 +81,14 @@ public class AnotacaoController {
 		return ResponseEntity.ok().body(dadosDeAnotacao);
 	}
 
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	@Operation(summary = "Buscar anotação pelo id", description = "Busca alguma anotação existente pelo id")
 	public ResponseEntity<DadosDeAnotacao> buscarAnotacaoPeloId(@PathVariable Long id) {
 		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(id, usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeAnotacao);
 	}
 
-	@GetMapping(value = "/data/{dataInicial}/{dataFinal}")
+	@GetMapping("/data/{dataInicial}/{dataFinal}")
 	@Operation(summary = "Buscar anotações pela data", description = "Busca anotações por uma data inicial e uma data final")
 	public ResponseEntity<Page<DadosDeAnotacao>> buscarAnotacoesPelaData(Pageable paginacao,
 			@PathVariable String dataInicial, @PathVariable String dataFinal) {

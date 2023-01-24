@@ -28,9 +28,11 @@ import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping(value = "/pedido")
+@SecurityRequirement(name = "api-security")
 public class PedidoController {
 
 	@Autowired
@@ -48,46 +50,46 @@ public class PedidoController {
 	@Autowired
 	private AutenticacaoService autenticacaoService;
 
-	@PostMapping(value = "/cartao/{cartao}")
+	@PostMapping("/cartao/{cartao}")
 	@Operation(summary = "Fazer pedido", description = "Cria um pedido para uma comanda aberta no sistema")
 	public ResponseEntity<DadosDeComanda> fazerPedido(@PathVariable String cartao,
 			@RequestBody @Valid List<DadosFazerPedido> dados) {
 		return ResponseEntity.ok().body(fazPedido.fazer(cartao, dados));
 	}
 
-	@DeleteMapping(value = "/{id}/cartao/{cartao}")
+	@DeleteMapping("/{id}/cartao/{cartao}")
 	@Operation(summary = "Remover pedido", description = "Remove algum pedido de alguma comanda aberta existente. Efetuado pelo Cliente, não é possível remover pedido já entregue")
 	public ResponseEntity<DadosDeComanda> removerPedido(@PathVariable Long id, @PathVariable String cartao) {
 		return ResponseEntity.ok().body(removePedido.remover(id, cartao));
 	}
 
-	@PatchMapping(value = "/{id}/entregar")
+	@PatchMapping("/{id}/entregar")
 	@Operation(summary = "Entregar pedido", description = "Atualiza o pedido como entregue")
 	public ResponseEntity<DadosDePedido> entregarPedido(@PathVariable Long id) {
 		entregaPedido.entregar(id, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 	
-	@PatchMapping(value = "/{id}/cancelar-entrega")
+	@PatchMapping("/{id}/cancelar-entrega")
 	@Operation(summary = "Cancelar entrega de pedido", description = "Atualiza o pedido como não entregue")
 	public ResponseEntity<DadosDePedido> CancelarEntregaDePedido(@PathVariable Long id) {
 		entregaPedido.cancelarEntrega(id, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	@Operation(summary = "Buscar pedido", description = "Busca algum pedido existente pelo id")
 	public ResponseEntity<DadosDePedido> buscarPedido(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPeloId(id));
 	}
 
-	@GetMapping(value = "/comanda/{comandaId}")
+	@GetMapping("/comanda/{comandaId}")
 	@Operation(summary = "Buscar pedidos pela comanda", description = "Busca pedidos existente pelo comanda")
 	public ResponseEntity<List<DadosDePedido>> buscarPedidosPelaComanda(@PathVariable Long comandaId) {
 		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPelaComanda(comandaId));
 	}
 
-	@GetMapping(value = "/data/{dataInicial}/{dataFinal}")
+	@GetMapping("/data/{dataInicial}/{dataFinal}")
 	@Operation(summary = "Buscar pedidos por data", description = "Busca pedidos pela data inicial e final definidas")
 	public ResponseEntity<Page<DadosDePedido>> buscarPedidosPelaData(Pageable paginacao,
 			@PathVariable String dataInicial, @PathVariable String dataFinal) {
@@ -95,13 +97,13 @@ public class PedidoController {
 				buscaDadosDePedidos.buscarPorData(paginacao, LocalDate.parse(dataInicial), LocalDate.parse(dataFinal), usuarioAutenticado()));
 	}
 
-	@GetMapping(value = "/entregues")
+	@GetMapping("/entregues")
 	@Operation(summary = "Buscar pedidos entregues", description = "Busca os pedidos que foram entregues")
 	public ResponseEntity<Page<DadosDePedido>> buscarPedidosEntregues(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarEntregues(paginacao, true, usuarioAutenticado()));
 	}
 
-	@GetMapping(value = "/nao-entregues")
+	@GetMapping("/nao-entregues")
 	@Operation(summary = "Buscar pedidos não entregues", description = "Busca os pedidos que não foram entregues")
 	public ResponseEntity<Page<DadosDePedido>> buscarPedidosNaoEntregues(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarEntregues(paginacao, false, usuarioAutenticado()));

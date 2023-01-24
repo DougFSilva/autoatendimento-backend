@@ -19,9 +19,11 @@ import br.com.totemAutoatendimento.aplicacao.cartao.RemoveCartao;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping(value = "/cartao")
+@RequestMapping("/cartao")
+@SecurityRequirement(name = "api-security")
 public class CartaoController {
 
 	@Autowired
@@ -36,14 +38,14 @@ public class CartaoController {
 	@Autowired
 	private AutenticacaoService autenticacaoService;
 	
-	@PostMapping(value = "/{codigo}")
+	@PostMapping("/{codigo}")
 	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
 		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").buildAndExpand(cartao.getCodigo()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@DeleteMapping(value = "/{codigo}")
+	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> removerCartao(@PathVariable String codigo) {
 		removeCartao.remover(codigo, usuarioAutenticado());
 		return ResponseEntity.noContent().build();

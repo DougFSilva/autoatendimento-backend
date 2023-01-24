@@ -21,7 +21,7 @@ public class AutenticacaoController {
 	@Autowired
 	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
-	@PostMapping(value = "/login")
+	@PostMapping("/login")
 	@Operation(summary = "Auntenticar no sistema", description = "Faz a autenticação no sistema com usuário e senha")
 	public ResponseEntity<DadosDeUsuario> login(@RequestBody @Valid DadosDeLogin dados) {
 		Usuario usuario = autenticacaoDeUsuario.autenticar(dados);
@@ -29,7 +29,7 @@ public class AutenticacaoController {
 		return ResponseEntity.ok().body(new DadosDeUsuario(usuario));
 	}
 
-	@PostMapping(value = "/logout")
+	@PostMapping("/logout")
 	public ResponseEntity<Void> logout(HttpSession session) {
 		session.invalidate();
 		return ResponseEntity.noContent().build();

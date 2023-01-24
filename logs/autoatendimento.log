@@ -18,3 +18,4 @@
 24 jan. 2023 11:19:32.047 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à subcategoria Cervejas!
 24 jan. 2023 11:20:06.948 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à subcategoria Cervejas!
 24 jan. 2023 11:26:12.520 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à mercadoria com código merc01!
+24 jan. 2023 11:35:57.176 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 12 criada!

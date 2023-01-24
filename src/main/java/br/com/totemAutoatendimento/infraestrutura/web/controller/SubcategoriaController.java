@@ -36,9 +36,11 @@ import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping(value = "/mercadoria/subcategoria")
+@RequestMapping("/mercadoria/subcategoria")
+@SecurityRequirement(name = "api-security")
 public class SubcategoriaController {
 
     @Value("${imagens.path}")
@@ -62,7 +64,7 @@ public class SubcategoriaController {
     @Autowired
 	private AutenticacaoService autenticacaoService;
 
-    @PostMapping(value = "/{nome}/categoria/{idCategoria}")
+    @PostMapping("/{nome}/categoria/{idCategoria}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Criar subcategoria", description = "Cria uma subcategoria para cadastrar as mercadorias")
     public ResponseEntity<Subcategoria> criarSubcategoria(@PathVariable Long idCategoria, @PathVariable String nome) {
@@ -72,7 +74,7 @@ public class SubcategoriaController {
         return ResponseEntity.created(uri).build();
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
     public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
@@ -80,28 +82,28 @@ public class SubcategoriaController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping("/{id}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
     public ResponseEntity<DadosDeSubcategoria> editarSubcategoria(@PathVariable Long id, @RequestBody @Valid DadosEditarSubcategoria dados) {
     	return ResponseEntity.ok().body(editaSubcategoria.editar(id, dados, usuarioAutenticado()));
     }
     
-    @GetMapping(value = "/categoria/{categoriaId}")
-    @Cacheable(value = "buscarSubcategoriasPelaCategoria")
+    @GetMapping("/categoria/{categoriaId}")
+    @Cacheable("buscarSubcategoriasPelaCategoria")
     @Operation(summary = "Buscar subcategorias pela categoria", description = "Busca todas subcategorias pertencentes à uma categoria")
     public ResponseEntity<List<DadosDeSubcategoria>> buscarSubcategoriasPelaCategoria(@PathVariable Long categoriaId) {
         return ResponseEntity.ok().body(buscarSubcategorias.buscarPelaCategoria(categoriaId, usuarioAutenticado()));
     }
 
     @GetMapping
-    @Cacheable(value = "buscarTodasSubcategorias")
+    @Cacheable("buscarTodasSubcategorias")
     @Operation(summary = "Buscar todas subcategorias", description = "Busca todas subcategorias existentes")
     public ResponseEntity<List<Subcategoria>> buscarTodasSubcategorias() {
         return ResponseEntity.ok().body(buscarSubcategorias.buscarTodas());
     }
 
-    @PostMapping(value = "/{id}/imagem")
+    @PostMapping("/{id}/imagem")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarImagemDaSubcategoria", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
     public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
@@ -115,8 +117,8 @@ public class SubcategoriaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/imagem/{nomeDaImagem}")
-    @Cacheable(value = "buscarImagemDaSubcategoria")
+    @GetMapping("/imagem/{nomeDaImagem}")
+    @Cacheable("buscarImagemDaSubcategoria")
     @Operation(summary = "Buscar imagem", description = "Busca imagem da subcategoria")
     public ResponseEntity<byte[]> buscarImagemDaSubcategoria(@PathVariable String nomeDaImagem) {
         BuscaImagem buscaImagem = new BuscaImagem();

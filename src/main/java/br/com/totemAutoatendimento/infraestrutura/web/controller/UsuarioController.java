@@ -30,9 +30,11 @@ import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosEditarUsuario;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping(value = "/usuario")
+@RequestMapping("/usuario")
+@SecurityRequirement(name = "api-security")
 public class UsuarioController {
 
 	@Autowired
@@ -65,33 +67,33 @@ public class UsuarioController {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("/{id}")
 	@Operation(summary = "Remover usuário", description = "Remove algum usuário existente")
 	public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
 		removeUsuario.remover(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping(value = "/{id}")
+	@PutMapping("/{id}")
 	@Operation(summary = "Editar usuário", description = "Edita algum usuário existente")
 	public ResponseEntity<DadosDeUsuario> editarUsuario(@PathVariable Long id,  @RequestBody @Valid DadosEditarUsuario dados) {
 		return ResponseEntity.ok().body(editaUsuario.editar(id, dados, usuarioAutenticado()));
 	}
 
-	@PatchMapping(value = "/{id}/alterar-senha")
+	@PatchMapping("/{id}/alterar-senha")
 	@Operation(summary = "Alterar senha de usuário", description = "Atera a senha de algum usuário existente")
 	public ResponseEntity<Void> alterarSenhaDeUsuario(@PathVariable Long id, @RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
 		alteraSenhaDeUsuario.alterar(id, dados, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	@Operation(summary = "Buscar usuário pelo Id", description = "Busca algum usuário existente pelo id")
 	public ResponseEntity<DadosDeUsuario> buscarUsuario(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscarPeloId(id, usuarioAutenticado()));
 	}
 	
-	@GetMapping(value = "/registro/{registro}")
+	@GetMapping("/registro/{registro}")
 	@Operation(summary = "Buscar usuário pelo registro", description = "Busca algum usuário existente pelo registro")
 	public ResponseEntity<DadosDeUsuario> buscarUsuarioPeloRegistro(@PathVariable String registro) {
 		return ResponseEntity.ok().body(buscaDadosDeUsuarios.buscarPeloRegistro(registro, usuarioAutenticado()));
