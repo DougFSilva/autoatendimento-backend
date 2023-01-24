@@ -9,7 +9,7 @@ import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 @Service
 public class LoggerAdapter implements SystemLogger {
 
-	private Logger logger = LoggerFactory.getLogger(LoggerAdapter.class);
+	private Logger logger = LoggerFactory.getLogger("autoatendimento.logger");
 
 
 	@Override

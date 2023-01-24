@@ -11,7 +11,7 @@
     </springProfile>
 
     <springProfile name="prod">
-
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
         <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>logs/autoatendimento.log</file>
 
@@ -30,8 +30,12 @@
             </rollingPolicy>
         </appender>
 
-        <root level="INFO">
+        <logger name="autoatendimento.logger">
             <appender-ref ref="FILE-ROLLING"/>
+        </logger>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 

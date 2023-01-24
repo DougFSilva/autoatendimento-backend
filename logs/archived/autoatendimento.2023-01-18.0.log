@@ -1,0 +1,15 @@
+18 jan. 2023 16:36:30.716 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication.logStarting - Starting TotemAutoatendimentoApplication using Java 17.0.1 on LAPTOP-USO2KRV7 with PID 17012 (C:\Users\dougl\Documents\codes\totem-autoatendimento\target\classes started by dougl in C:\Users\dougl\Documents\codes\totem-autoatendimento)
+18 jan. 2023 16:36:30.717 [restartedMain] INFO  b.c.t.TotemAutoatendimentoApplication.logStartupProfileInfo - The following 1 profile is active: "prod"
+18 jan. 2023 16:36:30.774 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18 jan. 2023 16:36:30.774 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18 jan. 2023 16:36:31.890 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18 jan. 2023 16:36:32.004 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 105 ms. Found 8 JPA repository interfaces.
+18 jan. 2023 16:36:32.809 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port(s): 8080 (http)
+18 jan. 2023 16:36:32.822 [restartedMain] INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+18 jan. 2023 16:36:32.822 [restartedMain] INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/9.0.68]
+18 jan. 2023 16:36:32.957 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+18 jan. 2023 16:36:32.958 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 2183 ms
+18 jan. 2023 16:36:33.158 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+18 jan. 2023 16:36:33.254 [restartedMain] INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 5.6.12.Final
+18 jan. 2023 16:36:33.481 [restartedMain] INFO  o.h.annotations.common.Version.<clinit> - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18 jan. 2023 16:36:33.646 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
