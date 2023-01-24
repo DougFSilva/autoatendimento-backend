@@ -36,7 +36,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -64,7 +64,7 @@ public class MercadoriaController {
 	private UploadImagemMercadoria uploadImagemDeMercadoria;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
@@ -170,7 +170,7 @@ public class MercadoriaController {
 	}
 	
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 
 }

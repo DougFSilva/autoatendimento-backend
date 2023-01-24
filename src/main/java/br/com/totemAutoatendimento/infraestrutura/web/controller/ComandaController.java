@@ -30,7 +30,7 @@ import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.TipoPagamento;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -61,7 +61,7 @@ public class ComandaController {
 	private ReabreComanda reabreComanda;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping
 	@Operation(summary = "Criar comanda", description = "Cria uma comanda no sistema")
@@ -157,7 +157,7 @@ public class ComandaController {
 	}
 	
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 
 }

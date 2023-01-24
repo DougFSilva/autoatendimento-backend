@@ -34,7 +34,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDe
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosEditarSubcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -62,7 +62,7 @@ public class SubcategoriaController {
     private UploadImagemDaSubcategoria uploadImagemDaSubcategoria;
     
     @Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
     @PostMapping("/{nome}/categoria/{idCategoria}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
@@ -137,7 +137,7 @@ public class SubcategoriaController {
     }
     
     private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 
 }

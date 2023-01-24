@@ -28,7 +28,7 @@ import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosCriarUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosDeUsuario;
 import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosEditarUsuario;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -53,7 +53,7 @@ public class UsuarioController {
 	private BuscaDadosDeUsuarios buscaDadosDeUsuarios;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping
 	@Operation(summary = "Criar usuário", description = "Cria um usuário no sistema")
@@ -106,6 +106,6 @@ public class UsuarioController {
 	}
 	
 	 private Usuario usuarioAutenticado() {
-			return autenticacaoService.recuperarAutenticado();
+			return autenticacaoDeUsuario.recuperarAutenticado();
 		}
 }

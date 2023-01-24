@@ -29,7 +29,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategori
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -57,7 +57,7 @@ public class CategoriaController {
 	private UploadImagemDaCategoria uploadImagemDaCategoria;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping("/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
@@ -125,6 +125,6 @@ public class CategoriaController {
 	}
 	
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 }

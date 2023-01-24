@@ -26,7 +26,7 @@ import br.com.totemAutoatendimento.aplicacao.pedido.RemovePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -48,7 +48,7 @@ public class PedidoController {
 	public BuscaDadosDePedidos buscaDadosDePedidos;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping("/cartao/{cartao}")
 	@Operation(summary = "Fazer pedido", description = "Cria um pedido para uma comanda aberta no sistema")
@@ -116,7 +116,7 @@ public class PedidoController {
 	}
 	
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 
 }

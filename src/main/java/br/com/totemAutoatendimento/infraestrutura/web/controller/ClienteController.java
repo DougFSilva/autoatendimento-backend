@@ -29,7 +29,7 @@ import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosEditarCliente;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -51,7 +51,7 @@ public class ClienteController {
 	private BuscaDadosDeClientes buscaDadosDeClientes;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 	
 	@PostMapping
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
@@ -106,7 +106,7 @@ public class ClienteController {
 	}
 	
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 	
 }

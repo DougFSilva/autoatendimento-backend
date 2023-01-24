@@ -29,7 +29,7 @@ import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosCriarOuEditarAnot
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosDeAnotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -51,7 +51,7 @@ public class AnotacaoController {
 	private BuscaDadosDeAnotacao buscaDadosDeAnotacao;
 
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping
 	@CacheEvict(value = "buscarTodasAnotacoes", allEntries = true)
@@ -106,7 +106,7 @@ public class AnotacaoController {
 	}
 
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 
 }

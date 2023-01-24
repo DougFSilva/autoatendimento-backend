@@ -18,7 +18,7 @@ import br.com.totemAutoatendimento.aplicacao.cartao.CriaCartao;
 import br.com.totemAutoatendimento.aplicacao.cartao.RemoveCartao;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoService;
+import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
@@ -36,7 +36,7 @@ public class CartaoController {
 	private BuscaTodosCartoes buscaTodosCartoes;
 	
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 	
 	@PostMapping("/{codigo}")
 	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
@@ -58,6 +58,6 @@ public class CartaoController {
 	}
 	
 	private Usuario usuarioAutenticado() {
-		return autenticacaoService.recuperarAutenticado();
+		return autenticacaoDeUsuario.recuperarAutenticado();
 	}
 }
