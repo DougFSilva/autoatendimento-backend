@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.web;
+package br.com.totemAutoatendimento.infraestrutura.web.controller;
 
 import java.net.URI;
 import java.util.List;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaImagem;
+import br.com.totemAutoatendimento.aplicacao.imagem.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaTodasCategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
@@ -37,7 +37,7 @@ import io.swagger.v3.oas.annotations.Operation;
 public class CategoriaController {
 
 	@Value("${imagens.path}")
-	private String path;
+	private String pathPastaImagens;
 
 	@Autowired
 	private CriaCategoria criaCategoria;
@@ -94,14 +94,12 @@ public class CategoriaController {
 	@Operation(summary = "Adicionar imagem", description = "Adiciona uma imagem em formato jgp ou png a alguma categoria existente")
 	public ResponseEntity<Void> adicionarImagemACategoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
-		String nomeDaImagem = String.format("%d-%s", id, file.getOriginalFilename());
-		String pathLocal = this.path + "/mercadoria/categoria/" + nomeDaImagem;
-		String urlServidor = ServletUriComponentsBuilder
+		String baseUrlBuscarImagem = ServletUriComponentsBuilder
 				.fromCurrentContextPath()
 				.build()
 				.toUriString()
-				+ "/mercadoria/categoria/imagem/" + nomeDaImagem;
-		uploadImagemDaCategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado());
+				+ "/mercadoria/categoria/imagem/";
+		uploadImagemDaCategoria.upload(id, file, pathPastaImagens, baseUrlBuscarImagem, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
@@ -109,10 +107,10 @@ public class CategoriaController {
 	@Cacheable(value = "buscarImagemDaCategoria")
 	@Operation(summary = "Buscar imagem", description = "Busca imagem da categoria")
 	public ResponseEntity<byte[]> buscarImagemDaCategoria(@PathVariable String nomeDaImagem) {
-		String extensao = nomeDaImagem.split("\\.")[1];
-		BuscaImagem buscarImagem = new BuscaImagem();
-		byte[] imagem = buscarImagem.buscar(path + "mercadoria/categoria/" + nomeDaImagem);
+		BuscaImagem buscaImagem = new BuscaImagem();
+		byte[] imagem = buscaImagem.buscar(pathPastaImagens, Categoria.class, nomeDaImagem);
 		HttpHeaders httpHeaders = new HttpHeaders();
+		String extensao = nomeDaImagem.split("\\.")[1];
 		switch (extensao.toLowerCase()) {
 			case "jpg":
 				httpHeaders.setContentType(MediaType.IMAGE_JPEG);

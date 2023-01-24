@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.web;
+package br.com.totemAutoatendimento.infraestrutura.web.controller;
 
 import java.net.URI;
 
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.totemAutoatendimento.aplicacao.imagem.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaDadosDeMercadorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.CriaMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditaMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoveMercadoria;
@@ -44,7 +44,7 @@ import io.swagger.v3.oas.annotations.Operation;
 public class MercadoriaController {
 
 	@Value("${imagens.path}")
-	private String path;
+	private String pathPastaImagens;
 
 	@Autowired
 	private CriaMercadoria criaMercadoria;
@@ -139,12 +139,12 @@ public class MercadoriaController {
 	@Operation(summary = "Adicionar imagem à mercadoria", description = "Adiciona uma imagem em formato jpg ou png a alguma mercadoria existente")
 	public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
-		String nomeDaImagem = String.format("%d-%s", id, file.getOriginalFilename());
-		String pathLocal = this.path + "/mercadoria/" + nomeDaImagem;
-		String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
-				+ "/mercadoria/imagem/" + nomeDaImagem;
-
-		uploadImagemDeMercadoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado());
+		String baseUrlBuscarImagem = ServletUriComponentsBuilder
+				.fromCurrentContextPath()
+				.build()
+				.toUriString()
+				+ "/mercadoria/imagem/";
+		uploadImagemDeMercadoria.executar(id, file, pathPastaImagens, baseUrlBuscarImagem, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 
@@ -152,10 +152,10 @@ public class MercadoriaController {
 	@Cacheable(value = "buscarImagemDaMercadoria")
 	@Operation(summary = "Buscar imagem da mercadoria", description = "Busca imagem da mercadoria")
 	public ResponseEntity<byte[]> buscarImagemDaMercadoria(@PathVariable String nomeDaImagem) {
-		String extensao = nomeDaImagem.split("\\.")[1];
-		BuscaImagem buscarImagem = new BuscaImagem();
-		byte[] imagem = buscarImagem.buscar(path + "mercadoria/" + nomeDaImagem);
+		BuscaImagem buscaImagem = new BuscaImagem();
+		byte[] imagem = buscaImagem.buscar(pathPastaImagens, Mercadoria.class, nomeDaImagem);
 		HttpHeaders httpHeaders = new HttpHeaders();
+		String extensao = nomeDaImagem.split("\\.")[1];
 		switch (extensao.toLowerCase()) {
 		case "jpg":
 			httpHeaders.setContentType(MediaType.IMAGE_JPEG);

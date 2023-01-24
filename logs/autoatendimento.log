@@ -13,3 +13,8 @@
 24 jan. 2023 09:29:09.024 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 12 entregue!
 24 jan. 2023 09:29:34.556 [http-nio-8080-exec-7] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 6 entregue!
 24 jan. 2023 09:29:37.330 [http-nio-8080-exec-8] INFO  autoatendimento.logger.info - Usuário 784512 - Comanda com id 1 fechada!
+24 jan. 2023 10:46:11.457 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à categoria Bebidas!
+24 jan. 2023 11:12:57.312 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à categoria Bebidas!
+24 jan. 2023 11:19:32.047 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à subcategoria Cervejas!
+24 jan. 2023 11:20:06.948 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à subcategoria Cervejas!
+24 jan. 2023 11:26:12.520 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à mercadoria com código merc01!

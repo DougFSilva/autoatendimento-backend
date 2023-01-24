@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.web;
+package br.com.totemAutoatendimento.infraestrutura.web.controller;
 
 import java.net.URI;
 import java.util.List;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaImagem;
+import br.com.totemAutoatendimento.aplicacao.imagem.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscaSubcategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriaSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditaSubcategoria;
@@ -42,7 +42,7 @@ import io.swagger.v3.oas.annotations.Operation;
 public class SubcategoriaController {
 
     @Value("${imagens.path}")
-    private String path;
+    private String pathPastaImagens;
 
     @Autowired
     private CriaSubcategoria criaSubcategoria;
@@ -106,11 +106,12 @@ public class SubcategoriaController {
     @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
     public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
-    	String nomeDaImagem = String.format("%d-%s", id, file.getOriginalFilename());
-        String pathLocal = this.path + "/mercadoria/subcategoria/" + nomeDaImagem;
-        String urlServidor = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
-                + "/mercadoria/subcategoria/imagem/" + nomeDaImagem;
-        uploadImagemDaSubcategoria.executar(id, file, pathLocal, urlServidor, usuarioAutenticado());
+        String baseUrlBuscarImagem = ServletUriComponentsBuilder
+        		.fromCurrentContextPath()
+        		.build()
+        		.toUriString()
+                + "/mercadoria/subcategoria/imagem/";
+        uploadImagemDaSubcategoria.executar(id, file, pathPastaImagens, baseUrlBuscarImagem, usuarioAutenticado());
         return ResponseEntity.ok().build();
     }
 
@@ -118,10 +119,10 @@ public class SubcategoriaController {
     @Cacheable(value = "buscarImagemDaSubcategoria")
     @Operation(summary = "Buscar imagem", description = "Busca imagem da subcategoria")
     public ResponseEntity<byte[]> buscarImagemDaSubcategoria(@PathVariable String nomeDaImagem) {
-        String extensao = nomeDaImagem.split("\\.")[1];
-        BuscaImagem buscarImagem = new BuscaImagem();
-        byte[] imagem = buscarImagem.buscar(path + "mercadoria/subcategoria/" + nomeDaImagem);
+        BuscaImagem buscaImagem = new BuscaImagem();
+        byte[] imagem = buscaImagem.buscar(pathPastaImagens, Subcategoria.class, nomeDaImagem);
         HttpHeaders httpHeaders = new HttpHeaders();
+        String extensao = nomeDaImagem.split("\\.")[1];
         switch (extensao.toLowerCase()) {
             case "jpg":
                 httpHeaders.setContentType(MediaType.IMAGE_JPEG);

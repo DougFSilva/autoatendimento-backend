@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.web;
+package br.com.totemAutoatendimento.infraestrutura.web.controller;
 
 import java.time.LocalDate;
 import java.util.List;

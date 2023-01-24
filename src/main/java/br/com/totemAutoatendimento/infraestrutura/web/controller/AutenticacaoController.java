@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.infraestrutura.web;
+package br.com.totemAutoatendimento.infraestrutura.web.controller;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;

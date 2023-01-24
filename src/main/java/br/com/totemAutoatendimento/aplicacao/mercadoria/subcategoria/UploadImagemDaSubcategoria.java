@@ -1,17 +1,13 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.totemAutoatendimento.aplicacao.imagem.SalvaImagem;
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
-import br.com.totemAutoatendimento.dominio.exception.ErroNoUploadDeArquivoException;
-import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.SubcategoriaRepository;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
@@ -27,24 +23,16 @@ public class UploadImagemDaSubcategoria {
 		this.logger = logger;
 	}
 
-	public void executar(Long id, MultipartFile file, String pathLocal, String urlServidor, Usuario usuarioAutenticado) {
+	public void executar(Long id, MultipartFile file, String pathPastaImagens, String baseUrlBuscarImagem, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
-		String extensao = file.getContentType();
-		if (extensao == null || (!extensao.equals("image/jpeg") && !extensao.equals("image/png"))) {
-			throw new ViolacaoDeIntegridadeDeDadosException("O arquivo de imagem deve ser PNG ou JPG!");
+        Optional<Subcategoria> subcategoria = repository.buscarPeloId(id);
+		if(subcategoria.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Subcategoria com id %d não encontrada!", id));
 		}
-		Optional<Subcategoria> subcategoria = repository.buscarPeloId(id);
-    	if(subcategoria.isEmpty()) {
-    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", id));
-    	}
-		try {
-			Files.copy(file.getInputStream(), Path.of(pathLocal), StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new ErroNoUploadDeArquivoException("Erro no processo de upload do arquivo!", e.getCause());
-		}
-		subcategoria.get().setImagem(urlServidor);
-		Subcategoria subcategoriaEditada = repository.editar(subcategoria.get());
+		SalvaImagem salvaImagem = new SalvaImagem();
+		salvaImagem.salvar(file, Subcategoria.class, pathPastaImagens, usuarioAutenticado);
+		subcategoria.get().setImagem(baseUrlBuscarImagem + file.getOriginalFilename());
+        Subcategoria subcategoriaEditada = repository.editar(subcategoria.get());
 		logger.info(
 				String.format("Usuário %s - Inserido imagem à subcategoria %s!", 
 						usuarioAutenticado.getRegistro(), subcategoriaEditada.getNome())

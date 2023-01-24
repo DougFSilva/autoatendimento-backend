@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.aplicacao.mercadoria;
+package br.com.totemAutoatendimento.aplicacao.imagem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +10,12 @@ import br.com.totemAutoatendimento.dominio.exception.ErroNaConversaoDaImagemEmBy
 
 public class BuscaImagem {
 
-    public byte[] buscar(String path) {
-        File file = new File(path);
+    public byte[] buscar(String pathPastaImagens, Class<?> tipoDeObjeto, String nomeDaImagem) {
+        File file = new File(pathPastaImagens
+        		+ File.separator
+        		+ tipoDeObjeto.getSimpleName().toLowerCase()
+        		+ File.separator
+        		+ nomeDaImagem);
         byte[] imagem = new byte[(int) file.length()];
         FileInputStream fileInputStream;
         try {
