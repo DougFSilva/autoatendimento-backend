@@ -6,7 +6,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.RelatorioMercadoriasMaisVendidas;
+import br.com.totemAutoatendimento.dominio.mercadoria.relatorio.RelatorioMercadoriasDeMaiorFaturamento;
+import br.com.totemAutoatendimento.dominio.mercadoria.relatorio.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 
 public interface MercadoriaRepository {
@@ -29,6 +30,6 @@ public interface MercadoriaRepository {
 	
 	Page<RelatorioMercadoriasMaisVendidas> buscarMaisVendidasPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 	
-	Page<Mercadoria> buscarMaisLucrativas(Pageable paginacao);
+	Page<RelatorioMercadoriasDeMaiorFaturamento> buscarComMaiorFaturamentoPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
 
 }

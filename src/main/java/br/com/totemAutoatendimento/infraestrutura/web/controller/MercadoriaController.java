@@ -35,8 +35,9 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosEditarMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
+import br.com.totemAutoatendimento.dominio.mercadoria.relatorio.RelatorioMercadoriasDeMaiorFaturamento;
+import br.com.totemAutoatendimento.dominio.mercadoria.relatorio.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
 import io.swagger.v3.oas.annotations.Operation;
@@ -139,6 +140,14 @@ public class MercadoriaController {
 	public ResponseEntity<Page<RelatorioMercadoriasMaisVendidas>> buscarMercadoriasMaisVendidasPelaData(
 			Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarMercadoriasMaisVendidasPelaData(paginacao,
+				LocalDate.parse(dataInicial), LocalDate.parse(dataFinal), usuarioAutenticado()));
+	}
+	
+	@GetMapping("/relatorio/maior-faturamento/data/{dataInicial}/{dataFinal}")
+	@Operation(summary = "Buscar mercadorias com maior faturamento pela data", description = "Busca as mercadorias com maior faturamento pela data inicial e data final")
+	public ResponseEntity<Page<RelatorioMercadoriasDeMaiorFaturamento>> buscarMercadoriasComMaiorFaturamentoPelaData(
+			Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal) {
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarMercadoriasDeMaiorFaturamentoPelaData(paginacao,
 				LocalDate.parse(dataInicial), LocalDate.parse(dataFinal), usuarioAutenticado()));
 	}
 

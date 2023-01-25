@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.aplicacao.mercadoria.dto;
+package br.com.totemAutoatendimento.dominio.mercadoria.relatorio;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

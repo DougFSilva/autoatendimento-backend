@@ -8,9 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
+import br.com.totemAutoatendimento.dominio.mercadoria.relatorio.RelatorioMercadoriasDeMaiorFaturamento;
+import br.com.totemAutoatendimento.dominio.mercadoria.relatorio.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.conversores.MercadoriaEntityConverter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.conversores.SubcategoriaEntityConverter;
@@ -88,12 +89,12 @@ public class MercadoriaEntityAdapter implements MercadoriaRepository {
 		return repository.buscarMaisVendidasPelaData(paginacao, dataInicial, dataFinal);
 	}
 
-
 	@Override
-	public Page<Mercadoria> buscarMaisLucrativas(Pageable paginacao) {
-		// TODO Auto-generated method stub
-		return null;
+	public Page<RelatorioMercadoriasDeMaiorFaturamento> buscarComMaiorFaturamentoPelaData(Pageable paginacao,
+			LocalDate dataInicial, LocalDate dataFinal) {
+		return repository.buscarComMaiorFaturamentoPelaData(paginacao, dataInicial, dataFinal);
 	}
+
 
 
 }
