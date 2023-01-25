@@ -17,5 +17,5 @@ public interface PedidoEntityDao extends JpaRepository<PedidoEntity, Long> {
     Page<PedidoEntity> findAllByEntregue(Pageable paginacao, Boolean entregue);
 
 	List<PedidoEntity> findAllByComanda(ComandaEntity entity);
-
+	
 }

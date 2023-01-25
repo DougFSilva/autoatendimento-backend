@@ -1,0 +1,32 @@
+24 jan. 2023 09:25:59.700 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 10 criada!
+24 jan. 2023 09:26:12.272 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 11 criada!
+24 jan. 2023 09:26:16.044 [http-nio-8080-exec-5] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 1 removida!
+24 jan. 2023 09:26:54.437 [http-nio-8080-exec-10] INFO  autoatendimento.logger.info - Usuário 784512 - Usuário com registro 784514 criado!
+24 jan. 2023 09:27:24.868 [http-nio-8080-exec-1] INFO  autoatendimento.logger.info - Pedido com id 12 criado para comanda com id 1!
+24 jan. 2023 09:28:00.497 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 2 entregue!
+24 jan. 2023 09:28:03.934 [http-nio-8080-exec-5] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 1 entregue!
+24 jan. 2023 09:28:32.594 [http-nio-8080-exec-7] INFO  autoatendimento.logger.info - Usuário 784512 - Aplicado desconto de 15,000000 em comanda com id 1!
+24 jan. 2023 09:29:03.396 [http-nio-8080-exec-10] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 5 entregue!
+24 jan. 2023 09:29:04.907 [http-nio-8080-exec-1] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 9 entregue!
+24 jan. 2023 09:29:06.553 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 10 entregue!
+24 jan. 2023 09:29:07.872 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 11 entregue!
+24 jan. 2023 09:29:09.024 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 12 entregue!
+24 jan. 2023 09:29:34.556 [http-nio-8080-exec-7] INFO  autoatendimento.logger.info - Usuário 784512 - Pedido com id 6 entregue!
+24 jan. 2023 09:29:37.330 [http-nio-8080-exec-8] INFO  autoatendimento.logger.info - Usuário 784512 - Comanda com id 1 fechada!
+24 jan. 2023 10:46:11.457 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à categoria Bebidas!
+24 jan. 2023 11:12:57.312 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à categoria Bebidas!
+24 jan. 2023 11:19:32.047 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à subcategoria Cervejas!
+24 jan. 2023 11:20:06.948 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à subcategoria Cervejas!
+24 jan. 2023 11:26:12.520 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à mercadoria com código merc01!
+24 jan. 2023 11:35:57.176 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 12 criada!
+24 jan. 2023 11:47:39.120 [http-nio-8080-exec-5] INFO  autoatendimento.logger.info - Usuário 784512 - Comanda com id 3 aberta!
+24 jan. 2023 11:49:14.865 [http-nio-8080-exec-8] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à categoria Bebidas!
+24 jan. 2023 11:49:28.798 [http-nio-8080-exec-9] INFO  autoatendimento.logger.info - Usuário 784512 - Inserido imagem à categoria Bebidas!
+24 jan. 2023 13:26:54.392 [http-nio-8080-exec-7] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 13 criada!
+24 jan. 2023 13:28:24.585 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 14 criada!
+24 jan. 2023 13:29:44.436 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuario 784512 - Anotacao com id 15 criada!
+24 jan. 2023 14:15:51.683 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784512 -  Usuário com id 6 removido!
+24 jan. 2023 14:20:49.010 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+24 jan. 2023 14:22:06.997 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+24 jan. 2023 14:37:38.769 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+24 jan. 2023 14:38:00.835 [http-nio-8080-exec-3] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!

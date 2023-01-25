@@ -1,5 +1,6 @@
 package br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.MercadoriaRepository;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
@@ -80,5 +82,18 @@ public class MercadoriaEntityAdapter implements MercadoriaRepository {
 	public Page<Mercadoria> buscarTodas(Pageable paginacao) {
 		return repository.findAll(paginacao).map(mercadoriaEntityConverter::converterParaMercadoria);
 	}
+	
+	@Override
+	public Page<RelatorioMercadoriasMaisVendidas> buscarMaisVendidasPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
+		return repository.buscarMaisVendidasPelaData(paginacao, dataInicial, dataFinal);
+	}
+
+
+	@Override
+	public Page<Mercadoria> buscarMaisLucrativas(Pageable paginacao) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

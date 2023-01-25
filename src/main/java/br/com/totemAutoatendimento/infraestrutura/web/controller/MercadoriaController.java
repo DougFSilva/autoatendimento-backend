@@ -1,6 +1,7 @@
 package br.com.totemAutoatendimento.infraestrutura.web.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
 
@@ -34,6 +35,7 @@ import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosEditarMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.dominio.mercadoria.Mercadoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
@@ -62,7 +64,7 @@ public class MercadoriaController {
 
 	@Autowired
 	private UploadImagemMercadoria uploadImagemDeMercadoria;
-	
+
 	@Autowired
 	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
@@ -90,7 +92,8 @@ public class MercadoriaController {
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Editar mercadoria", description = "Edita alguma mercadoria existente")
-	public ResponseEntity<DadosDeMercadoria> editarMercadoria(@PathVariable Long id, @RequestBody @Valid DadosEditarMercadoria dados) {
+	public ResponseEntity<DadosDeMercadoria> editarMercadoria(@PathVariable Long id,
+			@RequestBody @Valid DadosEditarMercadoria dados) {
 		return ResponseEntity.ok().body(editaMercadoria.editar(id, dados, usuarioAutenticado()));
 	}
 
@@ -111,21 +114,32 @@ public class MercadoriaController {
 	@Operation(summary = "Buscar mercadorias por subcategoria", description = "Busca mercadorias pela subcategoria")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasPelaSubcategoria(Pageable paginacao,
 			@PathVariable Long subcategoriaId) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPelaSubcategoria(paginacao, subcategoriaId, usuarioAutenticado()));
+		return ResponseEntity.ok()
+				.body(buscaDadosDeMercadorias.buscarPelaSubcategoria(paginacao, subcategoriaId, usuarioAutenticado()));
 	}
 
 	@GetMapping("/com-promocao")
 	@Cacheable("buscarMercadoriasEmPromocao")
 	@Operation(summary = "Buscar mercadorias em promoção", description = "Busca mercadorias que estão em promoção")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasEmPromocao(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, true, usuarioAutenticado()));
+		return ResponseEntity.ok()
+				.body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, true, usuarioAutenticado()));
 	}
 
 	@GetMapping("/sem-promocao")
 	@Cacheable("buscarMercadoriasSemPromocao")
 	@Operation(summary = "Buscar mercadorias sem promoção", description = "Busca mercadorias que estão sem promoção")
 	public ResponseEntity<Page<DadosDeMercadoria>> buscarMercadoriasSemPromocao(Pageable paginacao) {
-		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, false, usuarioAutenticado()));
+		return ResponseEntity.ok()
+				.body(buscaDadosDeMercadorias.buscarEmPromocao(paginacao, false, usuarioAutenticado()));
+	}
+
+	@GetMapping("/relatorio/mais-vendidas/data/{dataInicial}/{dataFinal}")
+	@Operation(summary = "Buscar mercadorias mais vendidas pela data", description = "Busca as mercadorias mais vendidas pela data inicial e data final")
+	public ResponseEntity<Page<RelatorioMercadoriasMaisVendidas>> buscarMercadoriasMaisVendidasPelaData(
+			Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal) {
+		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarMercadoriasMaisVendidasPelaData(paginacao,
+				LocalDate.parse(dataInicial), LocalDate.parse(dataFinal), usuarioAutenticado()));
 	}
 
 	@GetMapping
@@ -141,10 +155,7 @@ public class MercadoriaController {
 	@Operation(summary = "Adicionar imagem à mercadoria", description = "Adiciona uma imagem em formato jpg ou png a alguma mercadoria existente")
 	public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
-		String baseUrlBuscarImagem = ServletUriComponentsBuilder
-				.fromCurrentContextPath()
-				.build()
-				.toUriString()
+		String baseUrlBuscarImagem = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
 				+ "/mercadoria/imagem/";
 		uploadImagemDeMercadoria.executar(id, file, pathPastaImagens, baseUrlBuscarImagem, usuarioAutenticado());
 		return ResponseEntity.ok().build();
@@ -168,7 +179,7 @@ public class MercadoriaController {
 		}
 		return ResponseEntity.ok().headers(httpHeaders).body(imagem);
 	}
-	
+
 	private Usuario usuarioAutenticado() {
 		return autenticacaoDeUsuario.recuperarAutenticado();
 	}

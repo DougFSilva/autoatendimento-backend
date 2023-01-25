@@ -1,11 +1,13 @@
 package br.com.totemAutoatendimento.aplicacao.mercadoria;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.RelatorioMercadoriasMaisVendidas;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
@@ -29,7 +31,7 @@ public class BuscaDadosDeMercadorias {
 	public DadosDeMercadoria buscarPeloId(Long id, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Mercadoria> mercadoria = repository.buscarPeloId(id);
-		if(mercadoria.isEmpty()) {
+		if (mercadoria.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Mercadoria com id %d não encontrada!", id));
 		}
 		return new DadosDeMercadoria(mercadoria.get());
@@ -49,17 +51,25 @@ public class BuscaDadosDeMercadorias {
 		return repository.buscarEmPromocao(paginacao, promocao).map(DadosDeMercadoria::new);
 	}
 
-	public Page<DadosDeMercadoria> buscarPelaSubcategoria(Pageable paginacao, Long idSubcategoria, Usuario usuarioAutenticado) {
+	public Page<DadosDeMercadoria> buscarPelaSubcategoria(Pageable paginacao, Long idSubcategoria,
+			Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Subcategoria> subcategoria = subcategoriaRepository.buscarPeloId(idSubcategoria);
-    	if(subcategoria.isEmpty()) {
-    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", idSubcategoria));
-    	}
+		if (subcategoria.isEmpty()) {
+			throw new ViolacaoDeIntegridadeDeDadosException(
+					String.format("Subcategoria com id %d não encontrada!", idSubcategoria));
+		}
 		return repository.buscarPelaSubcategoria(paginacao, subcategoria.get()).map(DadosDeMercadoria::new);
 	}
 
 	public Page<DadosDeMercadoria> buscarTodas(Pageable paginacao, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		return repository.buscarTodas(paginacao).map(DadosDeMercadoria::new);
+	}
+
+	public Page<RelatorioMercadoriasMaisVendidas> buscarMercadoriasMaisVendidasPelaData(Pageable paginacao,
+			LocalDate dataInicial, LocalDate dataFinal, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
+		return repository.buscarMaisVendidasPelaData(paginacao, dataInicial, dataFinal);
 	}
 }

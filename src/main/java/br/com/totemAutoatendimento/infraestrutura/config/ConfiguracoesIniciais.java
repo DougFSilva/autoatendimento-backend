@@ -26,7 +26,7 @@ public class ConfiguracoesIniciais implements ApplicationRunner {
 
 	@Value("${app.usuario.default.email}")
 	private String email;
-
+	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		criarUsuarioMaster();
