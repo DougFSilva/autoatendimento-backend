@@ -47,28 +47,14 @@ class BuscaDadosDeAnotacaoTest {
 	void deveriaBuscarOsDadosDeUmaAnotacaoPeloIdPorUmPerfilAdministrador() {
 		Usuario administrador = usuario();
 		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
-		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
-		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), administrador);
-		Mockito.verify(repository).buscarPeloId(anotacao().getId());
-		assertEquals(anotacao().getId(), dadosDeAnotacao.getId());
-		assertEquals(anotacao().getTimestamp(), dadosDeAnotacao.getTimestamp());
-		assertEquals(anotacao().getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-		assertEquals(anotacao().getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
-		assertEquals(anotacao().getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
+		testarBuscaDeAnotacaoPeloId(administrador);
 	}
 
 	@Test
 	void deveriaBuscarOsDadosDeUmaAnotacaoPeloIdPorUmPerfilFuncionario() {
 		Usuario funcionario = usuario();
 		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
-		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
-		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), funcionario);
-		Mockito.verify(repository).buscarPeloId(anotacao().getId());
-		assertEquals(anotacao().getId(), dadosDeAnotacao.getId());
-		assertEquals(anotacao().getTimestamp(), dadosDeAnotacao.getTimestamp());
-		assertEquals(anotacao().getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-		assertEquals(anotacao().getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
-		assertEquals(anotacao().getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
+		testarBuscaDeAnotacaoPeloId(funcionario);
 	}
 
 	@Test
@@ -93,40 +79,14 @@ class BuscaDadosDeAnotacaoTest {
 	void deveriaBuscarOsDadosDeAnotacoesPelaDataPorUmPerfilAdministrador() {
 		Usuario administrador = usuario();
 		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
-		Pageable paginacao = Pageable.unpaged();
-		LocalDate dataInicial = LocalDate.of(2023, 1, 1);
-		LocalDate dataFinal = LocalDate.of(2023, 1, 2);
-		Mockito.when(repository.buscarPelaData(paginacao, dataInicial, dataFinal)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, administrador);
-		Mockito.verify(repository).buscarPelaData(paginacao, dataInicial, dataFinal);
-		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
-			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
-			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
-			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
-		}
+		testarBuscaDeAnotacoesPelaData(administrador);
 	}
 	
 	@Test
 	void deveriaBuscarOsDadosAnotacoesPelaDataPorUmPerfilFuncionario() {
 		Usuario funcionario = usuario();
 		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
-		Pageable paginacao = Pageable.unpaged();
-		LocalDate dataInicial = LocalDate.of(2023, 1, 1);
-		LocalDate dataFinal = LocalDate.of(2023, 1, 2);
-		Mockito.when(repository.buscarPelaData(paginacao, dataInicial, dataFinal)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, funcionario);
-		Mockito.verify(repository).buscarPelaData(paginacao, dataInicial, dataFinal);
-		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
-			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
-			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
-			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
-		}
+		testarBuscaDeAnotacoesPelaData(funcionario);
 	}
 	
 	@Test
@@ -142,36 +102,14 @@ class BuscaDadosDeAnotacaoTest {
 	void deveriaBuscarOsDadosDeTodasAnotacaoPorUmPerfilAdministrador() {
 		Usuario administrador = usuario();
 		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
-		Pageable paginacao = Pageable.unpaged();
-		Mockito.when(repository.buscarTodas(paginacao)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, administrador);
-		Mockito.verify(repository).buscarTodas(paginacao);
-		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
-			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
-			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
-			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
-		}
+		testarBuscaDeTodasAnotacoes(administrador);
 	}
 	
 	@Test
 	void deveriaBuscarOsDadosDeTodasAnotacaoPorUmPerfilFuncionario() {
-		Usuario administrador = usuario();
-		administrador.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
-		Pageable paginacao = Pageable.unpaged();
-		Mockito.when(repository.buscarTodas(paginacao)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, administrador);
-		Mockito.verify(repository).buscarTodas(paginacao);
-		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
-			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
-			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
-			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
-		}
+		Usuario funcionario = usuario();
+		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
+		testarBuscaDeTodasAnotacoes(funcionario);
 	}
 	
 	@Test
@@ -181,6 +119,49 @@ class BuscaDadosDeAnotacaoTest {
 		assertThrows(UsuarioSemPermissaoException.class,
 				() -> buscaDadosDeAnotacao.buscarTodas(Pageable.unpaged(), totem));
 		Mockito.verifyNoInteractions(repository);
+	}
+	
+	private void testarBuscaDeAnotacaoPeloId(Usuario usuarioAutenticado) {
+		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
+		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), usuarioAutenticado);
+		Mockito.verify(repository).buscarPeloId(anotacao().getId());
+		assertEquals(anotacao().getId(), dadosDeAnotacao.getId());
+		assertEquals(anotacao().getTimestamp(), dadosDeAnotacao.getTimestamp());
+		assertEquals(anotacao().getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
+		assertEquals(anotacao().getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+		assertEquals(anotacao().getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
+	}
+	
+	private void testarBuscaDeAnotacoesPelaData(Usuario usuarioAutenticado) {
+		Pageable paginacao = Pageable.unpaged();
+		LocalDate dataInicial = LocalDate.of(2023, 1, 1);
+		LocalDate dataFinal = LocalDate.of(2023, 1, 2);
+		Mockito.when(repository.buscarPelaData(paginacao, dataInicial, dataFinal)).thenReturn(anotacoes());
+		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, usuarioAutenticado);
+		Mockito.verify(repository).buscarPelaData(paginacao, dataInicial, dataFinal);
+		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
+			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
+			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
+			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
+			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
+			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
+		}
+	}
+	
+	private void testarBuscaDeTodasAnotacoes(Usuario usuarioAutenticado) {
+		Pageable paginacao = Pageable.unpaged();
+		Mockito.when(repository.buscarTodas(paginacao)).thenReturn(anotacoes());
+		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, usuarioAutenticado);
+		Mockito.verify(repository).buscarTodas(paginacao);
+		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
+			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
+			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
+			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
+			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
+			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
+		}
 	}
 	
 	private Usuario usuario() {

@@ -21,7 +21,7 @@ private final AnotacaoRepository repository;
 	}
 	
 	public void remover(Long id, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
+		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Anotacao> anotacao = repository.buscarPeloId(id);
 		if(anotacao.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Anotacao com id %d não encontrada!", id));

@@ -2,9 +2,13 @@ package br.com.totemAutoatendimento.aplicacao.anotacao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,19 +18,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosCriarOuEditarAnotacao;
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.AnotacaoRepository;
 import br.com.totemAutoatendimento.dominio.anotacao.NivelDeImportancia;
+import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.UsuarioSemPermissaoException;
 import br.com.totemAutoatendimento.dominio.usuario.Password;
 import br.com.totemAutoatendimento.dominio.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.usuario.TipoPerfil;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-class CriaAnotacaoTest {
+class RemoveAnotacaoTest {
 
 	@Mock
 	private AnotacaoRepository repository;
@@ -37,53 +41,53 @@ class CriaAnotacaoTest {
 	@Captor
 	private ArgumentCaptor<Anotacao> anotacaoCaptor;
 	
-	private CriaAnotacao criaAnotacao;
+	private RemoveAnotacao removeAnotacao;
 	
 	@BeforeEach
 	public void beforeEach() {
 		MockitoAnnotations.openMocks(this);
-		this.criaAnotacao = new CriaAnotacao(repository, systemLogger);
-		
+		this.removeAnotacao = new RemoveAnotacao(repository, systemLogger);
 	}
 	
 	@Test
-	void deveriaCriarUmaAnotacaoPorUmPerfilAdministrador() {
+	void deveriaRemoverUmaAnotacaoPorUmPerfilAdministrador() {
 		Usuario administrador = usuario();
 		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
-		testarCriacaoDeAnotacao(administrador);
+		testarRemocaoDeAnotacao(administrador);
 	}
 	
 	@Test
-	void deveriaCriarUmaAnotacaoPorUmPerfilFuncionario() {
+	void deveriaRemoverUmaAnotacaoPorUmPerfilFuncionario() {
 		Usuario funcionario = usuario();
 		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
-		testarCriacaoDeAnotacao(funcionario);
+		testarRemocaoDeAnotacao(funcionario);
 	}
 	
 	@Test
-	void naoDeveriaCriarUmaAnotacaoPorUmPerfilTotem() {
-		Usuario administrador = usuario();
-		administrador.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
-		DadosCriarOuEditarAnotacao dados = new DadosCriarOuEditarAnotacao(anotacao().getDescricao(), anotacao().getNivelDeImportancia());
-		assertThrows(UsuarioSemPermissaoException.class, () -> criaAnotacao.criar(dados, administrador));
-		Mockito.verifyNoMoreInteractions(systemLogger);
-		Mockito.verifyNoMoreInteractions(repository);
+	void naoDeveriaRemoverUmaAnotacaoPorUmPerfilTotem() {
+		Usuario funcionario = usuario();
+		funcionario.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
+		assertThrows(UsuarioSemPermissaoException.class, () -> removeAnotacao.remover(anotacao().getId(), funcionario));
+		verifyNoInteractions(repository);
+		verifyNoMoreInteractions(systemLogger);
 	}
 	
-	private void testarCriacaoDeAnotacao(Usuario usuarioAutenticado) {
-		DadosCriarOuEditarAnotacao dados = new DadosCriarOuEditarAnotacao(anotacao().getDescricao(), anotacao().getNivelDeImportancia());
-		Mockito.when(repository.criar(Mockito.any())).thenReturn(anotacao());
-		Anotacao anotacao = criaAnotacao.criar(dados, usuarioAutenticado);
-		Mockito.verify(repository).criar(anotacaoCaptor.capture());
+	@Test
+	void naoDeveriaTentarRemoverUmaAnotacaoQueNaoFoiEncontradaNoBancoDeDados() {
+		Usuario administrador = usuario();
+		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
+		Mockito.when(repository.buscarPeloId(Mockito.anyLong())).thenReturn(Optional.empty());
+		assertThrows(ObjetoNaoEncontradoException.class, () -> removeAnotacao.remover(anotacao().getId(), administrador));
+		Mockito.verify(repository, never()).remover(Mockito.any());
+		Mockito.verifyNoInteractions(systemLogger);
+	}
+	
+	private void testarRemocaoDeAnotacao(Usuario usuarioAutenticado) {
+		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
+		removeAnotacao.remover(anotacao().getId(), usuarioAutenticado);
+		Mockito.verify(repository).remover(anotacaoCaptor.capture());
 		Mockito.verify(systemLogger).info(Mockito.anyString());
-		assertEquals(dados.descricao(), anotacaoCaptor.getValue().getDescricao());
-		assertEquals(dados.nivelDeImportancia(), anotacaoCaptor.getValue().getNivelDeImportancia());
-		assertEquals(usuarioAutenticado, anotacaoCaptor.getValue().getRegistrador());
-		assertEquals(anotacao().getId(), anotacao.getId());
-		assertEquals(anotacao().getTimestamp(), anotacao.getTimestamp());
-		assertEquals(anotacao().getRegistrador(), anotacao.getRegistrador());
-		assertEquals(anotacao().getDescricao(), anotacao.getDescricao());
-		assertEquals(anotacao().getNivelDeImportancia(), anotacao.getNivelDeImportancia());
+		assertEquals(anotacao(), anotacaoCaptor.getValue());
 	}
 	
 	private Usuario usuario() {
@@ -96,4 +100,5 @@ class CriaAnotacaoTest {
 		return new Anotacao(1l, LocalDateTime.of(2023, 1, 1, 13, 0, 0), usuario(), "Teste de anotação",
 				NivelDeImportancia.MEDIA);
 	}
+
 }
