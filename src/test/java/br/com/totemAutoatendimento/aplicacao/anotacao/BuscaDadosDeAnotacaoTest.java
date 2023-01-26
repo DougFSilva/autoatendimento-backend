@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosDeAnotacao;
-import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.AnotacaoRepository;
@@ -45,11 +44,11 @@ class BuscaDadosDeAnotacaoTest {
 	}
 
 	@Test
-	void deveriaBuscarOsDadosDeUmaAnotacaoPeloIdParaUmPerfilAdministrador() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
+	void deveriaBuscarOsDadosDeUmaAnotacaoPeloIdPorUmPerfilAdministrador() {
+		Usuario administrador = usuario();
+		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
 		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
-		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), usuarioAdministrador);
+		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), administrador);
 		Mockito.verify(repository).buscarPeloId(anotacao().getId());
 		assertEquals(anotacao().getId(), dadosDeAnotacao.getId());
 		assertEquals(anotacao().getTimestamp(), dadosDeAnotacao.getTimestamp());
@@ -59,11 +58,11 @@ class BuscaDadosDeAnotacaoTest {
 	}
 
 	@Test
-	void deveriaBuscarOsDadosDeUmaAnotacaoPeloIdParaUmPerfilFuncionario() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
+	void deveriaBuscarOsDadosDeUmaAnotacaoPeloIdPorUmPerfilFuncionario() {
+		Usuario funcionario = usuario();
+		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
 		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
-		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), usuarioAdministrador);
+		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), funcionario);
 		Mockito.verify(repository).buscarPeloId(anotacao().getId());
 		assertEquals(anotacao().getId(), dadosDeAnotacao.getId());
 		assertEquals(anotacao().getTimestamp(), dadosDeAnotacao.getTimestamp());
@@ -73,32 +72,32 @@ class BuscaDadosDeAnotacaoTest {
 	}
 
 	@Test
-	void naoDeveriaBuscarOsDadosDeUmaAnotacaoPeloIdParaUmPerfilTotem() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
+	void naoDeveriaBuscarOsDadosDeUmaAnotacaoPeloIdPorUmPerfilTotem() {
+		Usuario totem = usuario();
+		totem.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
 		assertThrows(UsuarioSemPermissaoException.class,
-				() -> AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAdministrador));
-		Mockito.verifyNoInteractions(repository);;
+				() -> buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), totem));
+		Mockito.verifyNoInteractions(repository);
 	}
 	
 	@Test
 	void deveriaLancarUmaExceptionSeAnotacaoNaoForEncontradaNoBancoDeDados() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
+		Usuario administrador = usuario();
+		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
 		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.empty());
 		assertThrows(ObjetoNaoEncontradoException.class,
-				() -> buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), usuarioAdministrador));
+				() -> buscaDadosDeAnotacao.buscarPeloId(anotacao().getId(), administrador));
 	}
 
 	@Test
-	void deveriaBuscarOsDadosDeAnotacoesPelaDataParaUmPerfilAdministrador() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
+	void deveriaBuscarOsDadosDeAnotacoesPelaDataPorUmPerfilAdministrador() {
+		Usuario administrador = usuario();
+		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
 		Pageable paginacao = Pageable.unpaged();
 		LocalDate dataInicial = LocalDate.of(2023, 1, 1);
 		LocalDate dataFinal = LocalDate.of(2023, 1, 2);
 		Mockito.when(repository.buscarPelaData(paginacao, dataInicial, dataFinal)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, usuarioAdministrador);
+		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, administrador);
 		Mockito.verify(repository).buscarPelaData(paginacao, dataInicial, dataFinal);
 		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
 			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
@@ -111,14 +110,14 @@ class BuscaDadosDeAnotacaoTest {
 	}
 	
 	@Test
-	void deveriaBuscarOsDadosAnotacoesPelaDataParaUmPerfilFuncionario() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
+	void deveriaBuscarOsDadosAnotacoesPelaDataPorUmPerfilFuncionario() {
+		Usuario funcionario = usuario();
+		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
 		Pageable paginacao = Pageable.unpaged();
 		LocalDate dataInicial = LocalDate.of(2023, 1, 1);
 		LocalDate dataFinal = LocalDate.of(2023, 1, 2);
 		Mockito.when(repository.buscarPelaData(paginacao, dataInicial, dataFinal)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, usuarioAdministrador);
+		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarPelaData(paginacao, dataInicial, dataFinal, funcionario);
 		Mockito.verify(repository).buscarPelaData(paginacao, dataInicial, dataFinal);
 		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
 			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
@@ -131,21 +130,21 @@ class BuscaDadosDeAnotacaoTest {
 	}
 	
 	@Test
-	void naoDeveriaBuscarOsDadosDeAnotacoesPelaDataParaUmPerfilTotem() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
+	void naoDeveriaBuscarOsDadosDeAnotacoesPelaDataPorUmPerfilTotem() {
+		Usuario totem = usuario();
+		totem.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
 		assertThrows(UsuarioSemPermissaoException.class,
-				() -> AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAdministrador));
-		Mockito.verifyNoInteractions(repository);;
+				() -> buscaDadosDeAnotacao.buscarPelaData(Pageable.unpaged(), LocalDate.now(), LocalDate.now(), totem));
+		Mockito.verifyNoInteractions(repository);
 	}
 	
 	@Test
-	void deveriaBuscarOsDadosDeTodasAnotacaoParaUmPerfilAdministrador() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
+	void deveriaBuscarOsDadosDeTodasAnotacaoPorUmPerfilAdministrador() {
+		Usuario administrador = usuario();
+		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
 		Pageable paginacao = Pageable.unpaged();
 		Mockito.when(repository.buscarTodas(paginacao)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, usuarioAdministrador);
+		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, administrador);
 		Mockito.verify(repository).buscarTodas(paginacao);
 		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
 			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
@@ -158,12 +157,12 @@ class BuscaDadosDeAnotacaoTest {
 	}
 	
 	@Test
-	void deveriaBuscarOsDadosDeTodasAnotacaoParaUmPerfilFuncionario() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
+	void deveriaBuscarOsDadosDeTodasAnotacaoPorUmPerfilFuncionario() {
+		Usuario administrador = usuario();
+		administrador.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
 		Pageable paginacao = Pageable.unpaged();
 		Mockito.when(repository.buscarTodas(paginacao)).thenReturn(anotacoes());
-		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, usuarioAdministrador);
+		Page<DadosDeAnotacao> dadosDeAnotacoes = buscaDadosDeAnotacao.buscarTodas(paginacao, administrador);
 		Mockito.verify(repository).buscarTodas(paginacao);
 		for (int i = 0; i < dadosDeAnotacoes.getSize(); i++) {
 			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
@@ -176,14 +175,14 @@ class BuscaDadosDeAnotacaoTest {
 	}
 	
 	@Test
-	void naoDeveriaBuscarOsDadosDeTodasAnotacoesParaUmPerfilTotem() {
-		Usuario usuarioAdministrador = usuario();
-		usuarioAdministrador.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
+	void naoDeveriaBuscarOsDadosDeTodasAnotacoesPorUmPerfilTotem() {
+		Usuario totem = usuario();
+		totem.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
 		assertThrows(UsuarioSemPermissaoException.class,
-				() -> AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAdministrador));
-		Mockito.verifyNoInteractions(repository);;
+				() -> buscaDadosDeAnotacao.buscarTodas(Pageable.unpaged(), totem));
+		Mockito.verifyNoInteractions(repository);
 	}
-
+	
 	private Usuario usuario() {
 		Email email = new Email("fulano@email.com");
 		Password password = new Password("P@ssW0rd");

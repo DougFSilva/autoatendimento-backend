@@ -9,12 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.totemAutoatendimento.dominio.Email;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"id", "cpf", "registro"})
 @Setter
 @ToString
 public class Usuario implements UserDetails {
