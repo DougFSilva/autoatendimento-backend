@@ -18,13 +18,13 @@ public class ConfiguracoesIniciais implements ApplicationRunner {
 	@Autowired
 	private CriaUsuarioMaster criaUsuarioMaster;
 
-	@Value("${app.usuario.default.username}")
+	@Value("${app.usuario.master.username}")
 	private String registro;
 
-	@Value("${app.usuario.default.senha}")
+	@Value("${app.usuario.master.senha}")
 	private String senha;
 
-	@Value("${app.usuario.default.email}")
+	@Value("${app.usuario.master.email}")
 	private String email;
 	
 	@Override
@@ -34,7 +34,7 @@ public class ConfiguracoesIniciais implements ApplicationRunner {
 	
 	private void criarUsuarioMaster() {
 		String nome = "Master";
-		String cpf = "00000000000";
+		String cpf = "00000000010";
 		DadosCriarUsuario dadosCriarUsuario = new DadosCriarUsuario(nome, cpf, registro, email, senha,
 				Arrays.asList(TipoPerfil.ADMINISTRADOR));
 		criaUsuarioMaster.criar(dadosCriarUsuario);
