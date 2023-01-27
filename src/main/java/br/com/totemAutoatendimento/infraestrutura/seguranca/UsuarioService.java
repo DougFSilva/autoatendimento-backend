@@ -6,17 +6,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.totemAutoatendimento.dominio.usuario.UsuarioRepository;
+import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.dao.UsuarioEntityDao;
 
 @Service
 public class UsuarioService implements UserDetailsService {
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioEntityDao repository;
 
 	@Override	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return usuarioRepository.buscarPeloRegistro(username).get();
+		return repository.findByRegistro(username).get();
 	}
 	
 

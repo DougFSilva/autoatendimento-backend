@@ -18,16 +18,13 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class UsuarioEntityConverter {
 
 	@Autowired
-	private PasswordEntityConverter passwordEntityConverter;
-
-	@Autowired
 	private EmailEntityConverter emailEntityConverter;
 	
 	@Autowired
 	private PerfilEntityConverter perfilEntityConverter;
 
 	public Usuario converterParaUsuario(UsuarioEntity entity) {
-		Password password = passwordEntityConverter.converterParaPassword(entity.getPassword());
+		Password password = new Password(entity.getPassword());
 		Email email = emailEntityConverter.converterParaEmail(entity.getEmail());
 		List<Perfil> perfis = entity.getPerfis().stream().map(perfil -> perfilEntityConverter.converterParaPerfil(perfil)).toList();
 		return new Usuario(entity.getId(),
@@ -40,8 +37,8 @@ public class UsuarioEntityConverter {
 	}
 
 	public UsuarioEntity converterParaUsuarioEntity(Usuario usuario) {
-		PasswordEntity passwordEntity = passwordEntityConverter.converterParaPasswordEntity(new Password(usuario.getPassword()));
 		EmailEntity emailEntity = emailEntityConverter.converterParaEmailEntity(usuario.getEmail());
+		PasswordEntity passwordEntity = new PasswordEntity(usuario.getPassword().getSenha());
 		List<PerfilEntity> perfis = usuario.getPerfis().stream().map(perfil -> perfilEntityConverter.converterParaPerfilEntity(perfil)).toList();
 		return new UsuarioEntity(usuario.getId(),
 				usuario.getNome(),

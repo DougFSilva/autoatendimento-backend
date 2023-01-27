@@ -28,7 +28,7 @@ public class AlteraSenhaDeUsuario {
 		if(usuario.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Usuário com id %d não encontrado!", id));
 		}
-		if(!codificador.comparar(dados.senhaAtual(), usuario.get().getPassword())) {
+		if(!codificador.comparar(dados.senhaAtual(), usuario.get().getPassword().getSenha())) {
 			throw new VerificacaoDeSenhaException("Senha atual não confere!");
 		}
 		Password password = new Password(dados.novaSenha(), codificador);

@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import br.com.totemAutoatendimento.dominio.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.usuario.TipoPerfil;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,9 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "perfis")
-public class PerfilEntity {
+public class PerfilEntity implements GrantedAuthority{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +36,10 @@ public class PerfilEntity {
 	
 	public PerfilEntity(Perfil perfil) {
 		this.tipo = perfil.getTipo();
+	}
+
+	@Override
+	public String getAuthority() {
+		return tipo.getDescricao();
 	}
 }

@@ -1,7 +1,5 @@
 package br.com.totemAutoatendimento.dominio.usuario;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,14 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "tipo")
-public class Perfil implements GrantedAuthority {
+public class Perfil {
 
-	private static final long serialVersionUID = 1L;
-	
 	private TipoPerfil tipo;
 
-	@Override
-	public String getAuthority() {
-		return tipo.getDescricao();
-	}
 }

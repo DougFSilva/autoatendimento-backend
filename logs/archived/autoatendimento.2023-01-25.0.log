@@ -1,0 +1,4 @@
+25 jan. 2023 08:00:17.838 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+25 jan. 2023 08:00:27.671 [http-nio-8080-exec-6] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+25 jan. 2023 08:00:35.573 [http-nio-8080-exec-10] INFO  autoatendimento.logger.info - Pedido com id 13 criado para comanda com id 3!
+25 jan. 2023 08:01:46.072 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Pedido com id 14 criado para comanda com id 3!
