@@ -54,13 +54,13 @@ public class PedidoController {
 	@Operation(summary = "Fazer pedido", description = "Cria um pedido para uma comanda aberta no sistema")
 	public ResponseEntity<DadosDeComanda> fazerPedido(@PathVariable String cartao,
 			@RequestBody @Valid List<DadosFazerPedido> dados) {
-		return ResponseEntity.ok().body(fazPedido.fazer(cartao, dados));
+		return ResponseEntity.ok().body(fazPedido.fazer(cartao, dados, usuarioAutenticado()));
 	}
 
 	@DeleteMapping("/{id}/cartao/{cartao}")
 	@Operation(summary = "Remover pedido", description = "Remove algum pedido de alguma comanda aberta existente. Efetuado pelo Cliente, não é possível remover pedido já entregue")
 	public ResponseEntity<DadosDeComanda> removerPedido(@PathVariable Long id, @PathVariable String cartao) {
-		return ResponseEntity.ok().body(removePedido.remover(id, cartao));
+		return ResponseEntity.ok().body(removePedido.remover(id, cartao, usuarioAutenticado()));
 	}
 
 	@PatchMapping("/{id}/entregar")
@@ -80,13 +80,13 @@ public class PedidoController {
 	@GetMapping("/{id}")
 	@Operation(summary = "Buscar pedido", description = "Busca algum pedido existente pelo id")
 	public ResponseEntity<DadosDePedido> buscarPedido(@PathVariable Long id) {
-		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPeloId(id));
+		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPeloId(id, usuarioAutenticado()));
 	}
 
 	@GetMapping("/comanda/{comandaId}")
 	@Operation(summary = "Buscar pedidos pela comanda", description = "Busca pedidos existente pelo comanda")
 	public ResponseEntity<List<DadosDePedido>> buscarPedidosPelaComanda(@PathVariable Long comandaId) {
-		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPelaComanda(comandaId));
+		return ResponseEntity.ok().body(buscaDadosDePedidos.buscarPelaComanda(comandaId, usuarioAutenticado()));
 	}
 
 	@GetMapping("/data/{dataInicial}/{dataFinal}")

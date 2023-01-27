@@ -100,7 +100,7 @@ public class SubcategoriaController {
     @Cacheable("buscarTodasSubcategorias")
     @Operation(summary = "Buscar todas subcategorias", description = "Busca todas subcategorias existentes")
     public ResponseEntity<List<Subcategoria>> buscarTodasSubcategorias() {
-        return ResponseEntity.ok().body(buscarSubcategorias.buscarTodas());
+        return ResponseEntity.ok().body(buscarSubcategorias.buscarTodas(usuarioAutenticado()));
     }
 
     @PostMapping("/{id}/imagem")

@@ -33,7 +33,8 @@ public class BuscaSubcategorias {
 		return subcategorias.stream().map(DadosDeSubcategoria::new).toList();
 	}
 
-	public List<Subcategoria> buscarTodas() {
+	public List<Subcategoria> buscarTodas(Usuario UsuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(UsuarioAutenticado);
 		return repository.buscarTodas();
 	}
 }

@@ -1,13 +1,14 @@
 package br.com.totemAutoatendimento.aplicacao.usuario;
 
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
-import br.com.totemAutoatendimento.aplicacao.usuario.dto.DadosCriarUsuario;
 import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.usuario.CodificadorDeSenha;
 import br.com.totemAutoatendimento.dominio.usuario.Password;
 import br.com.totemAutoatendimento.dominio.usuario.Perfil;
+import br.com.totemAutoatendimento.dominio.usuario.TipoPerfil;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.dominio.usuario.UsuarioRepository;
 
@@ -25,12 +26,15 @@ public class CriaUsuarioMaster {
 		this.logger = logger;
 	}
 	
-	public void criar(DadosCriarUsuario dados) {
-		Email email = new Email(dados.email());
-		Password password = new Password(dados.senha(), codificadorDeSenha);
-		List<Perfil> perfis = dados.tipoPerfil().stream().map(tipoPerfil -> new Perfil(tipoPerfil)).toList();
-		Usuario usuario = new Usuario(null, dados.nome(), dados.cpf(), dados.registro(), email, password, perfis);
-		if(repository.buscarPeloRegistro(dados.registro()).isEmpty()) {
+	public void criar(String senha) {
+		String nome = "Usuário Master";
+		String cpf = "Master - Sem cpf";
+		String registro = "master";
+		Email email = new Email("master@master.com");
+		Password password = new Password(senha, codificadorDeSenha);
+		List<Perfil> perfis = Arrays.asList(new Perfil(TipoPerfil.ADMINISTRADOR), new Perfil(TipoPerfil.FUNCIONARIO));
+		Usuario usuario = new Usuario(null, nome, cpf, registro, email, password, perfis);
+		if(repository.buscarPeloRegistro(registro).isEmpty()) {
 			repository.criar(usuario);
 			logger.info("Sistema - Usuário Master Criado!");
 		};

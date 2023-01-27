@@ -10,6 +10,7 @@ import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.VerificaDisponibilidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
@@ -20,6 +21,7 @@ import br.com.totemAutoatendimento.dominio.pedido.MensagemDePedido;
 import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
 import br.com.totemAutoatendimento.dominio.pedido.TipoDeMensagemDePedido;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
 public class FazPedido {
 
@@ -43,7 +45,8 @@ public class FazPedido {
 	}
 
 	@Transactional
-	public DadosDeComanda fazer(String codigoCartao, List<DadosFazerPedido> dados) {
+	public DadosDeComanda fazer(String codigoCartao, List<DadosFazerPedido> dados, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(null);
 		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(

@@ -27,7 +27,8 @@ public class BuscaDadosDePedidos {
 		this.comandaRepository = comandaRepository;
 	}
 
-	public DadosDePedido buscarPeloId(Long id) {
+	public DadosDePedido buscarPeloId(Long id, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Pedido> pedido = repository.buscarPeloId(id);
 		if(pedido.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Pedido com id %d não encontrado", id));
@@ -35,7 +36,8 @@ public class BuscaDadosDePedidos {
 		return new DadosDePedido(pedido.get());
 	}
 
-	public List<DadosDePedido> buscarPelaComanda(Long comandaId) {
+	public List<DadosDePedido> buscarPelaComanda(Long comandaId, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Comanda> comanda = comandaRepository.buscarPeloId(comandaId);
     	if(comanda.isEmpty()) {
     		throw new ObjetoNaoEncontradoException(String.format("Comanda com id %d não encontrada!", comandaId));

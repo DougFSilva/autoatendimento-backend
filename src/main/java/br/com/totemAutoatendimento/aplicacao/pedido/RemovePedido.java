@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
+import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
@@ -16,6 +17,7 @@ import br.com.totemAutoatendimento.dominio.pedido.MensagemDePedido;
 import br.com.totemAutoatendimento.dominio.pedido.Pedido;
 import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
 import br.com.totemAutoatendimento.dominio.pedido.TipoDeMensagemDePedido;
+import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
 public class RemovePedido {
 
@@ -36,7 +38,8 @@ public class RemovePedido {
 	}
 
 	@Transactional
-	public DadosDeComanda remover(Long id, String codigoCartao) {
+	public DadosDeComanda remover(Long id, String codigoCartao, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Comanda aberta com cartão %s não encontrada!", codigoCartao));
