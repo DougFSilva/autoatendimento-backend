@@ -20,10 +20,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.AplicaDescontoEmComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.BuscaDadosDeComandas;
-import br.com.totemAutoatendimento.aplicacao.comanda.CriaComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.AbreComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.FechaComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.ReabreComanda;
-import br.com.totemAutoatendimento.aplicacao.comanda.RemoveComanda;
+import br.com.totemAutoatendimento.aplicacao.comanda.DeletaComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.RemoveDescontoDaComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosCriarComanda;
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
@@ -40,10 +40,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class ComandaController {
 
 	@Autowired
-	private CriaComanda criaComanda;
+	private AbreComanda abreComanda;
 
 	@Autowired
-	private RemoveComanda removeComanda;
+	private DeletaComanda removeComanda;
 
 	@Autowired
 	private BuscaDadosDeComandas buscaDadosDeComandas;
@@ -66,7 +66,7 @@ public class ComandaController {
 	@PostMapping
 	@Operation(summary = "Criar comanda", description = "Cria uma comanda no sistema")
 	public ResponseEntity<Comanda> criarComanda(@RequestBody @Valid DadosCriarComanda dados) {
-		Comanda comanda = criaComanda.criar(dados, usuarioAutenticado());
+		Comanda comanda = abreComanda.abrir(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(comanda.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -75,7 +75,7 @@ public class ComandaController {
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Remover comanda", description = "Remove alguma comanda existente")
 	public ResponseEntity<Void> removerComanda(@PathVariable Long id) {
-		removeComanda.remover(id, usuarioAutenticado());
+		removeComanda.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 

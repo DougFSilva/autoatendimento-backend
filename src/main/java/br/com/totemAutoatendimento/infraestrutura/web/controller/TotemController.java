@@ -22,9 +22,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.totem.AlteraSenhaDeTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.BuscaDadosDeTotem;
-import br.com.totemAutoatendimento.aplicacao.totem.CriaTotem;
+import br.com.totemAutoatendimento.aplicacao.totem.CadastraTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.EditaTotem;
-import br.com.totemAutoatendimento.aplicacao.totem.RemoveTotem;
+import br.com.totemAutoatendimento.aplicacao.totem.DeletaTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.dto.DadosCriarTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.dto.DadosDeTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.dto.DadosEditarTotem;
@@ -39,10 +39,10 @@ import io.swagger.v3.oas.annotations.Operation;
 public class TotemController {
 
 	@Autowired
-	private CriaTotem criaTotem;
+	private CadastraTotem criaTotem;
 	
 	@Autowired
-	private RemoveTotem removeTotem;
+	private DeletaTotem removeTotem;
 	
 	@Autowired
 	private EditaTotem editaTotem;
@@ -60,7 +60,7 @@ public class TotemController {
 	@CacheEvict(value = "buscarTodosTotens", allEntries = true)
 	@Operation(summary = "Criar Totem", description = "Cria um Totem no sistema")
 	public ResponseEntity<Totem> criarTotem(@RequestBody @Valid DadosCriarTotem dados) {
-		Totem totem = criaTotem.criar(dados, usuarioAutenticado());
+		Totem totem = criaTotem.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(totem.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
@@ -69,7 +69,7 @@ public class TotemController {
 	@CacheEvict(value = "buscarTodosTotens", allEntries = true)
 	@Operation(summary = "Remover Totem", description = "Remove um Totem cadastrado no sistema")
 	public ResponseEntity<Void> removerTotem(@PathVariable Long id) {
-		removeTotem.remover(id, usuarioAutenticado());
+		removeTotem.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 	

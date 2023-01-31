@@ -25,7 +25,7 @@ import br.com.totemAutoatendimento.aplicacao.imagem.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaTodasCategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.DeletaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
 import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
@@ -45,7 +45,7 @@ public class CategoriaController {
 	private CriaCategoria criaCategoria;
 
 	@Autowired
-	private RemoveCategoria removeCategoria;
+	private DeletaCategoria removeCategoria;
 
 	@Autowired
 	private EditaCategoria editaCategoria;
@@ -73,7 +73,7 @@ public class CategoriaController {
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
 	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
 	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
-		removeCategoria.remover(id, usuarioAutenticado());
+		removeCategoria.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.cartao.BuscaTodosCartoes;
-import br.com.totemAutoatendimento.aplicacao.cartao.CriaCartao;
-import br.com.totemAutoatendimento.aplicacao.cartao.RemoveCartao;
+import br.com.totemAutoatendimento.aplicacao.cartao.CadastraCartao;
+import br.com.totemAutoatendimento.aplicacao.cartao.DeletaCartao;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
@@ -27,10 +27,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class CartaoController {
 
 	@Autowired
-	private CriaCartao criaCartao;
+	private CadastraCartao criaCartao;
 	
 	@Autowired
-	private RemoveCartao removeCartao;
+	private DeletaCartao removeCartao;
 	
 	@Autowired
 	private BuscaTodosCartoes buscaTodosCartoes;
@@ -40,14 +40,14 @@ public class CartaoController {
 	
 	@PostMapping("/{codigo}")
 	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
-		Cartao cartao = criaCartao.criar(codigo, usuarioAutenticado());
+		Cartao cartao = criaCartao.cadastrar(codigo, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").buildAndExpand(cartao.getCodigo()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> removerCartao(@PathVariable String codigo) {
-		removeCartao.remover(codigo, usuarioAutenticado());
+		removeCartao.deletar(codigo, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 	

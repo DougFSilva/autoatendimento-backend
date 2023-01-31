@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.totemAutoatendimento.aplicacao.anotacao.BuscaDadosDeAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.CriaAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.EditaAnotacao;
-import br.com.totemAutoatendimento.aplicacao.anotacao.RemoveAnotacao;
+import br.com.totemAutoatendimento.aplicacao.anotacao.DeletaAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosCriarOuEditarAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosDeAnotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
@@ -42,7 +42,7 @@ public class AnotacaoController {
 	private CriaAnotacao criaAnotacao;
 
 	@Autowired
-	private RemoveAnotacao removeAnotacao;
+	private DeletaAnotacao removeAnotacao;
 
 	@Autowired
 	private EditaAnotacao editaAnotacao;
@@ -68,7 +68,7 @@ public class AnotacaoController {
 	@CacheEvict(value = "buscarTodasAnotacoes", allEntries = true)
 	@Operation(summary = "Remover anotação", description = "Remove alguma anotações existente")
 	public ResponseEntity<Void> removerAnotacao(@PathVariable Long id) {
-		removeAnotacao.remover(id, usuarioAutenticado());
+		removeAnotacao.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 

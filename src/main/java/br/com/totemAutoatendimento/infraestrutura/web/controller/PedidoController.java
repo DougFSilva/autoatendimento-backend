@@ -22,7 +22,7 @@ import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
 import br.com.totemAutoatendimento.aplicacao.pedido.BuscaDadosDePedidos;
 import br.com.totemAutoatendimento.aplicacao.pedido.EntregaPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.FazPedido;
-import br.com.totemAutoatendimento.aplicacao.pedido.RemovePedido;
+import br.com.totemAutoatendimento.aplicacao.pedido.DeletaPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
@@ -39,7 +39,7 @@ public class PedidoController {
 	public FazPedido fazPedido;
 
 	@Autowired
-	public RemovePedido removePedido;
+	public DeletaPedido removePedido;
 
 	@Autowired
 	public EntregaPedido entregaPedido;
@@ -60,7 +60,7 @@ public class PedidoController {
 	@DeleteMapping("/{id}/cartao/{cartao}")
 	@Operation(summary = "Remover pedido", description = "Remove algum pedido de alguma comanda aberta existente. Efetuado pelo Cliente, não é possível remover pedido já entregue")
 	public ResponseEntity<DadosDeComanda> removerPedido(@PathVariable Long id, @PathVariable String cartao) {
-		return ResponseEntity.ok().body(removePedido.remover(id, cartao, usuarioAutenticado()));
+		return ResponseEntity.ok().body(removePedido.deletar(id, cartao, usuarioAutenticado()));
 	}
 
 	@PatchMapping("/{id}/entregar")

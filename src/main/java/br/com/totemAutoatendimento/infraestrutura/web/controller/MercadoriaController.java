@@ -28,9 +28,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.imagem.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaDadosDeMercadorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.CriaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.CadastraMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditaMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoveMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.DeletaMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosCriarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
@@ -52,10 +52,10 @@ public class MercadoriaController {
 	private String pathPastaImagens;
 
 	@Autowired
-	private CriaMercadoria criaMercadoria;
+	private CadastraMercadoria criaMercadoria;
 
 	@Autowired
-	private RemoveMercadoria removeMercadoria;
+	private DeletaMercadoria removeMercadoria;
 
 	@Autowired
 	private EditaMercadoria editaMercadoria;
@@ -74,7 +74,7 @@ public class MercadoriaController {
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Criar mercadoria", description = "Cria uma mercadoria no sistema")
 	public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
-		Mercadoria mercadoria = criaMercadoria.criar(dados, usuarioAutenticado());
+		Mercadoria mercadoria = criaMercadoria.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -85,7 +85,7 @@ public class MercadoriaController {
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
 	@Operation(summary = "Remover mercadoria", description = "Remove alguma mercadoria existente")
 	public ResponseEntity<Void> removerMercadoria(@PathVariable Long id) {
-		removeMercadoria.remover(id, usuarioAutenticado());
+		removeMercadoria.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 

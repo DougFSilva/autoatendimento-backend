@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.cliente.BuscaDadosDeClientes;
-import br.com.totemAutoatendimento.aplicacao.cliente.CriaCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.CadastraCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.EditaCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.RemoveCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.DeletaCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosCriarCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosEditarCliente;
@@ -39,10 +39,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class ClienteController {
 
 	@Autowired
-	private CriaCliente criaCliente;
+	private CadastraCliente criaCliente;
 
 	@Autowired
-	private RemoveCliente removeCliente;
+	private DeletaCliente removeCliente;
 
 	@Autowired
 	private EditaCliente editaCliente;
@@ -57,7 +57,7 @@ public class ClienteController {
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
 	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
-		Cliente cliente = criaCliente.criar(dados, usuarioAutenticado());
+		Cliente cliente = criaCliente.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -67,7 +67,7 @@ public class ClienteController {
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
 	@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
 	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
-		removeCliente.remover(id, usuarioAutenticado());
+		removeCliente.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 

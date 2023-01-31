@@ -28,7 +28,7 @@ import br.com.totemAutoatendimento.aplicacao.imagem.BuscaImagem;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.BuscaSubcategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.CriaSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.EditaSubcategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.RemoveSubcategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.DeletaSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.UploadImagemDaSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDeSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosEditarSubcategoria;
@@ -50,7 +50,7 @@ public class SubcategoriaController {
     private CriaSubcategoria criaSubcategoria;
 
     @Autowired
-    private RemoveSubcategoria removeSubcategoria;
+    private DeletaSubcategoria removeSubcategoria;
 
     @Autowired
     private EditaSubcategoria editaSubcategoria;
@@ -78,7 +78,7 @@ public class SubcategoriaController {
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
     public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
-        removeSubcategoria.remover(id, usuarioAutenticado());
+        removeSubcategoria.deletar(id, usuarioAutenticado());
         return ResponseEntity.noContent().build();
     }
 

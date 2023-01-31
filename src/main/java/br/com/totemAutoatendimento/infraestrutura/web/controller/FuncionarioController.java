@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.totemAutoatendimento.aplicacao.funcionario.BuscaDadosDeFuncionario;
-import br.com.totemAutoatendimento.aplicacao.funcionario.CriaFuncionario;
+import br.com.totemAutoatendimento.aplicacao.funcionario.CadastraFuncionario;
 import br.com.totemAutoatendimento.aplicacao.funcionario.EditaFuncionario;
-import br.com.totemAutoatendimento.aplicacao.funcionario.RemoveFuncionario;
+import br.com.totemAutoatendimento.aplicacao.funcionario.DeletaFuncionario;
 import br.com.totemAutoatendimento.aplicacao.funcionario.dto.DadosCriarFuncionario;
 import br.com.totemAutoatendimento.aplicacao.funcionario.dto.DadosDeFuncionario;
 import br.com.totemAutoatendimento.aplicacao.funcionario.dto.DadosEditarFuncionario;
@@ -40,10 +40,10 @@ import io.swagger.v3.oas.annotations.Operation;
 public class FuncionarioController {
 
 	@Autowired
-	private CriaFuncionario criaFuncionario;
+	private CadastraFuncionario criaFuncionario;
 
 	@Autowired
-	private RemoveFuncionario removeFuncionario;
+	private DeletaFuncionario removeFuncionario;
 
 	@Autowired
 	private EditaFuncionario editaFuncionario;
@@ -61,7 +61,7 @@ public class FuncionarioController {
 	@CacheEvict(value = "buscarTodosFuncionario", allEntries = true)
 	@Operation(summary = "Criar funcionário", description = "Cria um Funcionário no sistema")
 	public ResponseEntity<Funcionario> criarFuncionario(@Valid @RequestBody DadosCriarFuncionario dados) {
-		Funcionario funcionario = criaFuncionario.criar(dados, usuarioAutenticado());
+		Funcionario funcionario = criaFuncionario.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(funcionario.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -71,7 +71,7 @@ public class FuncionarioController {
 	@CacheEvict(value = "buscarTodosFuncionario", allEntries = true)
 	@Operation(summary = "Remover funcionário", description = "Remove um Funcionário cadastrado no sistema")
 	public ResponseEntity<Void> removerFuncionario(@PathVariable Long id) {
-		removeFuncionario.remover(id, usuarioAutenticado());
+		removeFuncionario.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
