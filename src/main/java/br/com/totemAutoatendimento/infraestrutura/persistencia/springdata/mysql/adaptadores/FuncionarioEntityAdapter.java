@@ -59,11 +59,20 @@ public class FuncionarioEntityAdapter implements FuncionarioRepository{
 		}
 		return Optional.empty();
 	}
+	
+	@Override
+	public Optional<Funcionario> buscarPeloUsuario(Long usuarioId) {
+		Optional<FuncionarioEntity> entity = dao.findByUsuarioId(usuarioId);
+		if(entity.isPresent()) {
+			return Optional.of(funcionarioEntityConverter.converterParaFuncionario(entity.get()));
+		}
+		return Optional.empty();
+	}
 
 	@Override
 	public List<Funcionario> buscarTodos() {
 		return dao.findAll().stream().map(funcionarioEntityConverter::converterParaFuncionario).toList();
 	}
-	
+
 	
 }

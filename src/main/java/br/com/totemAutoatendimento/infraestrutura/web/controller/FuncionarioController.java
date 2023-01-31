@@ -108,6 +108,14 @@ public class FuncionarioController {
 		DadosDeFuncionario dadosDeFuncionario = buscaDadosDeFuncionario.buscarPelaMatricuka(matricula, usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeFuncionario);
 	}
+	
+	@GetMapping("/usuario/{usuarioId}")
+	@Operation(summary = "Buscar dados de funcionário pelo usuário", description = "Busca um Funcionário "
+			+ "cadastrado no sistema pelo id do usuário pertencente a esse funcionário")
+	public ResponseEntity<DadosDeFuncionario> buscarFuncionarioPeloUsuario(@PathVariable Long usuarioId) {
+		DadosDeFuncionario dadosDeFuncionario = buscaDadosDeFuncionario.buscarPeloUsuario(usuarioId, usuarioAutenticado());
+		return ResponseEntity.ok().body(dadosDeFuncionario);
+	}
 
 	@GetMapping
 	@Cacheable("buscarTodosFuncionario")

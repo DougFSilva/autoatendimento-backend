@@ -13,5 +13,7 @@ public interface TotemRepository {
 	
 	Optional<Totem> buscarPeloIdentificador(String identificador);
 	
+	Optional<Totem> buscarPeloUsuario(Long usuarioId);
+	
 	List<Totem> buscarTodos();
 }

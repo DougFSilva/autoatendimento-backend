@@ -36,6 +36,15 @@ public class BuscaDadosDeFuncionario {
 		return new DadosDeFuncionario(funcionario.get());
 	}
 	
+	public DadosDeFuncionario buscarPeloUsuario(Long usuarioId, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
+		Optional<Funcionario> funcionario = repository.buscarPeloUsuario(usuarioId);
+		if(funcionario.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Funcionário com usuário de id %d não encontrado!", usuarioId ));
+		}
+		return new DadosDeFuncionario(funcionario.get());
+	}
+	
 	public List<DadosDeFuncionario> buscarTodos(Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		return repository.buscarTodos().stream().map(DadosDeFuncionario::new).toList();

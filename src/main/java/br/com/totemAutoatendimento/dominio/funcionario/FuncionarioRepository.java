@@ -15,5 +15,7 @@ public interface FuncionarioRepository {
 	
 	Optional<Funcionario> buscarPeloCpf(String cpf);
 	
+	Optional<Funcionario> buscarPeloUsuario(Long usuarioId);
+	
 	List<Funcionario> buscarTodos();
 }

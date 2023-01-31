@@ -9,4 +9,6 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public interface TotemEntityDao extends JpaRepository<TotemEntity, Long> {
 
 	Optional<TotemEntity> findByIdentificador(String identificador);
+
+	Optional<TotemEntity> findByUsuarioId(Long usuarioId);
 }

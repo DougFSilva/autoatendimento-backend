@@ -11,4 +11,6 @@ public interface FuncionarioEntityDao extends JpaRepository<FuncionarioEntity, L
 	Optional<FuncionarioEntity> findByMatricula(String matricula);
 
 	Optional<FuncionarioEntity> findByCpf(String cpf);
+
+	Optional<FuncionarioEntity> findByUsuarioId(Long usuarioId);
 }

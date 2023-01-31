@@ -50,10 +50,20 @@ public class TotemEntityAdapter implements TotemRepository {
 		}
 		return Optional.empty();
 	}
+	
+	@Override
+	public Optional<Totem> buscarPeloUsuario(Long usuarioId) {
+		Optional<TotemEntity> entity = dao.findByUsuarioId(usuarioId);
+		if(entity.isPresent()) {
+			return Optional.of(totemEntityConverter.converterParaTotem(entity.get()));
+		}
+		return Optional.empty();
+	}
 
 	@Override
 	public List<Totem> buscarTodos() {
 		return dao.findAll().stream().map(totemEntityConverter::converterParaTotem).toList();
 	}
+
 
 }

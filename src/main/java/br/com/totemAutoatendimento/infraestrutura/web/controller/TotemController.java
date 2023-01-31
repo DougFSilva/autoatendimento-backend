@@ -23,8 +23,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.totemAutoatendimento.aplicacao.totem.AlteraSenhaDeTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.BuscaDadosDeTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.CadastraTotem;
-import br.com.totemAutoatendimento.aplicacao.totem.EditaTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.DeletaTotem;
+import br.com.totemAutoatendimento.aplicacao.totem.EditaTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.dto.DadosCriarTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.dto.DadosDeTotem;
 import br.com.totemAutoatendimento.aplicacao.totem.dto.DadosEditarTotem;
@@ -101,6 +101,14 @@ public class TotemController {
 			+ "cadastrado no sistema pelo identificador")
 	public ResponseEntity<DadosDeTotem> buscarTotemPeloIdentificador(@PathVariable String identificador) {
 		DadosDeTotem dadosDeTotem = buscaDadosDeTotem.buscarPeloIdentificador(identificador, usuarioAutenticado());
+		return ResponseEntity.ok().body(dadosDeTotem);
+	}
+	
+	@GetMapping("/usuario/{usuarioId}")
+	@Operation(summary = "Buscar Totem pelo usuário", description = "Busca um Totem "
+			+ "cadastrado no sistema pelo id do usuário pertencente a esse Totem")
+	public ResponseEntity<DadosDeTotem> buscarTotemPeloUsuario(@PathVariable Long usuarioId) {
+		DadosDeTotem dadosDeTotem = buscaDadosDeTotem.buscarPeloUsuario(usuarioId, usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeTotem);
 	}
 	

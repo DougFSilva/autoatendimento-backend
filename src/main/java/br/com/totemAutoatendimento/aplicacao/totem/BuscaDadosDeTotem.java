@@ -36,6 +36,15 @@ public class BuscaDadosDeTotem {
 		return new DadosDeTotem(totem.get());
 	}
 	
+	public DadosDeTotem buscarPeloUsuario(Long usuarioId, Usuario usuarioAutenticado) {
+		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
+		Optional<Totem> totem = repository.buscarPeloUsuario(usuarioId);
+		if(totem.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Totem com usuario de id %d não encotrado!", usuarioId));
+		}
+		return new DadosDeTotem(totem.get());
+	}
+	
 	public List<DadosDeTotem> buscarTodos(Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		return repository.buscarTodos().stream().map(DadosDeTotem::new).toList();
