@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface CartaoRepository {
 
-	Cartao criar(Cartao cartao);
+	Cartao salvar(Cartao cartao);
 	
-	void remover(Cartao cartao);
+	void deletar(Cartao cartao);
 	
 	Optional<Cartao> buscarPeloCodigo(String codigo);
 	

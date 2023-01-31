@@ -22,27 +22,28 @@ public class AutenticacaoDeUsuario {
 
 	@Autowired
 	private LoggerAdapter logger;
-
+	
 	@Autowired
 	private UsuarioEntityConverter usuarioEntityConverter;
-
+	
 	public Usuario autenticar(DadosDeLogin dados) {
 		UsernamePasswordAuthenticationToken autenticacaoToken = new UsernamePasswordAuthenticationToken(
 				dados.registro(), dados.password());
+		Authentication autenticacao;
 		try {
-			Authentication autenticacao = authenticationManager.authenticate(autenticacaoToken);
-			SecurityContextHolder.getContext().setAuthentication(autenticacao);
-			return usuarioEntityConverter.converterParaUsuario((UsuarioEntity) autenticacao.getPrincipal());
+			autenticacao = authenticationManager.authenticate(autenticacaoToken);
 		} catch (AuthenticationException e) {
+			e.printStackTrace();
 			logger.error("Erro na autenticação do usuário. Usuário e/ou senha inválidos!");
 			throw new ErroNaAutenticacaoDeUsuario("Erro na autenticação do usuário. Usuário e/ou senha inválidos!");
 		}
+		SecurityContextHolder.getContext().setAuthentication(autenticacao);
+		return usuarioEntityConverter.converterParaUsuario((UsuarioEntity)autenticacao.getPrincipal());
 	}
 
 	public Usuario recuperarAutenticado() {
-		return usuarioEntityConverter.converterParaUsuario((UsuarioEntity) SecurityContextHolder
-				.getContext()
-				.getAuthentication()
-				.getPrincipal());
+		UsuarioEntity entity = (UsuarioEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return usuarioEntityConverter.converterParaUsuario(entity);
 	}
+	
 }

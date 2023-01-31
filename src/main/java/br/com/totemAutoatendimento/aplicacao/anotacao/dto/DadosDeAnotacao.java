@@ -19,20 +19,16 @@ public class DadosDeAnotacao {
 
 	private LocalDateTime timestamp;
 	
-	private String registroDoRegistrador;
-
-	private String nomeDoRegistrador;
+	private String registrador;
 
 	private String descricao;
 
 	private NivelDeImportancia nivelDeImportancia;
 	
-	
 	public DadosDeAnotacao(Anotacao anotacao) { 
 		this.id = anotacao.getId();
 		this.timestamp = anotacao.getTimestamp();
-		this.registroDoRegistrador = anotacao.getRegistrador().getRegistro();
-		this.nomeDoRegistrador = anotacao.getRegistrador().getNome();
+		this.registrador = anotacao.getRegistrador().getUsername();
 		this.descricao = anotacao.getDescricao();
 		this.nivelDeImportancia = anotacao.getNivelDeImportancia();
 	}

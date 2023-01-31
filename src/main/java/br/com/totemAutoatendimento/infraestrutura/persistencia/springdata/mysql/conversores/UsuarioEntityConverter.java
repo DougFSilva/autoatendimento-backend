@@ -5,47 +5,34 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.usuario.Password;
 import br.com.totemAutoatendimento.dominio.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
-import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.EmailEntity;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.PasswordEntity;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.PerfilEntity;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.entities.UsuarioEntity;
 
 @Service
 public class UsuarioEntityConverter {
-
-	@Autowired
-	private EmailEntityConverter emailEntityConverter;
 	
 	@Autowired
 	private PerfilEntityConverter perfilEntityConverter;
 
 	public Usuario converterParaUsuario(UsuarioEntity entity) {
-		Password password = new Password(entity.getPassword());
-		Email email = emailEntityConverter.converterParaEmail(entity.getEmail());
-		List<Perfil> perfis = entity.getPerfis().stream().map(perfil -> perfilEntityConverter.converterParaPerfil(perfil)).toList();
-		return new Usuario(entity.getId(),
-				entity.getNome(),
-				entity.getCpf(),
-				entity.getRegistro(),
-				email,
-				password,
+		List<Perfil> perfis = entity.getPerfis().stream().map(perfilEntityConverter::converterParaPerfil).toList();
+		return new Usuario(
+				entity.getId(),
+				entity.getUsername(),
+				new Password(entity.getPassword()),
 				perfis);
 	}
-
+	
 	public UsuarioEntity converterParaUsuarioEntity(Usuario usuario) {
-		EmailEntity emailEntity = emailEntityConverter.converterParaEmailEntity(usuario.getEmail());
-		PasswordEntity passwordEntity = new PasswordEntity(usuario.getPassword().getSenha());
-		List<PerfilEntity> perfis = usuario.getPerfis().stream().map(perfil -> perfilEntityConverter.converterParaPerfilEntity(perfil)).toList();
-		return new UsuarioEntity(usuario.getId(),
-				usuario.getNome(),
-				usuario.getCpf(),
-				usuario.getRegistro(),
-				emailEntity,
-				passwordEntity,
+		List<PerfilEntity> perfis = usuario.getPerfis().stream().map(perfilEntityConverter::converterParaPerfilEntity).toList();
+		return new UsuarioEntity(
+				usuario.getId(),
+				usuario.getUsername(),
+				new PasswordEntity(usuario.getPassword().getSenha()),
 				perfis);
 	}
 }

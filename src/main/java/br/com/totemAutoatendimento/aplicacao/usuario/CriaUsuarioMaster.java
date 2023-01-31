@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
-import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.usuario.CodificadorDeSenha;
 import br.com.totemAutoatendimento.dominio.usuario.Password;
 import br.com.totemAutoatendimento.dominio.usuario.Perfil;
@@ -19,7 +18,7 @@ public class CriaUsuarioMaster {
 	private final CodificadorDeSenha codificadorDeSenha;
 	
 	private final SystemLogger logger;
-
+	
 	public CriaUsuarioMaster(UsuarioRepository repository, CodificadorDeSenha codificadorDeSenha, final SystemLogger logger) {
 		this.repository = repository;
 		this.codificadorDeSenha = codificadorDeSenha;
@@ -27,15 +26,12 @@ public class CriaUsuarioMaster {
 	}
 	
 	public void criar(String senha) {
-		String nome = "Usuário Master";
-		String cpf = "Master - Sem cpf";
-		String registro = "master";
-		Email email = new Email("master@master.com");
+		String username = "master";
 		Password password = new Password(senha, codificadorDeSenha);
 		List<Perfil> perfis = Arrays.asList(new Perfil(TipoPerfil.ADMINISTRADOR), new Perfil(TipoPerfil.FUNCIONARIO));
-		Usuario usuario = new Usuario(null, nome, cpf, registro, email, password, perfis);
-		if(repository.buscarPeloRegistro(registro).isEmpty()) {
-			repository.criar(usuario);
+		Usuario usuario = new Usuario(null, username, password, perfis);
+		if(repository.buscarPeloUsername(username).isEmpty()) {
+			repository.salvar(usuario);
 			logger.info("Sistema - Usuário Master Criado!");
 		};
 	}

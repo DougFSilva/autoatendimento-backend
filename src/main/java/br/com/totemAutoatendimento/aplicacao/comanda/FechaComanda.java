@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 import br.com.totemAutoatendimento.dominio.comanda.ComandaRepository;
@@ -25,9 +25,9 @@ public class FechaComanda {
 
 	private final PedidoRepository pedidoRepository;
 
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public FechaComanda(ComandaRepository repository, PedidoRepository pedidoRepository, SystemLogger logger) {
+	public FechaComanda(ComandaRepository repository, PedidoRepository pedidoRepository, StandardLogger logger) {
 		this.repository = repository;
 		this.pedidoRepository = pedidoRepository;
 		this.logger = logger;
@@ -37,9 +37,9 @@ public class FechaComanda {
 	public DadosDeComanda fechar(Long id, TipoPagamento tipoPagamento, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Comanda> comanda = repository.buscarPeloId(id);
-    	if(comanda.isEmpty()) {
-    		throw new ObjetoNaoEncontradoException(String.format("Comanda com id %d não encontrada!", id));
-    	}
+		if (comanda.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(String.format("Comanda com id %d não encontrada!", id));
+		}
 		if (!comanda.get().getAberta()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(
 					String.format("Comanda com id %d já está fechada!", comanda.get().getId()));
@@ -53,10 +53,8 @@ public class FechaComanda {
 		comanda.get().setAberta(false);
 		comanda.get().setTipoPagamento(tipoPagamento);
 		comanda.get().setFechamento(LocalDateTime.now());
-		Comanda comandaFechada = repository.editar(comanda.get());
-		logger.info(
-				String.format("Usuário %s - Comanda com id %d fechada!", usuarioAutenticado.getRegistro(), comandaFechada.getId())
-		);
+		Comanda comandaFechada = repository.salvar(comanda.get());
+		logger.info(String.format("Comanda com id %d fechada!", comandaFechada.getId()), usuarioAutenticado);
 		return new DadosDeComanda(comandaFechada);
 	}
 }

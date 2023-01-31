@@ -20,33 +20,26 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class AnotacaoEntityAdapter implements AnotacaoRepository {
 
 	@Autowired
-	private AnotacaoEntityDao repository;
+	private AnotacaoEntityDao dao;
 
 	@Autowired
 	private AnotacaoEntityConverter anotacaoEntityConverter;
-
+	
 	@Override
-	public Anotacao criar(Anotacao anotacao) {
-		AnotacaoEntity entity = repository.save(anotacaoEntityConverter.converterParaAnotacaoEntity(anotacao));
+	public Anotacao salvar(Anotacao anotacao) {
+		AnotacaoEntity entity = dao.save(anotacaoEntityConverter.converterParaAnotacaoEntity(anotacao));
 		return anotacaoEntityConverter.converterParaAnotacao(entity);
 	}
 
 	@Override
-	public void remover(Anotacao anotacao) {
-		AnotacaoEntity entity = repository.save(anotacaoEntityConverter.converterParaAnotacaoEntity(anotacao));
-		repository.delete(entity);
-	}
-
-	@Override
-	public Anotacao editar(Anotacao anotacaoAtualizada) {
-		AnotacaoEntity entity = repository
-				.save(anotacaoEntityConverter.converterParaAnotacaoEntity(anotacaoAtualizada));
-		return anotacaoEntityConverter.converterParaAnotacao(entity);
+	public void deletar(Anotacao anotacao) {
+		AnotacaoEntity entity = dao.save(anotacaoEntityConverter.converterParaAnotacaoEntity(anotacao));
+		dao.delete(entity);
 	}
 
 	@Override
 	public Optional<Anotacao> buscarPeloId(Long id) {
-		Optional<AnotacaoEntity> entity = repository.findById(id);
+		Optional<AnotacaoEntity> entity = dao.findById(id);
 		if (entity.isPresent()) {
 			return Optional.of(anotacaoEntityConverter.converterParaAnotacao(entity.get()));
 		}
@@ -55,7 +48,7 @@ public class AnotacaoEntityAdapter implements AnotacaoRepository {
 
 	@Override
 	public Page<Anotacao> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
-		return repository.findAllByTimestampBetween(paginacao, 
+		return dao.findAllByTimestampBetween(paginacao, 
 				LocalDateTime.of(dataInicial, LocalTime.MIN),
 				LocalDateTime.of(dataFinal, LocalTime.MAX))
 				.map(anotacaoEntityConverter::converterParaAnotacao);
@@ -63,7 +56,7 @@ public class AnotacaoEntityAdapter implements AnotacaoRepository {
 
 	@Override
 	public Page<Anotacao> buscarTodas(Pageable paginacao) {
-		return repository.findAll(paginacao).map(anotacaoEntityConverter::converterParaAnotacao);
+		return dao.findAll(paginacao).map(anotacaoEntityConverter::converterParaAnotacao);
 	}
 
 }

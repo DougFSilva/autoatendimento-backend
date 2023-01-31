@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.totemAutoatendimento.aplicacao.cliente.BuscaDadosDeClientes;
-import br.com.totemAutoatendimento.aplicacao.cliente.CriaCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.CadastraCliente;
+import br.com.totemAutoatendimento.aplicacao.cliente.DeletaCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.EditaCliente;
-import br.com.totemAutoatendimento.aplicacao.cliente.RemoveCliente;
-import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.ClienteEntityAdapter;
 
 @Configuration
@@ -18,21 +18,21 @@ public class ClienteBeanConfiguration {
 	private ClienteEntityAdapter clienteEntityAdapter;
 	
 	@Autowired
-	private LoggerAdapter loggerAdapter;
+	private StandardLogger standardLogger;
 
 	@Bean
-	CriaCliente criaCliente() {
-		return new CriaCliente(clienteEntityAdapter, loggerAdapter);
+	CadastraCliente criaCliente() {
+		return new CadastraCliente(clienteEntityAdapter, standardLogger);
 	}
 
 	@Bean
-	RemoveCliente removeCliente() {
-		return new RemoveCliente(clienteEntityAdapter, loggerAdapter);
+	DeletaCliente removeCliente() {
+		return new DeletaCliente(clienteEntityAdapter, standardLogger);
 	}
 
 	@Bean
 	EditaCliente editaCliente() {
-		return new EditaCliente(clienteEntityAdapter, loggerAdapter);
+		return new EditaCliente(clienteEntityAdapter, standardLogger);
 	}
 
 	@Bean

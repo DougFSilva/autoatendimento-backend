@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.VerificaDisponibilidadeDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
@@ -33,10 +33,10 @@ public class FazPedido {
 
 	private final EventoDePedido eventoDePedido;
 
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
 	public FazPedido(PedidoRepository repository, ComandaRepository comandaRepository,
-			MercadoriaRepository mercadoriaRepository, EventoDePedido eventoDePedido, SystemLogger logger) {
+			MercadoriaRepository mercadoriaRepository, EventoDePedido eventoDePedido, StandardLogger logger) {
 		this.repository = repository;
 		this.comandaRepository = comandaRepository;
 		this.mercadoriaRepository = mercadoriaRepository;
@@ -57,16 +57,16 @@ public class FazPedido {
 					mercadoriaRepository);
 			Mercadoria mercadoria = verificaDisponibilidadeDeMercadoria.verificar(dado.codigoDaMercadoria());
 			Pedido pedido = new Pedido(comanda.get(), mercadoria, dado.mesa(), dado.quantidade());
-			Pedido pedidoCriado = repository.criar(pedido);
+			Pedido pedidoCriado = repository.salvar(pedido);
 			comanda.get().adicionarValor(pedidoCriado.getValor());
 			eventoDePedido.notificar(
 					new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_EFETUADO, new DadosDePedido(pedidoCriado))
 			);
 			logger.info(
-					String.format("Pedido com id %d criado para comanda com id %d!", pedidoCriado.getId(), comanda.get().getId())
-			);
+					String.format("Pedido com id %d criado para comanda com id %d!", 
+							pedidoCriado.getId(), comanda.get().getId()), usuarioAutenticado);
 		});
-		return new DadosDeComanda(comandaRepository.editar(comanda.get()));
+		return new DadosDeComanda(comandaRepository.salvar(comanda.get()));
 	}
 
 }

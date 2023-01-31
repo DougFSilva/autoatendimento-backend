@@ -2,7 +2,7 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria.categoria;
 
 import java.util.Optional;
 
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
@@ -14,9 +14,9 @@ public class EditaCategoria {
 
 	private final CategoriaRepository repository;
 
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public EditaCategoria(CategoriaRepository repository, SystemLogger logger) {
+	public EditaCategoria(CategoriaRepository repository, StandardLogger logger) {
 		this.repository = repository;
 		this.logger = logger;
 	}
@@ -24,18 +24,17 @@ public class EditaCategoria {
 	public Categoria editar(Long id, String nome, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		Optional<Categoria> categoria = repository.buscarPeloId(id);
-		if(categoria.isEmpty()) {
+		if (categoria.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Categoria com id %d não encontrada!", id));
 		}
 		Optional<Categoria> categoriaPorNome = repository.buscarPorNome(nome);
 		if (categoriaPorNome.isPresent() && categoriaPorNome.get().getId() != id) {
-			throw new ViolacaoDeIntegridadeDeDadosException(String.format("Categoria com nome %s já cadastrada!", nome));
+			throw new ViolacaoDeIntegridadeDeDadosException(
+					String.format("Categoria com nome %s já cadastrada!", nome));
 		}
 		categoria.get().setNome(nome);
-		Categoria categoriaEditada = repository.editar(categoria.get());
-		logger.info(
-				String.format("Usuário %s - Editada categoria de id %d!", usuarioAutenticado.getRegistro(), categoriaEditada.getId())
-		);
+		Categoria categoriaEditada = repository.salvar(categoria.get());
+		logger.info(String.format("Categoria de id %d editada!", categoriaEditada.getId()), usuarioAutenticado);
 		return categoriaEditada;
 	}
 }

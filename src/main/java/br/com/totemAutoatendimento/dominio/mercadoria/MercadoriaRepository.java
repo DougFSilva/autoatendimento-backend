@@ -12,11 +12,9 @@ import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
 
 public interface MercadoriaRepository {
 
-	Mercadoria criar(Mercadoria mercadoria);
+	Mercadoria salvar(Mercadoria mercadoria);
 
-	void remover(Mercadoria mercadoria);
-
-	Mercadoria editar(Mercadoria mercadoriaAtualizada);
+	void deletar(Mercadoria mercadoria);
 
 	Optional<Mercadoria> buscarPeloId(Long id);
 

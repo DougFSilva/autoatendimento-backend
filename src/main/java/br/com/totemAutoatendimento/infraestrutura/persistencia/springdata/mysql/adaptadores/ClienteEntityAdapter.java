@@ -17,32 +17,26 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class ClienteEntityAdapter implements ClienteRepository{
 
 	@Autowired 
-	private ClienteEntityDao repository;
+	private ClienteEntityDao dao;
 	
 	@Autowired
 	private ClienteEntityConverter clienteEntityConverter;
 
 	@Override
-	public Cliente criar(Cliente cliente) {
-		ClienteEntity entity = repository.save(clienteEntityConverter.converterParaClienteEntity(cliente));
+	public Cliente salvar(Cliente cliente) {
+		ClienteEntity entity = dao.save(clienteEntityConverter.converterParaClienteEntity(cliente));
 		return clienteEntityConverter.converterParaCliente(entity);
 		
 	}
 
 	@Override
-	public void remover(Cliente cliente) {
-		repository.delete(clienteEntityConverter.converterParaClienteEntity(cliente));
-	}
-
-	@Override
-	public Cliente editar(Cliente clienteAtualizado) {
-		ClienteEntity entity = repository.save(clienteEntityConverter.converterParaClienteEntity(clienteAtualizado));
-		return clienteEntityConverter.converterParaCliente(entity);
+	public void deletar(Cliente cliente) {
+		dao.delete(clienteEntityConverter.converterParaClienteEntity(cliente));
 	}
 
 	@Override
 	public Optional<Cliente> buscarPeloId(Long id) {
-		Optional<ClienteEntity> entity = repository.findById(id);
+		Optional<ClienteEntity> entity = dao.findById(id);
 		if(entity.isPresent()) {
 			return Optional.of(clienteEntityConverter.converterParaCliente(entity.get()));
 		}
@@ -51,7 +45,7 @@ public class ClienteEntityAdapter implements ClienteRepository{
 
 	@Override
 	public Optional<Cliente> buscarClientePorCpf(String cpf) {
-		Optional<ClienteEntity> entity = repository.findByCpf(cpf);
+		Optional<ClienteEntity> entity = dao.findByCpf(cpf);
 		if(entity.isPresent()) {
 			return Optional.of(clienteEntityConverter.converterParaCliente(entity.get()));
 		}
@@ -60,12 +54,12 @@ public class ClienteEntityAdapter implements ClienteRepository{
 
 	@Override
 	public Page<Cliente> buscarPorCidade(Pageable paginacao, String cidade) {
-		return repository.findAllByEnderecoCidade(paginacao, cidade).map(clienteEntityConverter::converterParaCliente);
+		return dao.findAllByEnderecoCidade(paginacao, cidade).map(clienteEntityConverter::converterParaCliente);
 	}
 
 	@Override
 	public Page<Cliente> buscarTodos(Pageable paginacao) {
-		return repository.findAll(paginacao).map(clienteEntityConverter::converterParaCliente);
+		return dao.findAll(paginacao).map(clienteEntityConverter::converterParaCliente);
 	}
 
 }

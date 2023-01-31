@@ -22,7 +22,7 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class MercadoriaEntityAdapter implements MercadoriaRepository {
 
 	@Autowired
-	private MercadoriaEntityDao repository;
+	private MercadoriaEntityDao dao;
 
 	@Autowired
 	private MercadoriaEntityConverter mercadoriaEntityConverter;
@@ -31,25 +31,19 @@ public class MercadoriaEntityAdapter implements MercadoriaRepository {
 	private SubcategoriaEntityConverter subcategoriaEntityConverter;
 
 	@Override
-	public Mercadoria criar(Mercadoria mercadoria) {
-		MercadoriaEntity entity = repository.save(mercadoriaEntityConverter.converterParaMercadoriaEntity(mercadoria));
+	public Mercadoria salvar(Mercadoria mercadoria) {
+		MercadoriaEntity entity = dao.save(mercadoriaEntityConverter.converterParaMercadoriaEntity(mercadoria));
 		return mercadoriaEntityConverter.converterParaMercadoria(entity);
 	}
 
 	@Override
-	public void remover(Mercadoria mercadoria) {
-		repository.delete(mercadoriaEntityConverter.converterParaMercadoriaEntity(mercadoria));
-	}
-
-	@Override
-	public Mercadoria editar(Mercadoria mercadoriaAtualizada) {
-		MercadoriaEntity entity = repository.save(mercadoriaEntityConverter.converterParaMercadoriaEntity(mercadoriaAtualizada));
-		return mercadoriaEntityConverter.converterParaMercadoria(entity);
+	public void deletar(Mercadoria mercadoria) {
+		dao.delete(mercadoriaEntityConverter.converterParaMercadoriaEntity(mercadoria));
 	}
 
 	@Override
 	public Optional<Mercadoria> buscarPeloId(Long id) {
-		Optional<MercadoriaEntity> entity = repository.findById(id);
+		Optional<MercadoriaEntity> entity = dao.findById(id);
 		if (entity.isPresent()) {
 			return Optional.of(mercadoriaEntityConverter.converterParaMercadoria(entity.get()));
 		}
@@ -58,7 +52,7 @@ public class MercadoriaEntityAdapter implements MercadoriaRepository {
 
 	@Override
 	public Optional<Mercadoria> buscarPeloCodigo(String codigo) {
-		Optional<MercadoriaEntity> entity = repository.findByCodigo(codigo);
+		Optional<MercadoriaEntity> entity = dao.findByCodigo(codigo);
 		if (entity.isPresent()) {
 			return Optional.of(mercadoriaEntityConverter.converterParaMercadoria(entity.get()));
 		}
@@ -67,7 +61,7 @@ public class MercadoriaEntityAdapter implements MercadoriaRepository {
 
 	@Override
 	public Page<Mercadoria> buscarPelaSubcategoria(Pageable paginacao, Subcategoria subcatergoria) {
-		return repository
+		return dao
 				.findAllBySubcategoria(paginacao,
 						subcategoriaEntityConverter.converterParaSubcategoriaEntity(subcatergoria))
 				.map(mercadoriaEntityConverter::converterParaMercadoria);
@@ -75,24 +69,24 @@ public class MercadoriaEntityAdapter implements MercadoriaRepository {
 
 	@Override
 	public Page<Mercadoria> buscarEmPromocao(Pageable paginacao, Boolean promocao) {
-		return repository.findAllByPromocao(paginacao, promocao)
+		return dao.findAllByPromocao(paginacao, promocao)
 				.map(mercadoriaEntityConverter::converterParaMercadoria);
 	}
 
 	@Override
 	public Page<Mercadoria> buscarTodas(Pageable paginacao) {
-		return repository.findAll(paginacao).map(mercadoriaEntityConverter::converterParaMercadoria);
+		return dao.findAll(paginacao).map(mercadoriaEntityConverter::converterParaMercadoria);
 	}
 	
 	@Override
 	public Page<RelatorioMercadoriasMaisVendidas> buscarMaisVendidasPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
-		return repository.buscarMaisVendidasPelaData(paginacao, dataInicial, dataFinal);
+		return dao.buscarMaisVendidasPelaData(paginacao, dataInicial, dataFinal);
 	}
 
 	@Override
 	public Page<RelatorioMercadoriasDeMaiorFaturamento> buscarComMaiorFaturamentoPelaData(Pageable paginacao,
 			LocalDate dataInicial, LocalDate dataFinal) {
-		return repository.buscarComMaiorFaturamentoPelaData(paginacao, dataInicial, dataFinal);
+		return dao.buscarComMaiorFaturamentoPelaData(paginacao, dataInicial, dataFinal);
 	}
 
 

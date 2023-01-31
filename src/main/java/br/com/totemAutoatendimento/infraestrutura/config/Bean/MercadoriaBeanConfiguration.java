@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.BuscaDadosDeMercadorias;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.CriaMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.CadastraMercadoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.DeletaMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.EditaMercadoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.RemoveMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.UploadImagemMercadoria;
-import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.MercadoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
@@ -23,21 +23,21 @@ public class MercadoriaBeanConfiguration {
 	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
 	
 	@Autowired
-	private LoggerAdapter loggerAdapter;
+	private StandardLogger standardLogger;
 
 	@Bean
-	CriaMercadoria criaMercadoria() {
-		return new CriaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
+	CadastraMercadoria criaMercadoria() {
+		return new CadastraMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, standardLogger);
 	}
 
 	@Bean
-	RemoveMercadoria removeMercadoria() {
-		return new RemoveMercadoria(mercadoriaEntityAdapter, loggerAdapter);
+	DeletaMercadoria removeMercadoria() {
+		return new DeletaMercadoria(mercadoriaEntityAdapter, standardLogger);
 	}
 
 	@Bean
 	EditaMercadoria editaMercadoria() {
-		return new EditaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
+		return new EditaMercadoria(mercadoriaEntityAdapter, subcategoriaEntityAdapter, standardLogger);
 	}
 
 	@Bean
@@ -47,7 +47,7 @@ public class MercadoriaBeanConfiguration {
 
 	@Bean
 	UploadImagemMercadoria uploadImagemDeMercadoria() {
-		return new UploadImagemMercadoria(mercadoriaEntityAdapter, loggerAdapter);
+		return new UploadImagemMercadoria(mercadoriaEntityAdapter, standardLogger);
 	}
 
 }

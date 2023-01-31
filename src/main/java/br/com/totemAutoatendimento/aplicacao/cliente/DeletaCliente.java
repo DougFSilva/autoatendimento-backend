@@ -4,34 +4,32 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 import br.com.totemAutoatendimento.dominio.cliente.ClienteRepository;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-public class RemoveCliente {
+public class DeletaCliente {
 
 	private final ClienteRepository repository;
 
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public RemoveCliente(ClienteRepository repository, SystemLogger logger) {
+	public DeletaCliente(ClienteRepository repository, StandardLogger logger) {
 		this.repository = repository;
 		this.logger = logger;
 	}
-	
+
 	@Transactional
-	public void remover(Long id, Usuario usuarioAutenticado) {
+	public void deletar(Long id, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		Optional<Cliente> cliente = repository.buscarPeloId(id);
 		if (cliente.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", id));
 		}
-		repository.remover(cliente.get());
-		logger.info(
-				String.format("Usuário %s - Cliente com cpf %s removido!", usuarioAutenticado.getRegistro(), cliente.get().getCpf())
-		);
+		repository.deletar(cliente.get());
+		logger.info(String.format("Cliente com cpf %s deletado!", cliente.get().getCpf()), usuarioAutenticado);
 	}
 }

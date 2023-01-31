@@ -21,7 +21,7 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class PedidoEntityAdapter implements PedidoRepository {
 
 	@Autowired
-	private PedidoEntityDao repository;
+	private PedidoEntityDao dao;
 
 	@Autowired
 	private PedidoEntityConverter pedidoEntityConverter;
@@ -30,25 +30,19 @@ public class PedidoEntityAdapter implements PedidoRepository {
 	private ComandaEntityConverter comandaEntityConverter;
 
 	@Override
-	public Pedido criar(Pedido pedido) {
-		PedidoEntity entity = repository.save(pedidoEntityConverter.converterParaPedidoEntity(pedido));
+	public Pedido salvar(Pedido pedido) {
+		PedidoEntity entity = dao.save(pedidoEntityConverter.converterParaPedidoEntity(pedido));
 		return pedidoEntityConverter.converterParaPedido(entity);
 	}
 
 	@Override
-	public void remover(Pedido pedido) {
-		repository.delete(pedidoEntityConverter.converterParaPedidoEntity(pedido));
-	}
-
-	@Override
-	public Pedido editar(Pedido pedidoAtualizado) {
-		PedidoEntity entity = repository.save(pedidoEntityConverter.converterParaPedidoEntity(pedidoAtualizado));
-		return pedidoEntityConverter.converterParaPedido(entity);
+	public void deletar(Pedido pedido) {
+		dao.delete(pedidoEntityConverter.converterParaPedidoEntity(pedido));
 	}
 
 	@Override
 	public Optional<Pedido> buscarPeloId(Long id) {
-		Optional<PedidoEntity> entity = repository.findById(id);
+		Optional<PedidoEntity> entity = dao.findById(id);
 		if (entity.isPresent()) {
 			return Optional.of(pedidoEntityConverter.converterParaPedido(entity.get()));
 		}
@@ -57,24 +51,24 @@ public class PedidoEntityAdapter implements PedidoRepository {
 
 	@Override
 	public List<Pedido> buscarPelaComanda(Comanda comanda) {
-		return repository.findAllByComanda(comandaEntityConverter.converterParaComandaEntity(comanda))
+		return dao.findAllByComanda(comandaEntityConverter.converterParaComandaEntity(comanda))
 				.stream().map(pedidoEntityConverter::converterParaPedido).toList();
 	}
 
 	@Override
 	public Page<Pedido> buscarPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal) {
-		return repository.findAllByDataBetween(paginacao, dataInicial, dataFinal)
+		return dao.findAllByDataBetween(paginacao, dataInicial, dataFinal)
 				.map(pedidoEntityConverter::converterParaPedido);
 	}
 
 	@Override
 	public Page<Pedido> buscarEntregue(Pageable paginacao, Boolean entregue) {
-		return repository.findAllByEntregue(paginacao, entregue).map(pedidoEntityConverter::converterParaPedido);
+		return dao.findAllByEntregue(paginacao, entregue).map(pedidoEntityConverter::converterParaPedido);
 	}
 
 	@Override
 	public Page<Pedido> buscarTodos(Pageable paginacao) {
-		return repository.findAll(paginacao).map(pedidoEntityConverter::converterParaPedido);
+		return dao.findAll(paginacao).map(pedidoEntityConverter::converterParaPedido);
 	}
 
 }

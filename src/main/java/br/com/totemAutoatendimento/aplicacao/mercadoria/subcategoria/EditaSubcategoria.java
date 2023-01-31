@@ -2,7 +2,7 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
 import java.util.Optional;
 
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosDeSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria.dto.DadosEditarSubcategoria;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
@@ -20,9 +20,9 @@ public class EditaSubcategoria {
 
 	private final CategoriaRepository categoriaRepository;
 	
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public EditaSubcategoria(SubcategoriaRepository repository, CategoriaRepository categoriaRepository, SystemLogger logger) {
+	public EditaSubcategoria(SubcategoriaRepository repository, CategoriaRepository categoriaRepository, StandardLogger logger) {
 		this.repository = repository;
 		this.categoriaRepository = categoriaRepository;
 		this.logger = logger;
@@ -44,11 +44,8 @@ public class EditaSubcategoria {
 		}
         subcategoria.get().setNome(dados.nome());
         subcategoria.get().setCategoria(categoria.get());
-        Subcategoria subcategoriaEditada = repository.editar(subcategoria.get());
-        logger.info(
-        		String.format("Usuário %s - Subcategoria de id %d editada!", 
-        				usuarioAutenticado.getRegistro(), subcategoriaEditada.getId())
-        );
+        Subcategoria subcategoriaEditada = repository.salvar(subcategoria.get());
+        logger.info(String.format("Subcategoria de id %d editada!", subcategoriaEditada.getId()), usuarioAutenticado);
         return new DadosDeSubcategoria(subcategoriaEditada);
     }
 }

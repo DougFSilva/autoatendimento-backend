@@ -16,31 +16,25 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class CategoriaEntityAdapter implements CategoriaRepository{
 	
 	@Autowired
-	private CategoriaEntityDao repository;
+	private CategoriaEntityDao dao;
 	
 	@Autowired
 	private CategoriaEntityConverter categoriaEntityConverter;
 
 	@Override
-	public Categoria criar(Categoria categoria) {
-		CategoriaEntity entity = repository.save(categoriaEntityConverter.converterParaCategoriaEntity(categoria));
+	public Categoria salvar(Categoria categoria) {
+		CategoriaEntity entity = dao.save(categoriaEntityConverter.converterParaCategoriaEntity(categoria));
 		return categoriaEntityConverter.converterParaCategoria(entity);
 	}
 
 	@Override
-	public void remover(Categoria categoria) {
-		repository.delete(categoriaEntityConverter.converterParaCategoriaEntity(categoria));
-	}
-
-	@Override
-	public Categoria editar(Categoria categoriaAtualizada) {
-		CategoriaEntity entity = repository.save(categoriaEntityConverter.converterParaCategoriaEntity(categoriaAtualizada));
-		return categoriaEntityConverter.converterParaCategoria(entity);
+	public void deletar(Categoria categoria) {
+		dao.delete(categoriaEntityConverter.converterParaCategoriaEntity(categoria));
 	}
 
 	@Override
 	public Optional<Categoria> buscarPeloId(Long id) {
-		Optional<CategoriaEntity> entity = repository.findById(id);
+		Optional<CategoriaEntity> entity = dao.findById(id);
 		if(entity.isPresent()) {
 			return Optional.of(categoriaEntityConverter.converterParaCategoria(entity.get()));
 		}
@@ -49,7 +43,7 @@ public class CategoriaEntityAdapter implements CategoriaRepository{
 
 	@Override
 	public Optional<Categoria> buscarPorNome(String nome) {
-		Optional<CategoriaEntity> entity = repository.findByNome(nome);
+		Optional<CategoriaEntity> entity = dao.findByNome(nome);
 		if(entity.isPresent()) {
 			return Optional.of(categoriaEntityConverter.converterParaCategoria(entity.get()));
 		}
@@ -58,7 +52,7 @@ public class CategoriaEntityAdapter implements CategoriaRepository{
 
 	@Override
 	public List<Categoria> buscarTodas() {
-		return repository.findAll().stream().map(categoriaEntityConverter::converterParaCategoria).toList();
+		return dao.findAll().stream().map(categoriaEntityConverter::converterParaCategoria).toList();
 	}
 
 }

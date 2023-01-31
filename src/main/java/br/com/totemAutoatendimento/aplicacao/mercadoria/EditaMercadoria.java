@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosDeMercadoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.dto.DadosEditarMercadoria;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
@@ -21,10 +21,11 @@ public class EditaMercadoria {
 	private final MercadoriaRepository repository;
 
 	private final SubcategoriaRepository subcategoriaRepository;
-	
-	private final SystemLogger logger;
 
-	public EditaMercadoria(MercadoriaRepository repository, SubcategoriaRepository subcategoriaRepository, SystemLogger logger) {
+	private final StandardLogger logger;
+
+	public EditaMercadoria(MercadoriaRepository repository, SubcategoriaRepository subcategoriaRepository,
+			StandardLogger logger) {
 		this.repository = repository;
 		this.subcategoriaRepository = subcategoriaRepository;
 		this.logger = logger;
@@ -39,13 +40,14 @@ public class EditaMercadoria {
 					String.format("Mercadoria com código %s já cadastrada!", dados.codigo()));
 		}
 		Optional<Mercadoria> mercadoria = repository.buscarPeloId(id);
-		if(mercadoria.isEmpty()) {
+		if (mercadoria.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(String.format("Mercadoria com id %d não encontrada!", id));
 		}
 		Optional<Subcategoria> subcategoria = subcategoriaRepository.buscarPeloId(dados.subcategoriaId());
-    	if(subcategoria.isEmpty()) {
-    		throw  new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com id %d não encontrada!", dados.subcategoriaId()));
-    	}
+		if (subcategoria.isEmpty()) {
+			throw new ViolacaoDeIntegridadeDeDadosException(
+					String.format("Subcategoria com id %d não encontrada!", dados.subcategoriaId()));
+		}
 		mercadoria.get().setCodigo(dados.codigo());
 		mercadoria.get().setSubcategoria(subcategoria.get());
 		mercadoria.get().setDescricao(dados.descricao());
@@ -53,11 +55,8 @@ public class EditaMercadoria {
 		mercadoria.get().setPromocao(dados.promocao());
 		mercadoria.get().setPrecoPromocional(dados.precoPromocional());
 		mercadoria.get().setDisponivel(dados.disponivel());
-		Mercadoria mercadoriaEditada = repository.editar(mercadoria.get());
-		logger.info(
-				String.format("Usuário %s - Mercadoria com código %s editada!", 
-						usuarioAutenticado.getRegistro(), mercadoriaEditada.getCodigo())
-		);
+		Mercadoria mercadoriaEditada = repository.salvar(mercadoria.get());
+		logger.info(String.format("Mercadoria com código %s editada!", mercadoriaEditada.getCodigo()), usuarioAutenticado);
 		return new DadosDeMercadoria(mercadoriaEditada);
 	}
 }

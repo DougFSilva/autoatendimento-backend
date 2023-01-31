@@ -10,11 +10,9 @@ import br.com.totemAutoatendimento.dominio.cliente.Cliente;
 
 public interface ComandaRepository {
 
-	Comanda criar(Comanda comanda);
+	Comanda salvar(Comanda comanda);
 
-	void remover(Comanda comanda);
-
-	Comanda editar(Comanda comandaAtualizada);
+	void deletar(Comanda comanda);
 
 	Optional<Comanda> buscarPeloId(Long id);
 

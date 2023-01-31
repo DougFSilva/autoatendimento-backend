@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.totemAutoatendimento.aplicacao.cartao.BuscaTodosCartoes;
-import br.com.totemAutoatendimento.aplicacao.cartao.CriaCartao;
-import br.com.totemAutoatendimento.aplicacao.cartao.RemoveCartao;
-import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
+import br.com.totemAutoatendimento.aplicacao.cartao.CadastraCartao;
+import br.com.totemAutoatendimento.aplicacao.cartao.DeletaCartao;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CartaoEntityAdapter;
 
 @Configuration
@@ -17,16 +17,16 @@ public class CartaoBeanConfiguration {
 	private CartaoEntityAdapter cartaoEntityAdapter;
 	
 	@Autowired
-	private LoggerAdapter loggerAdapter;
+	private StandardLogger standardLogger;
 
 	@Bean
-	CriaCartao criaCartao() {
-		return new CriaCartao(cartaoEntityAdapter, loggerAdapter);
+	CadastraCartao criaCartao() {
+		return new CadastraCartao(cartaoEntityAdapter, standardLogger);
 	}
 	
 	@Bean
-	RemoveCartao removeCartao() {
-		return new RemoveCartao(cartaoEntityAdapter, loggerAdapter);
+	DeletaCartao removeCartao() {
+		return new DeletaCartao(cartaoEntityAdapter, standardLogger);
 	}
 	
 	@Bean

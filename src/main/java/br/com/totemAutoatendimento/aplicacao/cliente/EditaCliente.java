@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosDeCliente;
 import br.com.totemAutoatendimento.aplicacao.cliente.dto.DadosEditarCliente;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.cliente.Cliente;
@@ -19,9 +19,9 @@ public class EditaCliente {
 
 	private final ClienteRepository repository;
 
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public EditaCliente(ClienteRepository repository, SystemLogger logger) {
+	public EditaCliente(ClienteRepository repository, StandardLogger logger) {
 		this.repository = repository;
 		this.logger = logger;
 	}
@@ -47,10 +47,8 @@ public class EditaCliente {
 		cliente.get().getEndereco().setBairro(dados.bairro());
 		cliente.get().getEndereco().setRua(dados.numero());
 		cliente.get().getEndereco().setNumero(dados.numero());
-		Cliente clienteEditado = repository.editar(cliente.get());
-		logger.info(
-				String.format("Usuário %s - Cliente com cpf %s editado!", usuarioAutenticado.getRegistro(),clienteEditado.getCpf())
-		);
+		Cliente clienteEditado = repository.salvar(cliente.get());
+		logger.info(String.format("Cliente com cpf %s editado!", clienteEditado.getCpf()), usuarioAutenticado);
 		return new DadosDeCliente(clienteEditado);
 	}
 

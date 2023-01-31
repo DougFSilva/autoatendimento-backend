@@ -14,34 +14,28 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 
 @Repository
 public class UsuarioEntityAdapter implements UsuarioRepository {
-	
-	@Autowired 
-	private UsuarioEntityDao repository;
+
+	@Autowired
+	private UsuarioEntityDao dao;
 	
 	@Autowired
 	private UsuarioEntityConverter usuarioEntityConverter;
-	
 
 	@Override
-	public Usuario criar(Usuario usuario) {
-		UsuarioEntity entity = repository.save(usuarioEntityConverter.converterParaUsuarioEntity(usuario));
-		return usuarioEntityConverter.converterParaUsuario(entity);
+	public Usuario salvar(Usuario usuario) {
+		UsuarioEntity entity = usuarioEntityConverter.converterParaUsuarioEntity(usuario);
+		return usuarioEntityConverter.converterParaUsuario(dao.save(entity));
 	}
 
 	@Override
-	public void remover(Usuario usuario) {
-		repository.delete(usuarioEntityConverter.converterParaUsuarioEntity(usuario));
-	}
-
-	@Override
-	public Usuario editar(Usuario usuarioAtualizado) {
-		UsuarioEntity entity = repository.save(usuarioEntityConverter.converterParaUsuarioEntity(usuarioAtualizado));
-		return usuarioEntityConverter.converterParaUsuario(entity);
+	public void deletar(Usuario usuario) {
+		UsuarioEntity entity = usuarioEntityConverter.converterParaUsuarioEntity(usuario);
+		dao.delete(entity);
 	}
 
 	@Override
 	public Optional<Usuario> buscarPeloId(Long id) {
-		Optional<UsuarioEntity> entity = repository.findById(id);
+		Optional<UsuarioEntity> entity = dao.findById(id);
 		if(entity.isPresent()) {
 			return Optional.of(usuarioEntityConverter.converterParaUsuario(entity.get()));
 		}
@@ -49,17 +43,8 @@ public class UsuarioEntityAdapter implements UsuarioRepository {
 	}
 
 	@Override
-	public Optional<Usuario> buscarPeloCpf(String cpf) {
-		Optional<UsuarioEntity> entity = repository.findByCpf(cpf);
-		if(entity.isPresent()) {
-			return Optional.of(usuarioEntityConverter.converterParaUsuario(entity.get()));
-		}
-		return Optional.empty();
-	}
-
-	@Override
-	public Optional<Usuario> buscarPeloRegistro(String registro) {
-		Optional<UsuarioEntity> entity = repository.findByRegistro(registro);
+	public Optional<Usuario> buscarPeloUsername(String username) {
+		Optional<UsuarioEntity> entity = dao.findByUsername(username);
 		if(entity.isPresent()) {
 			return Optional.of(usuarioEntityConverter.converterParaUsuario(entity.get()));
 		}
@@ -68,8 +53,7 @@ public class UsuarioEntityAdapter implements UsuarioRepository {
 
 	@Override
 	public List<Usuario> buscarTodos() {
-		return repository.findAll().stream().map(usuarioEntityConverter::converterParaUsuario).toList();
+		return dao.findAll().stream().map(usuarioEntityConverter::converterParaUsuario).toList();
 	}
-
-
+	
 }

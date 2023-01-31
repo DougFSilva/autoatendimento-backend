@@ -8,11 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface AnotacaoRepository {
 
-	Anotacao criar(Anotacao anotacao);
+	Anotacao salvar(Anotacao anotacao);
 	
-	void remover(Anotacao anotacao);
-	
-	Anotacao editar(Anotacao anotacaoAtualizada);
+	void deletar(Anotacao anotacao);
 	
 	Optional<Anotacao> buscarPeloId(Long id);
 	

@@ -5,18 +5,13 @@ import java.util.Optional;
 
 public interface UsuarioRepository {
 
-	Usuario criar(Usuario usuario);
+	Usuario salvar(Usuario usuario);
 	
-	void remover(Usuario usuario);
-	
-	Usuario editar(Usuario usuarioAtualizado);
+	void deletar(Usuario usuario);
 	
 	Optional<Usuario> buscarPeloId(Long id);
 	
-	Optional<Usuario> buscarPeloCpf(String cpf);
-	
-	Optional<Usuario> buscarPeloRegistro(String registro);
+	Optional<Usuario> buscarPeloUsername(String username);
 	
 	List<Usuario> buscarTodos();
-	
 }

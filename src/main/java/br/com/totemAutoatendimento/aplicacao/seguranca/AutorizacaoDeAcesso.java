@@ -13,7 +13,7 @@ public class AutorizacaoDeAcesso {
 		List<Perfil> perfis = usuario.getPerfis();
 		if (!perfis.contains(new Perfil(TipoPerfil.ADMINISTRADOR))) {
 			throw new UsuarioSemPermissaoException(
-					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getUsername()));
 		}
 	}
 
@@ -21,7 +21,7 @@ public class AutorizacaoDeAcesso {
 		List<Perfil> perfis = usuario.getPerfis();
 		if (!perfis.contains(new Perfil(TipoPerfil.FUNCIONARIO))) {
 			throw new UsuarioSemPermissaoException(
-					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getUsername()));
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class AutorizacaoDeAcesso {
 		List<Perfil> perfis = usuario.getPerfis();
 		if (!perfis.contains(new Perfil(TipoPerfil.TOTEM))) {
 			throw new UsuarioSemPermissaoException(
-					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getUsername()));
 		}
 	}
 
@@ -39,7 +39,7 @@ public class AutorizacaoDeAcesso {
 		if (!perfis.contains(new Perfil(TipoPerfil.ADMINISTRADOR))
 				&& !perfis.contains(new Perfil(TipoPerfil.FUNCIONARIO))) {
 			throw new UsuarioSemPermissaoException(
-					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getUsername()));
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class AutorizacaoDeAcesso {
 				&& !perfis.contains(new Perfil(TipoPerfil.FUNCIONARIO))
 				&& !perfis.contains(new Perfil(TipoPerfil.TOTEM))) {
 			throw new UsuarioSemPermissaoException(
-					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getRegistro()));
+					String.format("Usuário com registro %S sem autorização de acesso!", usuario.getUsername()));
 		}
 	}
 }

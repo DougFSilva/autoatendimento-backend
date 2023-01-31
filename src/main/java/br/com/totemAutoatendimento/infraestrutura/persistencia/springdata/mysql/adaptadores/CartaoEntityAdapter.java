@@ -16,26 +16,26 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class CartaoEntityAdapter implements CartaoRepository{
 
 	@Autowired
-	private CartaoEntityDao repository;
+	private CartaoEntityDao dao;
 	
 	@Autowired
 	private CartaoEntityConverter cartaoEntityConverter;
 	
 	@Override
-	public Cartao criar(Cartao cartao) {
-		CartaoEntity entity = repository.save(cartaoEntityConverter.converterParaCartaoEntity(cartao));
+	public Cartao salvar(Cartao cartao) {
+		CartaoEntity entity = dao.save(cartaoEntityConverter.converterParaCartaoEntity(cartao));
 		return cartaoEntityConverter.converterParaCartao(entity);
 	}
 
 	@Override
-	public void remover(Cartao cartao) {
-		CartaoEntity entity = repository.save(cartaoEntityConverter.converterParaCartaoEntity(cartao));
-		repository.delete(entity);
+	public void deletar(Cartao cartao) {
+		CartaoEntity entity = dao.save(cartaoEntityConverter.converterParaCartaoEntity(cartao));
+		dao.delete(entity);
 	}
 
 	@Override
 	public Optional<Cartao> buscarPeloCodigo(String codigo) {
-		Optional<CartaoEntity> entity = repository.findByCodigo(codigo);
+		Optional<CartaoEntity> entity = dao.findByCodigo(codigo);
 		if(entity.isPresent()) {
 			return Optional.of(cartaoEntityConverter.converterParaCartao(entity.get()));
 		}
@@ -44,7 +44,7 @@ public class CartaoEntityAdapter implements CartaoRepository{
 
 	@Override
 	public List<Cartao> buscarTodos() {
-		List<CartaoEntity> entities = repository.findAll();
+		List<CartaoEntity> entities = dao.findAll();
 		return entities.stream().map(cartaoEntityConverter::converterParaCartao).toList();
 	}
 

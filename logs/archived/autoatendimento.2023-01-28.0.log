@@ -1,0 +1,31 @@
+28 jan. 2023 07:53:10.382 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 07:53:53.242 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 07:57:12.871 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:01:44.351 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:02:07.385 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:13:20.423 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:14:44.136 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:15:30.376 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:16:02.861 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:17:43.754 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:17:49.516 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:19:32.575 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:19:53.959 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:19:57.595 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:20:28.981 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:21:37.974 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:21:39.668 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:22:07.678 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:23:11.647 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:23:29.797 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:23:59.706 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:24:47.697 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:25:06.789 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:25:48.228 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:25:53.437 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+28 jan. 2023 08:26:39.661 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:29:07.979 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:32:38.391 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:32:41.354 [http-nio-8080-exec-4] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:35:46.637 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+28 jan. 2023 08:35:48.108 [http-nio-8080-exec-4] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!

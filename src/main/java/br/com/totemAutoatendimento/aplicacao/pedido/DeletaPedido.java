@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.comanda.Comanda;
@@ -19,7 +19,7 @@ import br.com.totemAutoatendimento.dominio.pedido.PedidoRepository;
 import br.com.totemAutoatendimento.dominio.pedido.TipoDeMensagemDePedido;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-public class RemovePedido {
+public class DeletaPedido {
 
 	private final PedidoRepository repository;
 
@@ -27,10 +27,10 @@ public class RemovePedido {
 
 	private final EventoDePedido eventoDePedido;
 	
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public RemovePedido(PedidoRepository repository, ComandaRepository comandaRepository,
-			EventoDePedido eventoDePedido, SystemLogger logger) {
+	public DeletaPedido(PedidoRepository repository, ComandaRepository comandaRepository,
+			EventoDePedido eventoDePedido, StandardLogger logger) {
 		this.repository = repository;
 		this.comandaRepository = comandaRepository;
 		this.eventoDePedido = eventoDePedido;
@@ -38,7 +38,7 @@ public class RemovePedido {
 	}
 
 	@Transactional
-	public DadosDeComanda remover(Long id, String codigoCartao, Usuario usuarioAutenticado) {
+	public DadosDeComanda deletar(Long id, String codigoCartao, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
@@ -51,13 +51,13 @@ public class RemovePedido {
 		if (pedido.get().getEntregue()) {
 			throw new RegrasDeNegocioException("Não é possível cancelar pedido que já foi entregue!");
 		}
-		repository.remover(pedido.get());
+		repository.deletar(pedido.get());
 		comanda.get().removerValor(pedido.get().getValor());
-		Comanda comandaAtualizada = comandaRepository.editar(comanda.get());
+		Comanda comandaAtualizada = comandaRepository.salvar(comanda.get());
 		eventoDePedido.notificar(
 				new MensagemDePedido(TipoDeMensagemDePedido.PEDIDO_REMOVIDO, new DadosDePedido(pedido.get()))
 		);
-		logger.info(String.format("Pedido com id %d cancelado!", pedido.get().getId()));
+		logger.info(String.format("Pedido com id %d cancelado!", pedido.get().getId()), usuarioAutenticado);
 		return new DadosDeComanda(comandaAtualizada);
 	}
 	

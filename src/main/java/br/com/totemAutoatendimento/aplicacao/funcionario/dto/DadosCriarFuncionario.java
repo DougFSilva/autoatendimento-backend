@@ -1,4 +1,4 @@
-package br.com.totemAutoatendimento.aplicacao.usuario.dto;
+package br.com.totemAutoatendimento.aplicacao.funcionario.dto;
 
 import java.util.List;
 
@@ -9,7 +9,11 @@ import javax.validation.constraints.Pattern;
 
 import br.com.totemAutoatendimento.dominio.usuario.TipoPerfil;
 
-public record DadosEditarUsuario(
+public record DadosCriarFuncionario(
+		
+		@NotBlank
+		@Pattern(regexp = "[a-zA-Z0-9]{4,10}")
+		String matricula,
 		
 		@NotBlank
 		String nome,
@@ -18,14 +22,16 @@ public record DadosEditarUsuario(
 		@Pattern(regexp = "\\d{11}")
 		String cpf,
 
-		@NotBlank
-		@Pattern(regexp = "\\d{2,8}")
-		String registro,
-
 		@Email
 		String email,
-
+		
+		@NotBlank
+		String senha,
+		
 		@NotNull
-		List<TipoPerfil> tipoPerfil) {
+		List<TipoPerfil> tipoPerfil
+		
+
+	) {
 
 }

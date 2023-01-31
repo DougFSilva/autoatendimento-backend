@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.totemAutoatendimento.aplicacao.imagem.SalvaImagem;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.mercadoria.subcategoria.Subcategoria;
@@ -16,9 +16,9 @@ public class UploadImagemDaSubcategoria {
 
 	private final SubcategoriaRepository repository;
 	
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public UploadImagemDaSubcategoria(SubcategoriaRepository repository, SystemLogger logger) {
+	public UploadImagemDaSubcategoria(SubcategoriaRepository repository, StandardLogger logger) {
 		this.repository = repository;
 		this.logger = logger;
 	}
@@ -32,10 +32,7 @@ public class UploadImagemDaSubcategoria {
 		SalvaImagem salvaImagem = new SalvaImagem();
 		salvaImagem.salvar(file, Subcategoria.class, pathPastaImagens, usuarioAutenticado);
 		subcategoria.get().setImagem(baseUrlBuscarImagem + file.getOriginalFilename());
-        Subcategoria subcategoriaEditada = repository.editar(subcategoria.get());
-		logger.info(
-				String.format("Usuário %s - Inserido imagem à subcategoria %s!", 
-						usuarioAutenticado.getRegistro(), subcategoriaEditada.getNome())
-		);
+        Subcategoria subcategoriaEditada = repository.salvar(subcategoria.get());
+		logger.info(String.format("Inserido imagem à subcategoria %s!", subcategoriaEditada.getNome()), usuarioAutenticado);
 	}
 }

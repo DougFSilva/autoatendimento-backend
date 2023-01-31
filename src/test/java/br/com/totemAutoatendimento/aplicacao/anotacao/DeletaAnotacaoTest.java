@@ -30,7 +30,7 @@ import br.com.totemAutoatendimento.dominio.usuario.Perfil;
 import br.com.totemAutoatendimento.dominio.usuario.TipoPerfil;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-class RemoveAnotacaoTest {
+class DeletaAnotacaoTest {
 
 	@Mock
 	private AnotacaoRepository repository;
@@ -41,12 +41,12 @@ class RemoveAnotacaoTest {
 	@Captor
 	private ArgumentCaptor<Anotacao> anotacaoCaptor;
 	
-	private RemoveAnotacao removeAnotacao;
+	private DeletaAnotacao removeAnotacao;
 	
 	@BeforeEach
 	public void beforeEach() {
 		MockitoAnnotations.openMocks(this);
-		this.removeAnotacao = new RemoveAnotacao(repository, systemLogger);
+		this.removeAnotacao = new DeletaAnotacao(repository, systemLogger);
 	}
 	
 	@Test

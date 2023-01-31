@@ -7,12 +7,10 @@ import br.com.totemAutoatendimento.dominio.mercadoria.categoria.Categoria;
 
 public interface SubcategoriaRepository {
 
-	Subcategoria criar(Subcategoria subcategoria);
+	Subcategoria salvar(Subcategoria subcategoria);
 
-	void remover(Subcategoria subcategoria);
+	void deletar(Subcategoria subcategoria);
 
-	Subcategoria editar(Subcategoria subcategoriaAtualizada);
-	
 	Optional<Subcategoria> buscarPeloId(Long id);
 
 	Optional<Subcategoria> buscarPeloNome(String nome);

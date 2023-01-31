@@ -1,0 +1,47 @@
+30 jan. 2023 06:25:11.258 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+30 jan. 2023 06:26:06.516 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 06:26:53.103 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 06:31:17.266 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 06:51:12.030 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 06:53:14.267 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 06:53:58.181 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 06:55:05.853 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+30 jan. 2023 07:09:09.378 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+30 jan. 2023 13:25:39.566 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784512 criado!
+30 jan. 2023 13:26:08.480 [http-nio-8080-exec-6] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 13:39:27.784 [http-nio-8080-exec-6] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784513 criado!
+30 jan. 2023 13:39:40.272 [http-nio-8080-exec-9] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 13:41:29.128 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784513 - Funcionário com id 2 removido!
+30 jan. 2023 13:46:48.952 [http-nio-8080-exec-10] INFO  autoatendimento.logger.info - Usuário 784513 - Funcionário com id 5 editado!
+30 jan. 2023 13:50:06.596 [http-nio-8080-exec-3] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 13:50:12.295 [http-nio-8080-exec-5] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 13:50:35.746 [http-nio-8080-exec-9] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 13:52:16.218 [http-nio-8080-exec-6] INFO  autoatendimento.logger.info - Usuário 784514 - Alterada senha de funcionário de id 5
+30 jan. 2023 13:55:47.786 [http-nio-8080-exec-2] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 13:58:20.354 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuário 784514 - Totem com registro 784513 criado!
+30 jan. 2023 14:02:10.588 [http-nio-8080-exec-5] INFO  autoatendimento.logger.info - Usuário 784514 - Totem com registro 784514 criado!
+30 jan. 2023 14:08:21.365 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+30 jan. 2023 14:08:56.323 [http-nio-8080-exec-5] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 14:09:07.762 [http-nio-8080-exec-8] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784512 criado!
+30 jan. 2023 14:09:40.755 [http-nio-8080-exec-1] INFO  autoatendimento.logger.info - Usuário master - Totem com registro 784513 criado!
+30 jan. 2023 15:39:55.263 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+30 jan. 2023 15:40:00.825 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784512 criado!
+30 jan. 2023 15:40:45.844 [http-nio-8080-exec-7] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784513 criado!
+30 jan. 2023 15:41:14.735 [http-nio-8080-exec-1] INFO  autoatendimento.logger.info - Usuário master - Totem com registro 784514 criado!
+30 jan. 2023 15:41:22.139 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário master - Totem com registro 784515 criado!
+30 jan. 2023 15:51:03.063 [http-nio-8080-exec-5] INFO  autoatendimento.logger.info - Usuário master - Totem com registro Teste criado!
+30 jan. 2023 15:52:06.869 [http-nio-8080-exec-7] INFO  autoatendimento.logger.info - Usuário master - Totem com registro Taaaaaaa criado!
+30 jan. 2023 16:34:34.890 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+30 jan. 2023 16:35:14.859 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784513 criado!
+30 jan. 2023 16:35:24.420 [http-nio-8080-exec-8] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784514 criado!
+30 jan. 2023 16:35:35.412 [http-nio-8080-exec-9] INFO  autoatendimento.logger.info - Usuário master - Totem com registro 784514 criado!
+30 jan. 2023 16:35:40.148 [http-nio-8080-exec-10] INFO  autoatendimento.logger.info - Usuário master - Totem com registro 784515 criado!
+30 jan. 2023 16:35:56.322 [http-nio-8080-exec-1] INFO  autoatendimento.logger.info - Usuário master - Usuário com registro 784515 criado!
+30 jan. 2023 16:36:07.413 [http-nio-8080-exec-4] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+30 jan. 2023 16:49:19.744 [http-nio-8080-exec-10] INFO  autoatendimento.logger.info - Usuário master - Categoria bebidas criada!
+30 jan. 2023 16:49:32.809 [http-nio-8080-exec-1] INFO  autoatendimento.logger.info - Usuário master - Subcategoria Cerveja criada!
+30 jan. 2023 16:49:42.681 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário master - Mercadoria com código merc01 criada!
+30 jan. 2023 16:50:17.433 [http-nio-8080-exec-3] INFO  autoatendimento.logger.info - Usuário master - Cliente com cpf 28231006815 criado!
+30 jan. 2023 16:50:30.379 [http-nio-8080-exec-6] INFO  autoatendimento.logger.info - Usuario master - Cartão com código abc123 criado!
+30 jan. 2023 16:51:04.124 [http-nio-8080-exec-4] INFO  autoatendimento.logger.info - Usuário 784515 - Comanda com id 1 aberta!
+30 jan. 2023 16:52:47.639 [http-nio-8080-exec-3] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!

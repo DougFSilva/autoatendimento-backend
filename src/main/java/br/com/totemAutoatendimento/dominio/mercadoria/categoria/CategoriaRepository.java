@@ -5,11 +5,9 @@ import java.util.Optional;
 
 public interface CategoriaRepository {
 
-	Categoria criar(Categoria categoria);
+	Categoria salvar(Categoria categoria);
 	
-	void remover(Categoria categoria);
-	
-	Categoria editar(Categoria categoriaAtualizada);
+	void deletar(Categoria categoria);
 	
 	Optional<Categoria> buscarPeloId(Long id);
 	

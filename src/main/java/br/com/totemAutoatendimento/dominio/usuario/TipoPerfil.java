@@ -3,7 +3,7 @@ package br.com.totemAutoatendimento.dominio.usuario;
 
 public enum TipoPerfil {
 
-	ADMINISTRADOR(1, "ROLE_ADMIN"), FUNCIONARIO(2, "ROLE_FUNCIONARIO"), TOTEM(2, "ROLE_TOTEM");
+ADMINISTRADOR(1, "ROLE_ADMIN"), FUNCIONARIO(2, "ROLE_FUNCIONARIO"), TOTEM(2, "ROLE_TOTEM"), SEM_PERMISSAO(3, "ROLE_SEM_PERMISSAO");
 
 	private long codigo;
 	private String descricao;

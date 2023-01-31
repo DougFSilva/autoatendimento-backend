@@ -24,7 +24,7 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class ComandaEntityAdapter implements ComandaRepository {
 
 	@Autowired
-	private ComandaEntityDao repository;
+	private ComandaEntityDao dao;
 
 	@Autowired
 	private ComandaEntityConverter comandaEntityConverter;
@@ -36,25 +36,19 @@ public class ComandaEntityAdapter implements ComandaRepository {
 	private CartaoEntityConverter cartaoEntityConverter;
 
 	@Override
-	public Comanda criar(Comanda comanda) {
-		ComandaEntity entity = repository.save(comandaEntityConverter.converterParaComandaEntity(comanda));
+	public Comanda salvar(Comanda comanda) {
+		ComandaEntity entity = dao.save(comandaEntityConverter.converterParaComandaEntity(comanda));
 		return comandaEntityConverter.converterParaComanda(entity);
 	}
 
 	@Override
-	public void remover(Comanda comanda) {
-		repository.delete(comandaEntityConverter.converterParaComandaEntity(comanda));
-	}
-
-	@Override
-	public Comanda editar(Comanda comandaAtualizada) {
-		ComandaEntity entity = repository.save(comandaEntityConverter.converterParaComandaEntity(comandaAtualizada));
-		return comandaEntityConverter.converterParaComanda(entity);
+	public void deletar(Comanda comanda) {
+		dao.delete(comandaEntityConverter.converterParaComandaEntity(comanda));
 	}
 
 	@Override
 	public Optional<Comanda> buscarPeloId(Long id) {
-		Optional<ComandaEntity> entity = repository.findById(id);
+		Optional<ComandaEntity> entity = dao.findById(id);
 		if (entity.isPresent()) {
 			return Optional.of(comandaEntityConverter.converterParaComanda(entity.get()));
 		}
@@ -64,7 +58,7 @@ public class ComandaEntityAdapter implements ComandaRepository {
 	@Override
 	public Optional<Comanda> buscarPeloCartao(String codigoCartao, Boolean aberta) {
 		CartaoEntity cartaoEntity = cartaoEntityConverter.converterParaCartaoEntity(new Cartao(codigoCartao));
-		Optional<ComandaEntity> entity = repository.findByCartaoAndAberta(cartaoEntity, aberta);
+		Optional<ComandaEntity> entity = dao.findByCartaoAndAberta(cartaoEntity, aberta);
 		if (entity.isPresent()) {
 			return Optional.of(comandaEntityConverter.converterParaComanda(entity.get()));
 		}
@@ -73,30 +67,30 @@ public class ComandaEntityAdapter implements ComandaRepository {
 
 	@Override
 	public Page<Comanda> buscarAbertas(Pageable paginacao, Boolean aberta) {
-		return repository.findAllByAberta(paginacao, aberta).map(comandaEntityConverter::converterParaComanda);
+		return dao.findAllByAberta(paginacao, aberta).map(comandaEntityConverter::converterParaComanda);
 	}
 
 	@Override
 	public Page<Comanda> buscarPeloCliente(Pageable paginacao, Cliente cliente) {
-		return repository.findAllByCliente(paginacao, clienteEntityConverter.converterParaClienteEntity(cliente))
+		return dao.findAllByCliente(paginacao, clienteEntityConverter.converterParaClienteEntity(cliente))
 				.map(comandaEntityConverter::converterParaComanda);
 	}
 
 	@Override
 	public Page<Comanda> buscarPelaData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal) {
-		return repository.findAllByAberturaBetween(paginacao, dataInicial, dataFinal)
+		return dao.findAllByAberturaBetween(paginacao, dataInicial, dataFinal)
 				.map(comandaEntityConverter::converterParaComanda);
 	}
 
 	@Override
 	public Page<Comanda> buscarPeloTipoDePagamento(Pageable paginacao, TipoPagamento tipoPagamento) {
-		return repository.findAllByTipoPagamento(paginacao, tipoPagamento)
+		return dao.findAllByTipoPagamento(paginacao, tipoPagamento)
 				.map(comandaEntityConverter::converterParaComanda);
 	}
 
 	@Override
 	public Page<Comanda> buscarTodas(Pageable paginacao) {
-		return repository.findAll(paginacao).map(comandaEntityConverter::converterParaComanda);
+		return dao.findAll(paginacao).map(comandaEntityConverter::converterParaComanda);
 	}
 
 }

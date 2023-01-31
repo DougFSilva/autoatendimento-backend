@@ -18,7 +18,7 @@ import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.
 public class SubcategoriaEntityAdapter implements SubcategoriaRepository {
 
 	@Autowired
-	private SubcategoriaEntityDao repository;
+	private SubcategoriaEntityDao dao;
 
 	@Autowired
 	private SubcategoriaEntityConverter subcategoriaEntityConverter;
@@ -27,27 +27,20 @@ public class SubcategoriaEntityAdapter implements SubcategoriaRepository {
 	private CategoriaEntityConverter categoriaEntityConverter;
 
 	@Override
-	public Subcategoria criar(Subcategoria subcategoria) {
-		SubcategoriaEntity entity = repository
+	public Subcategoria salvar(Subcategoria subcategoria) {
+		SubcategoriaEntity entity = dao
 				.save(subcategoriaEntityConverter.converterParaSubcategoriaEntity(subcategoria));
 		return subcategoriaEntityConverter.converterParaSubcategoria(entity);
 	}
 
 	@Override
-	public void remover(Subcategoria subcategoria) {
-		repository.delete(subcategoriaEntityConverter.converterParaSubcategoriaEntity(subcategoria));
-	}
-
-	@Override
-	public Subcategoria editar(Subcategoria subcategoriaAtualizada) {
-		SubcategoriaEntity entity = repository
-				.save(subcategoriaEntityConverter.converterParaSubcategoriaEntity(subcategoriaAtualizada));
-		return subcategoriaEntityConverter.converterParaSubcategoria(entity);
+	public void deletar(Subcategoria subcategoria) {
+		dao.delete(subcategoriaEntityConverter.converterParaSubcategoriaEntity(subcategoria));
 	}
 
 	@Override
 	public Optional<Subcategoria> buscarPeloId(Long id) {
-		Optional<SubcategoriaEntity> entity = repository.findById(id);
+		Optional<SubcategoriaEntity> entity = dao.findById(id);
 		if (entity.isPresent()) {
 			return Optional.of(subcategoriaEntityConverter.converterParaSubcategoria(entity.get()));
 		}
@@ -56,7 +49,7 @@ public class SubcategoriaEntityAdapter implements SubcategoriaRepository {
 
 	@Override
 	public List<Subcategoria> buscarPelaCategoria(Categoria categoria) {
-		return repository.findAllByCategoria(categoriaEntityConverter.converterParaCategoriaEntity(categoria))
+		return dao.findAllByCategoria(categoriaEntityConverter.converterParaCategoriaEntity(categoria))
 				.stream()
 				.map(subcategoriaEntityConverter::converterParaSubcategoria)
 				.toList();
@@ -64,7 +57,7 @@ public class SubcategoriaEntityAdapter implements SubcategoriaRepository {
 
 	@Override
 	public Optional<Subcategoria> buscarPeloNome(String nome) {
-		Optional<SubcategoriaEntity> entity = repository.findByNome(nome);
+		Optional<SubcategoriaEntity> entity = dao.findByNome(nome);
 		if (entity.isPresent()) {
 			return Optional.of(subcategoriaEntityConverter.converterParaSubcategoria(entity.get()));
 		}
@@ -73,7 +66,7 @@ public class SubcategoriaEntityAdapter implements SubcategoriaRepository {
 
 	@Override
 	public List<Subcategoria> buscarTodas() {
-		return repository.findAll().stream().map(subcategoriaEntityConverter::converterParaSubcategoria).toList();
+		return dao.findAll().stream().map(subcategoriaEntityConverter::converterParaSubcategoria).toList();
 	}
 
 }

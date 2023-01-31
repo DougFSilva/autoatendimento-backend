@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.totemAutoatendimento.aplicacao.anotacao.BuscaDadosDeAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.CriaAnotacao;
+import br.com.totemAutoatendimento.aplicacao.anotacao.DeletaAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.EditaAnotacao;
-import br.com.totemAutoatendimento.aplicacao.anotacao.RemoveAnotacao;
-import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.AnotacaoEntityAdapter;
 
 @Configuration
@@ -18,21 +18,21 @@ public class AnotacaoBeanConfiguration {
 	private AnotacaoEntityAdapter anotacaoEntityAdapter;
 	
 	@Autowired
-	private LoggerAdapter loggerAdapter;
+	private StandardLogger standardLogger;
 	
 	@Bean
 	CriaAnotacao criaAnotacao() {
-		return new CriaAnotacao(anotacaoEntityAdapter, loggerAdapter);
+		return new CriaAnotacao(anotacaoEntityAdapter, standardLogger);
 	}
 	
 	@Bean
-	RemoveAnotacao removeAnotacao () {
-		return new RemoveAnotacao(anotacaoEntityAdapter, loggerAdapter);
+	DeletaAnotacao removeAnotacao () {
+		return new DeletaAnotacao(anotacaoEntityAdapter, standardLogger);
 	}
 	
 	@Bean
 	EditaAnotacao editaAnotacao() {
-		return new EditaAnotacao(anotacaoEntityAdapter, loggerAdapter);
+		return new EditaAnotacao(anotacaoEntityAdapter, standardLogger);
 	}
 	
 	@Bean

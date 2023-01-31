@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.BuscaTodasCategorias;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.CriaCategoria;
+import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.DeletaCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.EditaCategoria;
-import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.RemoveCategoria;
 import br.com.totemAutoatendimento.aplicacao.mercadoria.categoria.UploadImagemDaCategoria;
-import br.com.totemAutoatendimento.infraestrutura.logger.LoggerAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.CategoriaEntityAdapter;
 import br.com.totemAutoatendimento.infraestrutura.persistencia.springdata.mysql.adaptadores.SubcategoriaEntityAdapter;
 
@@ -23,21 +23,21 @@ public class CategoriaBeanConfiguration {
 	private SubcategoriaEntityAdapter subcategoriaEntityAdapter;
 	
 	@Autowired
-	private LoggerAdapter loggerAdapter;
+	private StandardLogger standardLogger;
 
 	@Bean
 	CriaCategoria criaCategoria() {
-		return new CriaCategoria(categoriaEntityAdapter, loggerAdapter);
+		return new CriaCategoria(categoriaEntityAdapter, standardLogger);
 	}
 
 	@Bean
-	RemoveCategoria removeCategoria() {
-		return new RemoveCategoria(categoriaEntityAdapter, subcategoriaEntityAdapter, loggerAdapter);
+	DeletaCategoria removeCategoria() {
+		return new DeletaCategoria(categoriaEntityAdapter, subcategoriaEntityAdapter, standardLogger);
 	}
 
 	@Bean
 	EditaCategoria editaCategoria() {
-		return new EditaCategoria(categoriaEntityAdapter, loggerAdapter);
+		return new EditaCategoria(categoriaEntityAdapter, standardLogger);
 	}
 
 	@Bean
@@ -47,7 +47,7 @@ public class CategoriaBeanConfiguration {
 
 	@Bean
 	UploadImagemDaCategoria uploadImagemDaCategoria() {
-		return new UploadImagemDaCategoria(categoriaEntityAdapter, loggerAdapter);
+		return new UploadImagemDaCategoria(categoriaEntityAdapter, standardLogger);
 	}
 
 }

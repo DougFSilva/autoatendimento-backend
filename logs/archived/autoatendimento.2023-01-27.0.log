@@ -1,0 +1,5 @@
+27 jan. 2023 07:25:19.551 [http-nio-8080-exec-2] INFO  autoatendimento.logger.info - Usuário 784512 - Usuário com registro 784515 criado!
+27 jan. 2023 15:39:01.656 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!
+27 jan. 2023 15:40:25.299 [http-nio-8080-exec-1] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+27 jan. 2023 15:40:49.201 [http-nio-8080-exec-3] ERROR autoatendimento.logger.error - Erro na autenticação do usuário. Usuário e/ou senha inválidos!
+27 jan. 2023 15:49:09.738 [restartedMain] INFO  autoatendimento.logger.info - Sistema - Usuário Master Criado!

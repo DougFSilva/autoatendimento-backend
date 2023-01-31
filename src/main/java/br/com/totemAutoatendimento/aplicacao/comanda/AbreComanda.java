@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosCriarComanda;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.cartao.CartaoRepository;
@@ -17,7 +17,7 @@ import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoExceptio
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 
-public class CriaComanda {
+public class AbreComanda {
 
 	private final ComandaRepository repository;
 
@@ -25,10 +25,10 @@ public class CriaComanda {
 
 	private final CartaoRepository cartaoRepository;
 
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public CriaComanda(ComandaRepository repository, ClienteRepository clienteRepository,
-			CartaoRepository cartaoRepository, SystemLogger logger) {
+	public AbreComanda(ComandaRepository repository, ClienteRepository clienteRepository,
+			CartaoRepository cartaoRepository, StandardLogger logger) {
 		this.repository = repository;
 		this.clienteRepository = clienteRepository;
 		this.cartaoRepository = cartaoRepository;
@@ -36,24 +36,24 @@ public class CriaComanda {
 	}
 
 	@Transactional
-	public Comanda criar(DadosCriarComanda dados, Usuario usuarioAutenticado) {
+	public Comanda abrir(DadosCriarComanda dados, Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministradorOuFuncionario(usuarioAutenticado);
 		if (repository.buscarPeloCartao(dados.codigoCartao(), true).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException("Comanda aberta existente para esse cartão!");
 		}
 		Optional<Cliente> cliente = clienteRepository.buscarPeloId(dados.clienteId());
 		if (cliente.isEmpty()) {
-			throw new ObjetoNaoEncontradoException(String.format("Cliente com id %d não encontrado!", dados.clienteId()));
+			throw new ObjetoNaoEncontradoException(
+					String.format("Cliente com id %d não encontrado!", dados.clienteId()));
 		}
 		Optional<Cartao> cartao = cartaoRepository.buscarPeloCodigo(dados.codigoCartao());
-		if(cartao.isEmpty()) {
-			throw new ObjetoNaoEncontradoException(String.format("Cartão com código %s não encontrado!", dados.codigoCartao()));
+		if (cartao.isEmpty()) {
+			throw new ObjetoNaoEncontradoException(
+					String.format("Cartão com código %s não encontrado!", dados.codigoCartao()));
 		}
 		Comanda comanda = new Comanda(cartao.get(), cliente.get());
-		Comanda comandaCriada = repository.criar(comanda);
-		logger.info(
-				String.format("Usuário %s - Comanda com id %d aberta!", usuarioAutenticado.getRegistro(), comandaCriada.getId())
-		);
+		Comanda comandaCriada = repository.salvar(comanda);
+		logger.info(String.format("Comanda com id %d aberta!", comandaCriada.getId()), usuarioAutenticado);
 		return comandaCriada;
 	}
 

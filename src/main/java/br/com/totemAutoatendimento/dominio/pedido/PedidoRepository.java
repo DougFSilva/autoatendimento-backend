@@ -11,11 +11,9 @@ import br.com.totemAutoatendimento.dominio.comanda.Comanda;
 
 public interface PedidoRepository {
 
-	Pedido criar(Pedido pedido);
+	Pedido salvar(Pedido pedido);
 
-	void remover(Pedido pedido);
-
-	Pedido editar(Pedido pedidoAtualizado);
+	void deletar(Pedido pedido);
 
 	Optional<Pedido> buscarPeloId(Long id);
 

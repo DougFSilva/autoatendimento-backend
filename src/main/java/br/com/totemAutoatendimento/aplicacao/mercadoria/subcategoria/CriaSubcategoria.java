@@ -2,7 +2,7 @@ package br.com.totemAutoatendimento.aplicacao.mercadoria.subcategoria;
 
 import java.util.Optional;
 
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.aplicacao.seguranca.AutorizacaoDeAcesso;
 import br.com.totemAutoatendimento.dominio.exception.ObjetoNaoEncontradoException;
 import br.com.totemAutoatendimento.dominio.exception.ViolacaoDeIntegridadeDeDadosException;
@@ -18,9 +18,9 @@ public class CriaSubcategoria {
 
 	private final CategoriaRepository categoriaRepository;
 	
-	private final SystemLogger logger;
+	private final StandardLogger logger;
 
-	public CriaSubcategoria(SubcategoriaRepository repository, CategoriaRepository categoriaRepository, SystemLogger logger) {
+	public CriaSubcategoria(SubcategoriaRepository repository, CategoriaRepository categoriaRepository, StandardLogger logger) {
 		this.repository = repository;
 		this.categoriaRepository = categoriaRepository;
 		this.logger = logger;
@@ -35,10 +35,8 @@ public class CriaSubcategoria {
 		if (repository.buscarPeloNome(nome).isPresent()) {
 			throw new ViolacaoDeIntegridadeDeDadosException(String.format("Subcategoria com nome %s já cadastrada!", nome));
 		}
-		Subcategoria subcategoriaCriada = repository.criar(new Subcategoria(null, categoria.get(), nome, "Sem imagem"));
-		logger.info(
-				String.format("Usuário %s - Subcategoria %s criada!", usuarioAutenticado.getRegistro(), subcategoriaCriada.getNome())
-		);
+		Subcategoria subcategoriaCriada = repository.salvar(new Subcategoria(null, categoria.get(), nome, "Sem imagem"));
+		logger.info(String.format("Subcategoria %s criada!", subcategoriaCriada.getNome()), usuarioAutenticado);
 		return subcategoriaCriada;
 	}
 }

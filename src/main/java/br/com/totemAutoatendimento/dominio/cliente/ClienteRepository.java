@@ -7,11 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ClienteRepository {
 
-	Cliente criar(Cliente cliente);
+	Cliente salvar(Cliente cliente);
 	
-	void remover(Cliente cliente);
-	
-	Cliente editar(Cliente clienteAtualizado);
+	void deletar(Cliente cliente);
 	
 	Optional<Cliente> buscarPeloId(Long id);
 	

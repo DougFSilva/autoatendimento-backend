@@ -16,13 +16,21 @@ public class AnotacaoEntityConverter {
 
 	public Anotacao converterParaAnotacao(AnotacaoEntity entity) {
 		Usuario usuario = usuarioEntityConverter.converterParaUsuario(entity.getRegistrador());
-		return new Anotacao(entity.getId(), entity.getTimestamp(), usuario, entity.getDescricao(),
+		return new Anotacao(
+				entity.getId(), 
+				entity.getTimestamp(), 
+				usuario, 
+				entity.getDescricao(),
 				entity.getNivelDeImportancia());
 	}
 	
 	public AnotacaoEntity converterParaAnotacaoEntity(Anotacao anotacao) {
 		UsuarioEntity usuarioEntity = usuarioEntityConverter.converterParaUsuarioEntity(anotacao.getRegistrador());
-		return new AnotacaoEntity(anotacao.getId(), anotacao.getTimestamp(), usuarioEntity, anotacao.getDescricao(),
+		return new AnotacaoEntity(
+				anotacao.getId(), 
+				anotacao.getTimestamp(), 
+				usuarioEntity, 
+				anotacao.getDescricao(),
 				anotacao.getNivelDeImportancia());
 	}
 }
