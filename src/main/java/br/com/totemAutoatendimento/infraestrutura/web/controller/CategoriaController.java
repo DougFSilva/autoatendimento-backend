@@ -45,7 +45,7 @@ public class CategoriaController {
 	private CriaCategoria criaCategoria;
 
 	@Autowired
-	private DeletaCategoria removeCategoria;
+	private DeletaCategoria deletaCategoria;
 
 	@Autowired
 	private EditaCategoria editaCategoria;
@@ -71,22 +71,22 @@ public class CategoriaController {
 
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
-	@Operation(summary = "Remover categoria", description = "Remove alguma categoria existente")
-	public ResponseEntity<Void> removerCategoria(@PathVariable Long id) {
-		removeCategoria.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar categoria", description = "Remove uma categoria existente no sistema")
+	public ResponseEntity<Void> deletarCategoria(@PathVariable Long id) {
+		deletaCategoria.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{id}/nome/{nome}")
 	@CacheEvict(value = "buscarTodasCategorias", allEntries = true)
-	@Operation(summary = "Editar categoria", description = "Edita alguma categoria existente")
+	@Operation(summary = "Editar categoria", description = "Edita uma categoria existente no sistema")
 	public ResponseEntity<Categoria> editarCategoria(@PathVariable Long id, @PathVariable String nome) {
 		return ResponseEntity.ok().body(editaCategoria.editar(id, nome, usuarioAutenticado()));
 	}
 
 	@GetMapping
 	@Cacheable("buscarTodasCategorias")
-	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes")
+	@Operation(summary = "Buscar todas categorias", description = "Busca todas categorias existentes no sistema")
 	public ResponseEntity<List<Categoria>> buscarTodasCategorias() {
 		return ResponseEntity.ok().body(buscaTodasCategorias.buscar(usuarioAutenticado()));
 	}

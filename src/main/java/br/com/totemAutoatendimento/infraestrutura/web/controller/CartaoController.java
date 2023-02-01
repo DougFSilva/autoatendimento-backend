@@ -19,6 +19,7 @@ import br.com.totemAutoatendimento.aplicacao.cartao.DeletaCartao;
 import br.com.totemAutoatendimento.dominio.cartao.Cartao;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;
 import br.com.totemAutoatendimento.infraestrutura.seguranca.AutenticacaoDeUsuario;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
@@ -27,10 +28,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class CartaoController {
 
 	@Autowired
-	private CadastraCartao criaCartao;
+	private CadastraCartao cadastraCartao;
 	
 	@Autowired
-	private DeletaCartao removeCartao;
+	private DeletaCartao deletaCartao;
 	
 	@Autowired
 	private BuscaTodosCartoes buscaTodosCartoes;
@@ -39,19 +40,22 @@ public class CartaoController {
 	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 	
 	@PostMapping("/{codigo}")
-	public ResponseEntity<Cartao> criarCartao(@PathVariable String codigo) {
-		Cartao cartao = criaCartao.cadastrar(codigo, usuarioAutenticado());
+	@Operation(summary = "Cadastrar cartão", description = "Cadastra um novo cartão no sistema")
+	public ResponseEntity<Cartao> cadastrarCartao(@PathVariable String codigo) {
+		Cartao cartao = cadastraCartao.cadastrar(codigo, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").buildAndExpand(cartao.getCodigo()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping("/{codigo}")
-	public ResponseEntity<Void> removerCartao(@PathVariable String codigo) {
-		removeCartao.deletar(codigo, usuarioAutenticado());
+	@Operation(summary = "Deletar cartão", description = "Deleta um cartão cadastrado no sistema")
+	public ResponseEntity<Void> deletarCartao(@PathVariable String codigo) {
+		deletaCartao.deletar(codigo, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping
+	@Operation(summary = "Buscar todos os cartões", description = "Busca todos cartões castrados no sistema")
 	public ResponseEntity<List<Cartao>> buscarTodosCartoes() {
 		List<Cartao> cartoes = buscaTodosCartoes.buscar(usuarioAutenticado());
 		return ResponseEntity.ok().body(cartoes);

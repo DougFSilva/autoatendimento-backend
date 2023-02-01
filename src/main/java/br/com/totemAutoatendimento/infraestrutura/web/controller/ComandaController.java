@@ -43,7 +43,7 @@ public class ComandaController {
 	private AbreComanda abreComanda;
 
 	@Autowired
-	private DeletaComanda removeComanda;
+	private DeletaComanda deletaComanda;
 
 	@Autowired
 	private BuscaDadosDeComandas buscaDadosDeComandas;
@@ -64,8 +64,8 @@ public class ComandaController {
 	private AutenticacaoDeUsuario autenticacaoDeUsuario;
 
 	@PostMapping
-	@Operation(summary = "Criar comanda", description = "Cria uma comanda no sistema")
-	public ResponseEntity<Comanda> criarComanda(@RequestBody @Valid DadosCriarComanda dados) {
+	@Operation(summary = "Abrir comanda", description = "Abre uma comanda no sistema")
+	public ResponseEntity<Comanda> abreComanda(@RequestBody @Valid DadosCriarComanda dados) {
 		Comanda comanda = abreComanda.abrir(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(comanda.getId())
 				.toUri();
@@ -73,20 +73,20 @@ public class ComandaController {
 	}
 
 	@DeleteMapping("/{id}")
-	@Operation(summary = "Remover comanda", description = "Remove alguma comanda existente")
-	public ResponseEntity<Void> removerComanda(@PathVariable Long id) {
-		removeComanda.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar comanda", description = "Deleta alguma comanda existente no sistema")
+	public ResponseEntity<Void> deletarComanda(@PathVariable Long id) {
+		deletaComanda.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar comanda", description = "Busca alguma comanda pelo id")
+	@Operation(summary = "Buscar comanda", description = "Busca uma comanda existente no sistema pelo id")
 	public ResponseEntity<DadosDeComanda> buscarComanda(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarPeloId(id, usuarioAutenticado()));
 	}
 
 	@GetMapping("/aberta/cartao/{cartao}")
-	@Operation(summary = "Buscar comanda pelo cartão", description = "Busca alguma comanda aberta pelo cartão")
+	@Operation(summary = "Buscar comanda pelo cartão", description = "Busca uma comanda aberta pelo cartão")
 	public ResponseEntity<DadosDeComanda> buscarComandaAbertaPeloCartao(@PathVariable String cartao) {
 		return ResponseEntity.ok().body(buscaDadosDeComandas.buscarAbertaPeloCartao(cartao, usuarioAutenticado()));
 	}

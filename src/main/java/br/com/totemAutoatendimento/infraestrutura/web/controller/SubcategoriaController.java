@@ -50,7 +50,7 @@ public class SubcategoriaController {
     private CriaSubcategoria criaSubcategoria;
 
     @Autowired
-    private DeletaSubcategoria removeSubcategoria;
+    private DeletaSubcategoria deletaSubcategoria;
 
     @Autowired
     private EditaSubcategoria editaSubcategoria;
@@ -76,15 +76,15 @@ public class SubcategoriaController {
 
     @DeleteMapping("/{id}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
-    @Operation(summary = "Remover subcategoria", description = "Remove alguma categoria existente")
-    public ResponseEntity<Void> removerSubcategoria(@PathVariable Long id) {
-        removeSubcategoria.deletar(id, usuarioAutenticado());
+    @Operation(summary = "Deletar subcategoria", description = "Deleta uma subcategoria existente no sistema pelo id")
+    public ResponseEntity<Void> deletarSubcategoria(@PathVariable Long id) {
+        deletaSubcategoria.deletar(id, usuarioAutenticado());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
-    @Operation(summary = "Editar subcategoria", description = "Edita alguma categoria existente")
+    @Operation(summary = "Editar subcategoria", description = "Edita uma categoria existente no sistema")
     public ResponseEntity<DadosDeSubcategoria> editarSubcategoria(@PathVariable Long id, @RequestBody @Valid DadosEditarSubcategoria dados) {
     	return ResponseEntity.ok().body(editaSubcategoria.editar(id, dados, usuarioAutenticado()));
     }
@@ -106,8 +106,7 @@ public class SubcategoriaController {
     @PostMapping("/{id}/imagem")
     @CacheEvict(value = {"buscarTodasSubcategorias", "buscarImagemDaSubcategoria", "buscarSubcategoriasPelaCategoria"}, allEntries = true)
     @Operation(summary = "Adicionar imagem à subcategoria", description = "Adiciona uma imagem em jpg ou png à uma subcategoria existente")
-    public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id,
-            @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Void> adicionarImagemASubcategoria(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         String baseUrlBuscarImagem = ServletUriComponentsBuilder
         		.fromCurrentContextPath()
         		.build()

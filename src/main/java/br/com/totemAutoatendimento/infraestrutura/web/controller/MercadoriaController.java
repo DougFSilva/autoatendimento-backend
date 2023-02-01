@@ -52,10 +52,10 @@ public class MercadoriaController {
 	private String pathPastaImagens;
 
 	@Autowired
-	private CadastraMercadoria criaMercadoria;
+	private CadastraMercadoria cadastraMercadoria;
 
 	@Autowired
-	private DeletaMercadoria removeMercadoria;
+	private DeletaMercadoria deletaMercadoria;
 
 	@Autowired
 	private EditaMercadoria editaMercadoria;
@@ -72,9 +72,9 @@ public class MercadoriaController {
 	@PostMapping
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
-	@Operation(summary = "Criar mercadoria", description = "Cria uma mercadoria no sistema")
-	public ResponseEntity<Mercadoria> criarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
-		Mercadoria mercadoria = criaMercadoria.cadastrar(dados, usuarioAutenticado());
+	@Operation(summary = "Cadastrar mercadoria", description = "Cadastra uma mercadoria no sistema")
+	public ResponseEntity<Mercadoria> cadastrarMercadoria(@RequestBody @Valid DadosCriarMercadoria dados) {
+		Mercadoria mercadoria = cadastraMercadoria.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mercadoria.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -83,29 +83,29 @@ public class MercadoriaController {
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
-	@Operation(summary = "Remover mercadoria", description = "Remove alguma mercadoria existente")
-	public ResponseEntity<Void> removerMercadoria(@PathVariable Long id) {
-		removeMercadoria.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar mercadoria", description = "Deleta uma mercadoria existente no sistema")
+	public ResponseEntity<Void> deletarMercadoria(@PathVariable Long id) {
+		deletaMercadoria.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{id}")
 	@CacheEvict(value = { "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
-	@Operation(summary = "Editar mercadoria", description = "Edita alguma mercadoria existente")
+	@Operation(summary = "Editar mercadoria", description = "Edita uma mercadoria existente nos sistema")
 	public ResponseEntity<DadosDeMercadoria> editarMercadoria(@PathVariable Long id,
 			@RequestBody @Valid DadosEditarMercadoria dados) {
 		return ResponseEntity.ok().body(editaMercadoria.editar(id, dados, usuarioAutenticado()));
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar mercadoria", description = "Busca alguma mercadoria pelo id")
+	@Operation(summary = "Buscar mercadoria", description = "Busca uma mercadoria existente no sistema pelo id")
 	public ResponseEntity<DadosDeMercadoria> buscarMercadoria(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloId(id, usuarioAutenticado()));
 	}
 
 	@GetMapping("/codigo/{codigo}")
-	@Operation(summary = "Buscar mercadoria por codigo", description = "Busca alguma mercadoria pelo codigo")
+	@Operation(summary = "Buscar mercadoria por codigo", description = "Busca uma mercadoria existente no sistema pelo codigo")
 	public ResponseEntity<DadosDeMercadoria> buscarMercadoriaPeloCodigo(@PathVariable String codigo) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarPeloCodigo(codigo, usuarioAutenticado()));
 	}
@@ -136,7 +136,8 @@ public class MercadoriaController {
 	}
 
 	@GetMapping("/relatorio/mais-vendidas/data/{dataInicial}/{dataFinal}")
-	@Operation(summary = "Buscar mercadorias mais vendidas pela data", description = "Busca as mercadorias mais vendidas pela data inicial e data final")
+	@Operation(summary = "Buscar mercadorias mais vendidas pela data", description = "Busca as mercadorias mais vendidas "
+			+ "pela data inicial e data final")
 	public ResponseEntity<Page<RelatorioMercadoriasMaisVendidas>> buscarMercadoriasMaisVendidasPelaData(
 			Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarMercadoriasMaisVendidasPelaData(paginacao,
@@ -144,7 +145,8 @@ public class MercadoriaController {
 	}
 	
 	@GetMapping("/relatorio/maior-faturamento/data/{dataInicial}/{dataFinal}")
-	@Operation(summary = "Buscar mercadorias com maior faturamento pela data", description = "Busca as mercadorias com maior faturamento pela data inicial e data final")
+	@Operation(summary = "Buscar mercadorias com maior faturamento pela data", description = "Busca as mercadorias com "
+			+ "maior faturamento pela data inicial e data final")
 	public ResponseEntity<Page<RelatorioMercadoriasDeMaiorFaturamento>> buscarMercadoriasComMaiorFaturamentoPelaData(
 			Pageable paginacao, @PathVariable String dataInicial, @PathVariable String dataFinal) {
 		return ResponseEntity.ok().body(buscaDadosDeMercadorias.buscarMercadoriasDeMaiorFaturamentoPelaData(paginacao,
@@ -161,7 +163,8 @@ public class MercadoriaController {
 	@PostMapping(value = "/{id}/imagem")
 	@CacheEvict(value = { "buscarImagemDaMercadoria", "buscarMercadoriasPorSubcategoria", "buscarMercadoriasEmPromocao",
 			"buscarMercadoriasSemPromocao", "buscarTodasMercadorias" }, allEntries = true)
-	@Operation(summary = "Adicionar imagem à mercadoria", description = "Adiciona uma imagem em formato jpg ou png a alguma mercadoria existente")
+	@Operation(summary = "Adicionar imagem à mercadoria", description = "Adiciona uma imagem em formato jpg ou png a "
+			+ "alguma mercadoria existente")
 	public ResponseEntity<Void> adicionarImagemAMercadoria(@PathVariable Long id,
 			@RequestParam("file") MultipartFile file) {
 		String baseUrlBuscarImagem = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()

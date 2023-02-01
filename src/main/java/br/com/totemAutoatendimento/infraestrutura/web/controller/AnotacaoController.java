@@ -42,7 +42,7 @@ public class AnotacaoController {
 	private CriaAnotacao criaAnotacao;
 
 	@Autowired
-	private DeletaAnotacao removeAnotacao;
+	private DeletaAnotacao deletaAnotacao;
 
 	@Autowired
 	private EditaAnotacao editaAnotacao;
@@ -66,15 +66,15 @@ public class AnotacaoController {
 
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = "buscarTodasAnotacoes", allEntries = true)
-	@Operation(summary = "Remover anotação", description = "Remove alguma anotações existente")
-	public ResponseEntity<Void> removerAnotacao(@PathVariable Long id) {
-		removeAnotacao.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar anotação", description = "Deleta uma anotações existente no sistema")
+	public ResponseEntity<Void> deletarAnotacao(@PathVariable Long id) {
+		deletaAnotacao.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{id}")
 	@CacheEvict(value = "buscarTodasAnotacoes", allEntries = true)
-	@Operation(summary = "Editar anotação", description = "Edita alguma anotações existente")
+	@Operation(summary = "Editar anotação", description = "Edita uma anotações existente no sistema")
 	public ResponseEntity<DadosDeAnotacao> editarAnotacao(@PathVariable Long id,
 			@RequestBody @Valid DadosCriarOuEditarAnotacao dados) {
 		DadosDeAnotacao dadosDeAnotacao = editaAnotacao.editar(id, dados, usuarioAutenticado());
@@ -82,7 +82,7 @@ public class AnotacaoController {
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar anotação pelo id", description = "Busca alguma anotação existente pelo id")
+	@Operation(summary = "Buscar anotação pelo id", description = "Busca uma anotação existente no sistema pelo id")
 	public ResponseEntity<DadosDeAnotacao> buscarAnotacaoPeloId(@PathVariable Long id) {
 		DadosDeAnotacao dadosDeAnotacao = buscaDadosDeAnotacao.buscarPeloId(id, usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeAnotacao);

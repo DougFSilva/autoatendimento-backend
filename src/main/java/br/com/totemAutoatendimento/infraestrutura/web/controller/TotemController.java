@@ -39,10 +39,10 @@ import io.swagger.v3.oas.annotations.Operation;
 public class TotemController {
 
 	@Autowired
-	private CadastraTotem criaTotem;
+	private CadastraTotem cadastraTotem;
 	
 	@Autowired
-	private DeletaTotem removeTotem;
+	private DeletaTotem deletaTotem;
 	
 	@Autowired
 	private EditaTotem editaTotem;
@@ -58,38 +58,38 @@ public class TotemController {
 	
 	@PostMapping
 	@CacheEvict(value = "buscarTodosTotens", allEntries = true)
-	@Operation(summary = "Criar Totem", description = "Cria um Totem no sistema")
-	public ResponseEntity<Totem> criarTotem(@RequestBody @Valid DadosCriarTotem dados) {
-		Totem totem = criaTotem.cadastrar(dados, usuarioAutenticado());
+	@Operation(summary = "Cadastrar Totem", description = "Cadastra um totem no sistema")
+	public ResponseEntity<Totem> cadastrarTotem(@RequestBody @Valid DadosCriarTotem dados) {
+		Totem totem = cadastraTotem.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(totem.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = "buscarTodosTotens", allEntries = true)
-	@Operation(summary = "Remover Totem", description = "Remove um Totem cadastrado no sistema")
-	public ResponseEntity<Void> removerTotem(@PathVariable Long id) {
-		removeTotem.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar Totem", description = "Deleta um totem cadastrado no sistema")
+	public ResponseEntity<Void> deletarTotem(@PathVariable Long id) {
+		deletaTotem.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{id}")
 	@CacheEvict(value = "buscarTodosTotens", allEntries = true)
-	@Operation(summary = "Editar Totem", description = "Edita um Totem cadastrado no sistema")
+	@Operation(summary = "Editar Totem", description = "Edita um totem cadastrado no sistema")
 	public ResponseEntity<DadosDeTotem> editarTotem(@PathVariable Long id, @RequestBody @Valid DadosEditarTotem dados) {
 		DadosDeTotem dadosDeTotem = editaTotem.editar(id, dados, usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeTotem);
 	}
 	
 	@PatchMapping("/{id}/alterar-senha")
-	@Operation(summary = "Alterar senha de Totem", description = "Altera senha de um Totem cadastrado no sistema")
+	@Operation(summary = "Alterar senha de Totem", description = "Altera senha de um totem cadastrado no sistema")
 	public ResponseEntity<Void> alterarSenhaDeTotem(@PathVariable Long id, @RequestBody @Valid DadosAlterarSenhaDeUsuario dados) {
 		alteraSenhaDeTotem.alterar(id, dados, usuarioAutenticado());
 		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar Totem pelo id", description = "Busca os dados de um Totem cadastrado "
+	@Operation(summary = "Buscar Totem pelo id", description = "Busca um totem cadastrado "
 			+ "no sistema pelo id")
 	public ResponseEntity<DadosDeTotem> buscarTotemPeloId(@PathVariable Long id) {
 		DadosDeTotem dadosDeTotem = buscaDadosDeTotem.buscarPeloId(id, usuarioAutenticado());
@@ -97,7 +97,7 @@ public class TotemController {
 	}
 	
 	@GetMapping("/registro/{registro}")
-	@Operation(summary = "Buscar Totem pelo identificador", description = "Busca os dados de um Totem "
+	@Operation(summary = "Buscar Totem pelo identificador", description = "Busca um totem "
 			+ "cadastrado no sistema pelo identificador")
 	public ResponseEntity<DadosDeTotem> buscarTotemPeloIdentificador(@PathVariable String identificador) {
 		DadosDeTotem dadosDeTotem = buscaDadosDeTotem.buscarPeloIdentificador(identificador, usuarioAutenticado());
@@ -105,7 +105,7 @@ public class TotemController {
 	}
 	
 	@GetMapping("/usuario/{usuarioId}")
-	@Operation(summary = "Buscar Totem pelo usuário", description = "Busca um Totem "
+	@Operation(summary = "Buscar Totem pelo usuário", description = "Busca um totem "
 			+ "cadastrado no sistema pelo id do usuário pertencente a esse Totem")
 	public ResponseEntity<DadosDeTotem> buscarTotemPeloUsuario(@PathVariable Long usuarioId) {
 		DadosDeTotem dadosDeTotem = buscaDadosDeTotem.buscarPeloUsuario(usuarioId, usuarioAutenticado());
@@ -114,8 +114,8 @@ public class TotemController {
 	
 	@GetMapping
 	@Cacheable("buscarTodosTotens")
-	@Operation(summary = "Buscar todos os Totens", description = "Busca os dados de todos os "
-			+ "Totens cadastrado no sistema")
+	@Operation(summary = "Buscar todos os Totens", description = "Busca todos os "
+			+ "totens cadastrados no sistema")
 	public ResponseEntity<List<DadosDeTotem>> buscarTodosTotens() {
 		List<DadosDeTotem> dadosDeTotens = buscaDadosDeTotem.buscarTodos(usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeTotens);

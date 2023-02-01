@@ -40,10 +40,10 @@ import io.swagger.v3.oas.annotations.Operation;
 public class FuncionarioController {
 
 	@Autowired
-	private CadastraFuncionario criaFuncionario;
+	private CadastraFuncionario cadastraFuncionario;
 
 	@Autowired
-	private DeletaFuncionario removeFuncionario;
+	private DeletaFuncionario deletaFuncionario;
 
 	@Autowired
 	private EditaFuncionario editaFuncionario;
@@ -59,9 +59,9 @@ public class FuncionarioController {
 
 	@PostMapping
 	@CacheEvict(value = "buscarTodosFuncionario", allEntries = true)
-	@Operation(summary = "Criar funcionário", description = "Cria um Funcionário no sistema")
-	public ResponseEntity<Funcionario> criarFuncionario(@Valid @RequestBody DadosCriarFuncionario dados) {
-		Funcionario funcionario = criaFuncionario.cadastrar(dados, usuarioAutenticado());
+	@Operation(summary = "Cadastrar funcionário", description = "Cadastra um funcionário no sistema")
+	public ResponseEntity<Funcionario> cadastrarFuncionario(@Valid @RequestBody DadosCriarFuncionario dados) {
+		Funcionario funcionario = cadastraFuncionario.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(funcionario.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -69,15 +69,15 @@ public class FuncionarioController {
 
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = "buscarTodosFuncionario", allEntries = true)
-	@Operation(summary = "Remover funcionário", description = "Remove um Funcionário cadastrado no sistema")
-	public ResponseEntity<Void> removerFuncionario(@PathVariable Long id) {
-		removeFuncionario.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar funcionário", description = "Deleta um funcionário cadastrado no sistema")
+	public ResponseEntity<Void> deletarFuncionario(@PathVariable Long id) {
+		deletaFuncionario.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{id}")
 	@CacheEvict(value = "buscarTodosFuncionario", allEntries = true)
-	@Operation(summary = "Editar funcionário", description = "Edita um Funcionário cadastrado no sistema")
+	@Operation(summary = "Editar funcionário", description = "Edita um funcionário cadastrado no sistema")
 	public ResponseEntity<DadosDeFuncionario> editarFuncionario(@PathVariable Long id,
 			@RequestBody @Valid DadosEditarFuncionario dados) {
 		DadosDeFuncionario dadosDeFuncionario = editaFuncionario.editar(id, dados, usuarioAutenticado());
@@ -85,7 +85,7 @@ public class FuncionarioController {
 	}
 	
 	@PatchMapping("/alterar-senha")
-	@Operation(summary = "Alterar senha de funcionário", description = "Altera a senha de um Funcionário "
+	@Operation(summary = "Alterar senha de funcionário", description = "Altera a senha de um funcionário "
 			+ "logado no sistema")
 	public ResponseEntity<Void> alterarSenhaDeUsuario(@RequestBody @Valid DadosAlterarSenhaDeUsuario dados, HttpSession session) {
 		alteraSenhaDeUsuario.alterar(dados, usuarioAutenticado());
@@ -94,7 +94,7 @@ public class FuncionarioController {
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar dados de funcionário pelo id", description = "Busca um Funcionário "
+	@Operation(summary = "Buscar dados de funcionário pelo id", description = "Busca um funcionário "
 			+ "cadastrado no sistema pelo id")
 	public ResponseEntity<DadosDeFuncionario> buscarFuncionarioPeloId(@PathVariable Long id) {
 		DadosDeFuncionario dadosDeFuncionario = buscaDadosDeFuncionario.buscarPeloId(id, usuarioAutenticado());
@@ -102,7 +102,7 @@ public class FuncionarioController {
 	}
 
 	@GetMapping("/matricula/{matricula}")
-	@Operation(summary = "Buscar dados de funcionário pela matricula", description = "Busca um Funcionário "
+	@Operation(summary = "Buscar dados de funcionário pela matricula", description = "Busca um funcionário "
 			+ "cadastrado no sistema pela matricula")
 	public ResponseEntity<DadosDeFuncionario> buscarFuncionarioPelaMatricula(@PathVariable String matricula) {
 		DadosDeFuncionario dadosDeFuncionario = buscaDadosDeFuncionario.buscarPelaMatricuka(matricula, usuarioAutenticado());
@@ -110,7 +110,7 @@ public class FuncionarioController {
 	}
 	
 	@GetMapping("/usuario/{usuarioId}")
-	@Operation(summary = "Buscar dados de funcionário pelo usuário", description = "Busca um Funcionário "
+	@Operation(summary = "Buscar dados de funcionário pelo usuário", description = "Busca um funcionário "
 			+ "cadastrado no sistema pelo id do usuário pertencente a esse funcionário")
 	public ResponseEntity<DadosDeFuncionario> buscarFuncionarioPeloUsuario(@PathVariable Long usuarioId) {
 		DadosDeFuncionario dadosDeFuncionario = buscaDadosDeFuncionario.buscarPeloUsuario(usuarioId, usuarioAutenticado());
@@ -119,8 +119,8 @@ public class FuncionarioController {
 
 	@GetMapping
 	@Cacheable("buscarTodosFuncionario")
-	@Operation(summary = "Buscar os dados de todos funcionário", description = "Busca os dados de todos "
-			+ "Funcionários cadastrados no sistema")
+	@Operation(summary = "Buscar os dados de todos funcionário", description = "Busca todos os "
+			+ "funcionários cadastrados no sistema")
 	public ResponseEntity<List<DadosDeFuncionario>> buscarTodosFuncionario() {
 		List<DadosDeFuncionario> dadosDeFuncionarios = buscaDadosDeFuncionario.buscarTodos(usuarioAutenticado());
 		return ResponseEntity.ok().body(dadosDeFuncionarios);

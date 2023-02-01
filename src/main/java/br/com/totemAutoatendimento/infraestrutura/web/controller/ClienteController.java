@@ -39,10 +39,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class ClienteController {
 
 	@Autowired
-	private CadastraCliente criaCliente;
+	private CadastraCliente cadastraCliente;
 
 	@Autowired
-	private DeletaCliente removeCliente;
+	private DeletaCliente deletaCliente;
 
 	@Autowired
 	private EditaCliente editaCliente;
@@ -55,9 +55,9 @@ public class ClienteController {
 	
 	@PostMapping
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
-	@Operation(summary = "Criar cliente", description = "Cria um novo cliente no sistema")
-	public ResponseEntity<Cliente> criarCliente(@RequestBody @Valid DadosCriarCliente dados) {
-		Cliente cliente = criaCliente.cadastrar(dados, usuarioAutenticado());
+	@Operation(summary = "Cadastrar cliente", description = "Cadastra um novo cliente no sistema")
+	public ResponseEntity<Cliente> cadastrarCliente(@RequestBody @Valid DadosCriarCliente dados) {
+		Cliente cliente = cadastraCliente.cadastrar(dados, usuarioAutenticado());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
@@ -65,27 +65,27 @@ public class ClienteController {
 
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade"}, allEntries = true)
-	@Operation(summary = "Remover cliente", description = "Remove algum cliente existente")
-	public ResponseEntity<Void> removerCliente(@PathVariable Long id) {
-		removeCliente.deletar(id, usuarioAutenticado());
+	@Operation(summary = "Deletar cliente", description = "Deleta um cliente existente no sistema")
+	public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
+		deletaCliente.deletar(id, usuarioAutenticado());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{id}")
 	@CacheEvict(value = { "buscarTodosClientes", "buscarClientesPorCidade" })
-	@Operation(summary = "Editar cliente", description = "Edita algum cliente existente")
+	@Operation(summary = "Editar cliente", description = "Edita um cliente existente no sistema")
 	public ResponseEntity<DadosDeCliente> editarCliente(@PathVariable Long id, @RequestBody @Valid DadosEditarCliente dados) {
 		return ResponseEntity.ok().body(editaCliente.editar(id, dados, usuarioAutenticado()));
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Buscar cliente", description = "Busca algum cliente existente pelo id")
+	@Operation(summary = "Buscar cliente", description = "Busca um cliente existente no sistema pelo id")
 	public ResponseEntity<DadosDeCliente> buscarCliente(@PathVariable Long id) {
 		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarPeloId(id, usuarioAutenticado()));
 	}
 
 	@GetMapping("/cpf/{cpf}")
-	@Operation(summary = "Buscar cliente por cpf", description = "Busca algum cliente existente por cpf")
+	@Operation(summary = "Buscar cliente por cpf", description = "Busca um cliente existente no sistema por cpf")
 	public ResponseEntity<DadosDeCliente> buscarClientePorCpf(@PathVariable String cpf) {
 		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarPeloCpf(cpf, usuarioAutenticado()));
 	}
@@ -100,7 +100,7 @@ public class ClienteController {
 
 	@GetMapping
 	@Cacheable("buscarTodosClientes")
-	@Operation(summary = "Buscar todos clientes", description = "Busca todos os clientes existentes")
+	@Operation(summary = "Buscar todos clientes", description = "Busca todos os clientes existentes no sistema")
 	public ResponseEntity<Page<DadosDeCliente>> buscarTodosClientes(Pageable paginacao) {
 		return ResponseEntity.ok().body(buscaDadosDeClientes.buscarTodos(paginacao, usuarioAutenticado()));
 	}
