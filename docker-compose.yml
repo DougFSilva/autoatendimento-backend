@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql
+    container_name: totem-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass # Senha do usuário admin do mongo
+    networks:
+      - totem-bridge
+    ports:
+      - 3309:3306
+    volumes:
+      - C:/Users/dougl/Documents/projects/totem/mysql:/var/lib/mysql
+    restart: always
+  
+  backend:
+    build: .
+    container_name: totem-backend
+    networks:
+      - totem-bridge
+    ports:
+      - 8080:8080
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://mysql:3306/totem_autoatendimento?createDatabaseIfNotExist=true&autoReconnect=true
+      - DATASOURCE_USERNAME=root
+      - DATASOURCE_PASSWORD=pass
+      - APP_USUARIO_MASTER_PASSWORD=Dfs789..
+      - APP_IMAGENS_PATH=/app/imagens
+      - APP_FRONTEND_ORIGEM=http://localhost:4200
+    volumes:
+      - C:/Users/dougl/Documents/projects/totem/imagens/:/app/imagens
+    depends_on:
+      - mysql
+    restart: always
+      
+networks:
+  totem-bridge:
+    driver: bridge
