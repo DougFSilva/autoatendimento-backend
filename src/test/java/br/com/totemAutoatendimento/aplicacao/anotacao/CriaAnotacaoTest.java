@@ -15,8 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosCriarOuEditarAnotacao;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
-import br.com.totemAutoatendimento.dominio.Email;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.AnotacaoRepository;
 import br.com.totemAutoatendimento.dominio.anotacao.NivelDeImportancia;
@@ -32,7 +31,7 @@ class CriaAnotacaoTest {
 	private AnotacaoRepository repository;
 	
 	@Mock
-	private SystemLogger systemLogger;
+	private StandardLogger logger;
 	
 	@Captor
 	private ArgumentCaptor<Anotacao> anotacaoCaptor;
@@ -42,7 +41,7 @@ class CriaAnotacaoTest {
 	@BeforeEach
 	public void beforeEach() {
 		MockitoAnnotations.openMocks(this);
-		this.criaAnotacao = new CriaAnotacao(repository, systemLogger);
+		this.criaAnotacao = new CriaAnotacao(repository, logger);
 		
 	}
 	
@@ -66,16 +65,16 @@ class CriaAnotacaoTest {
 		administrador.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
 		DadosCriarOuEditarAnotacao dados = new DadosCriarOuEditarAnotacao(anotacao().getDescricao(), anotacao().getNivelDeImportancia());
 		assertThrows(UsuarioSemPermissaoException.class, () -> criaAnotacao.criar(dados, administrador));
-		Mockito.verifyNoMoreInteractions(systemLogger);
+		Mockito.verifyNoMoreInteractions(logger);
 		Mockito.verifyNoMoreInteractions(repository);
 	}
 	
 	private void testarCriacaoDeAnotacao(Usuario usuarioAutenticado) {
 		DadosCriarOuEditarAnotacao dados = new DadosCriarOuEditarAnotacao(anotacao().getDescricao(), anotacao().getNivelDeImportancia());
-		Mockito.when(repository.criar(Mockito.any())).thenReturn(anotacao());
+		Mockito.when(repository.salvar(Mockito.any())).thenReturn(anotacao());
 		Anotacao anotacao = criaAnotacao.criar(dados, usuarioAutenticado);
-		Mockito.verify(repository).criar(anotacaoCaptor.capture());
-		Mockito.verify(systemLogger).info(Mockito.anyString());
+		Mockito.verify(repository).salvar(anotacaoCaptor.capture());
+		Mockito.verify(logger).info(String.format(Mockito.anyString(), Mockito.any()), usuarioAutenticado);
 		assertEquals(dados.descricao(), anotacaoCaptor.getValue().getDescricao());
 		assertEquals(dados.nivelDeImportancia(), anotacaoCaptor.getValue().getNivelDeImportancia());
 		assertEquals(usuarioAutenticado, anotacaoCaptor.getValue().getRegistrador());
@@ -87,9 +86,8 @@ class CriaAnotacaoTest {
 	}
 	
 	private Usuario usuario() {
-		Email email = new Email("fulano@email.com");
 		Password password = new Password("P@ssW0rd");
-		return new Usuario(1l, "Fulano da Silva", "00011100011", "123456", email, password, new ArrayList<>());
+		return new Usuario(1l, "123456", password, new ArrayList<>());
 	}
 	
 	private Anotacao anotacao() {

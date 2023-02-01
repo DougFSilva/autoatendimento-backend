@@ -18,8 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosCriarOuEditarAnotacao;
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosDeAnotacao;
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
-import br.com.totemAutoatendimento.dominio.Email;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.AnotacaoRepository;
 import br.com.totemAutoatendimento.dominio.anotacao.NivelDeImportancia;
@@ -36,7 +35,7 @@ class EditaAnotacaoTest {
 	private AnotacaoRepository repository;
 	
 	@Mock
-	private SystemLogger systemLogger;
+	private StandardLogger logger;
 	
 	@Captor
 	private ArgumentCaptor<Anotacao> anotacaoCaptor;
@@ -46,7 +45,7 @@ class EditaAnotacaoTest {
 	@BeforeEach
 	public void beforeEach() {
 		MockitoAnnotations.openMocks(this);
-		this.editaAnotacao = new EditaAnotacao(repository, systemLogger);
+		this.editaAnotacao = new EditaAnotacao(repository, logger);
 	}
 	
 	@Test
@@ -70,7 +69,7 @@ class EditaAnotacaoTest {
 		DadosCriarOuEditarAnotacao dados = new DadosCriarOuEditarAnotacao(anotacao().getDescricao(), anotacao().getNivelDeImportancia());
 		assertThrows(UsuarioSemPermissaoException.class, () -> editaAnotacao.editar(anotacao().getId(), dados, totem));
 		Mockito.verifyNoInteractions(repository);
-		Mockito.verifyNoInteractions(systemLogger);
+		Mockito.verifyNoInteractions(logger);
 	}
 	
 	@Test
@@ -80,8 +79,8 @@ class EditaAnotacaoTest {
 		DadosCriarOuEditarAnotacao dados = new DadosCriarOuEditarAnotacao(anotacao().getDescricao(), anotacao().getNivelDeImportancia());
 		Mockito.when(repository.buscarPeloId(Mockito.anyLong())).thenReturn(Optional.empty());
 		assertThrows(ObjetoNaoEncontradoException.class,() -> editaAnotacao.editar(anotacao().getId(), dados, administrador));
-		Mockito.verify(repository, never()).editar(Mockito.any());
-		Mockito.verifyNoInteractions(systemLogger);
+		Mockito.verify(repository, never()).salvar(Mockito.any());
+		Mockito.verifyNoInteractions(logger);
 	}
 	
 	private void testarEdicaoDeAnotacao(Usuario usuarioAutenticado) {
@@ -90,23 +89,21 @@ class EditaAnotacaoTest {
 		anotacaoAtualizada.setDescricao("Anotação Atualizada");
 		anotacaoAtualizada.setNivelDeImportancia(NivelDeImportancia.ALTA);
 		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
-		Mockito.when(repository.editar(Mockito.any())).thenReturn(anotacaoAtualizada);
+		Mockito.when(repository.salvar(Mockito.any())).thenReturn(anotacaoAtualizada);
 		DadosDeAnotacao dadosDeAnotacao = editaAnotacao.editar(anotacao().getId(), dados, usuarioAutenticado);
-		Mockito.verify(repository).editar(anotacaoCaptor.capture());
-		Mockito.verify(systemLogger).info(Mockito.anyString());
+		Mockito.verify(repository).salvar(anotacaoCaptor.capture());
+		Mockito.verify(logger).info(String.format(Mockito.anyString(), Mockito.any()), usuarioAutenticado);
 		assertEquals(dados.descricao(), anotacaoCaptor.getValue().getDescricao());
 		assertEquals(dados.nivelDeImportancia(), anotacaoCaptor.getValue().getNivelDeImportancia());
 		assertEquals(anotacaoAtualizada.getId(), dadosDeAnotacao.getId());
 		assertEquals(anotacaoAtualizada.getTimestamp(), dadosDeAnotacao.getTimestamp());
-		assertEquals(anotacaoAtualizada.getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-		assertEquals(anotacaoAtualizada.getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+		assertEquals(anotacaoAtualizada.getRegistrador().getUsername(), dadosDeAnotacao.getRegistrador());
 		assertEquals(anotacaoAtualizada.getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
 	}
 	
 	private Usuario usuario() {
-		Email email = new Email("fulano@email.com");
 		Password password = new Password("P@ssW0rd");
-		return new Usuario(1l, "Fulano da Silva", "00011100011", "123456", email, password, new ArrayList<>());
+		return new Usuario(1l, "123456", password, new ArrayList<>());
 	}
 	
 	private Anotacao anotacao() {

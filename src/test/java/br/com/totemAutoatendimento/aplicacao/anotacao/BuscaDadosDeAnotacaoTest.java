@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import br.com.totemAutoatendimento.aplicacao.anotacao.dto.DadosDeAnotacao;
-import br.com.totemAutoatendimento.dominio.Email;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.AnotacaoRepository;
 import br.com.totemAutoatendimento.dominio.anotacao.NivelDeImportancia;
@@ -127,8 +126,7 @@ class BuscaDadosDeAnotacaoTest {
 		Mockito.verify(repository).buscarPeloId(anotacao().getId());
 		assertEquals(anotacao().getId(), dadosDeAnotacao.getId());
 		assertEquals(anotacao().getTimestamp(), dadosDeAnotacao.getTimestamp());
-		assertEquals(anotacao().getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-		assertEquals(anotacao().getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+		assertEquals(anotacao().getRegistrador().getUsername(), dadosDeAnotacao.getRegistrador());
 		assertEquals(anotacao().getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
 	}
 	
@@ -143,8 +141,7 @@ class BuscaDadosDeAnotacaoTest {
 			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
 			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
 			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+			assertEquals(anotacoes().getContent().get(i).getRegistrador().getUsername(), dadosDeAnotacao.getRegistrador());
 			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
 		}
 	}
@@ -158,16 +155,14 @@ class BuscaDadosDeAnotacaoTest {
 			DadosDeAnotacao dadosDeAnotacao = dadosDeAnotacoes.getContent().get(i);
 			assertEquals(anotacoes().getContent().get(i).getId(), dadosDeAnotacao.getId());
 			assertEquals(anotacoes().getContent().get(i).getTimestamp(), dadosDeAnotacao.getTimestamp());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getRegistro(), dadosDeAnotacao.getRegistroDoRegistrador());
-			assertEquals(anotacoes().getContent().get(i).getRegistrador().getNome(), dadosDeAnotacao.getNomeDoRegistrador());
+			assertEquals(anotacoes().getContent().get(i).getRegistrador().getUsername(), dadosDeAnotacao.getRegistrador());
 			assertEquals(anotacoes().getContent().get(i).getNivelDeImportancia(), dadosDeAnotacao.getNivelDeImportancia());
 		}
 	}
 	
 	private Usuario usuario() {
-		Email email = new Email("fulano@email.com");
 		Password password = new Password("P@ssW0rd");
-		return new Usuario(1l, "Fulano da Silva", "00011100011", "123456", email, password, new ArrayList<>());
+		return new Usuario(1l, "123456", password, new ArrayList<>());
 	}
 
 	private Anotacao anotacao() {

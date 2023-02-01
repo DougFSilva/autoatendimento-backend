@@ -18,8 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import br.com.totemAutoatendimento.aplicacao.logger.SystemLogger;
-import br.com.totemAutoatendimento.dominio.Email;
+import br.com.totemAutoatendimento.aplicacao.logger.StandardLogger;
 import br.com.totemAutoatendimento.dominio.anotacao.Anotacao;
 import br.com.totemAutoatendimento.dominio.anotacao.AnotacaoRepository;
 import br.com.totemAutoatendimento.dominio.anotacao.NivelDeImportancia;
@@ -35,65 +34,64 @@ class DeletaAnotacaoTest {
 	@Mock
 	private AnotacaoRepository repository;
 	
-	@Mock
-	private SystemLogger systemLogger;
-	
 	@Captor
 	private ArgumentCaptor<Anotacao> anotacaoCaptor;
 	
-	private DeletaAnotacao removeAnotacao;
+	@Mock
+	private StandardLogger logger;
+	
+	private DeletaAnotacao deletaAnotacao;
 	
 	@BeforeEach
 	public void beforeEach() {
 		MockitoAnnotations.openMocks(this);
-		this.removeAnotacao = new DeletaAnotacao(repository, systemLogger);
+		this.deletaAnotacao = new DeletaAnotacao(repository, logger);
 	}
 	
 	@Test
-	void deveriaRemoverUmaAnotacaoPorUmPerfilAdministrador() {
+	void deveriaDeletarUmaAnotacaoPorUmPerfilAdministrador() {
 		Usuario administrador = usuario();
 		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
-		testarRemocaoDeAnotacao(administrador);
+		testarDeleteDeAnotacao(administrador);
 	}
 	
 	@Test
-	void deveriaRemoverUmaAnotacaoPorUmPerfilFuncionario() {
+	void deveriaDeletarUmaAnotacaoPorUmPerfilFuncionario() {
 		Usuario funcionario = usuario();
 		funcionario.getPerfis().add(new Perfil(TipoPerfil.FUNCIONARIO));
-		testarRemocaoDeAnotacao(funcionario);
+		testarDeleteDeAnotacao(funcionario);
 	}
 	
 	@Test
-	void naoDeveriaRemoverUmaAnotacaoPorUmPerfilTotem() {
+	void naoDeveriaDeletarUmaAnotacaoPorUmPerfilTotem() {
 		Usuario funcionario = usuario();
 		funcionario.getPerfis().add(new Perfil(TipoPerfil.TOTEM));
-		assertThrows(UsuarioSemPermissaoException.class, () -> removeAnotacao.remover(anotacao().getId(), funcionario));
+		assertThrows(UsuarioSemPermissaoException.class, () -> deletaAnotacao.deletar(anotacao().getId(), funcionario));
 		verifyNoInteractions(repository);
-		verifyNoMoreInteractions(systemLogger);
+		verifyNoMoreInteractions(logger);
 	}
 	
 	@Test
-	void naoDeveriaTentarRemoverUmaAnotacaoQueNaoFoiEncontradaNoBancoDeDados() {
+	void naoDeveriaTentarDeletarUmaAnotacaoQueNaoFoiEncontradaNoBancoDeDados() {
 		Usuario administrador = usuario();
 		administrador.getPerfis().add(new Perfil(TipoPerfil.ADMINISTRADOR));
 		Mockito.when(repository.buscarPeloId(Mockito.anyLong())).thenReturn(Optional.empty());
-		assertThrows(ObjetoNaoEncontradoException.class, () -> removeAnotacao.remover(anotacao().getId(), administrador));
-		Mockito.verify(repository, never()).remover(Mockito.any());
-		Mockito.verifyNoInteractions(systemLogger);
+		assertThrows(ObjetoNaoEncontradoException.class, () -> deletaAnotacao.deletar(anotacao().getId(), administrador));
+		Mockito.verify(repository, never()).deletar(null);
+		Mockito.verifyNoInteractions(logger);
 	}
 	
-	private void testarRemocaoDeAnotacao(Usuario usuarioAutenticado) {
+	private void testarDeleteDeAnotacao(Usuario usuarioAutenticado) {
 		Mockito.when(repository.buscarPeloId(anotacao().getId())).thenReturn(Optional.of(anotacao()));
-		removeAnotacao.remover(anotacao().getId(), usuarioAutenticado);
-		Mockito.verify(repository).remover(anotacaoCaptor.capture());
-		Mockito.verify(systemLogger).info(Mockito.anyString());
+		deletaAnotacao.deletar(anotacao().getId(), usuarioAutenticado);
+		Mockito.verify(repository).deletar(anotacaoCaptor.capture());
+		Mockito.verify(logger).info(String.format(Mockito.anyString(), Mockito.any()), usuarioAutenticado);
 		assertEquals(anotacao(), anotacaoCaptor.getValue());
 	}
 	
 	private Usuario usuario() {
-		Email email = new Email("fulano@email.com");
 		Password password = new Password("P@ssW0rd");
-		return new Usuario(1l, "Fulano da Silva", "00011100011", "123456", email, password, new ArrayList<>());
+		return new Usuario(1l, "123456", password, new ArrayList<>());
 	}
 	
 	private Anotacao anotacao() {
