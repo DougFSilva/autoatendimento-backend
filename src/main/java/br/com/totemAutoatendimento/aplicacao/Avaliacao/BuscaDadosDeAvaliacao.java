@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.aplicacao.Avaliacao;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,7 @@ public class BuscaDadosDeAvaliacao {
 		this.repository = repository;
 	}
 
-	public Page<DadosDeAvaliacao> buscarTodasPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal,
+	public Page<DadosDeAvaliacao> buscarTodasPelaData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal,
 			Usuario usuarioAutenticado) {
 		AutorizacaoDeAcesso.requerirPerfilAdministrador(usuarioAutenticado);
 		Page<Avaliacao> avaliacoes = repository.buscarTodasPelaData(paginacao, dataInicial, dataFinal);

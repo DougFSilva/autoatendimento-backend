@@ -27,6 +27,6 @@ public class DeletaAvaliacao {
 			throw new ObjetoNaoEncontradoException(String.format("Avaliação com id %d não encontrada!", id));
 		}
 		repository.deletar(avaliacao.get());
-		logger.info(String.format("Avaliaçaõ com id %d deletada!", id), usuarioAutenticado);
+		logger.info(String.format("Avaliação com id %d deletada!", id), usuarioAutenticado);
 	}
 }

@@ -34,7 +34,7 @@ public class CriaAvaliacao {
 		}
 		Optional<Avaliacao> ultimaAvaliacao = repository.buscarUltimaPeloTotem(totem.get().getId());
 		if (ultimaAvaliacao.isPresent()) {
-			long diferencaDeTempoEmSegundos = LocalDateTime.now().until(ultimaAvaliacao.get().getTimestamp(), ChronoUnit.SECONDS);
+			long diferencaDeTempoEmSegundos = ultimaAvaliacao.get().getTimestamp().until(LocalDateTime.now(), ChronoUnit.SECONDS);
 			if (diferencaDeTempoEmSegundos < Avaliacao.tempoEntreAvaliacoes) {
 				throw new RegrasDeNegocioException(String
 						.format("Somente é possível realizar avaliações a cada %d segundos para cada totem", Avaliacao.tempoEntreAvaliacoes));

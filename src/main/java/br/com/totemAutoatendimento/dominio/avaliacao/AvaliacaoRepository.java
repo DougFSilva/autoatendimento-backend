@@ -1,6 +1,6 @@
 package br.com.totemAutoatendimento.dominio.avaliacao;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -16,7 +16,7 @@ public interface AvaliacaoRepository {
 	
 	Optional<Avaliacao> buscarUltimaPeloTotem(Long totemId);
 	
-	Page<Avaliacao> buscarTodasPelaData(Pageable paginacao, LocalDate dataInicial, LocalDate dataFinal);
+	Page<Avaliacao> buscarTodasPelaData(Pageable paginacao, LocalDateTime dataInicial, LocalDateTime dataFinal);
 	
 	Page<Avaliacao> buscarTodas(Pageable paginacao);
 }
