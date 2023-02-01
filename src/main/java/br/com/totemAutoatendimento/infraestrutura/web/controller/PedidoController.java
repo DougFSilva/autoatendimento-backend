@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.totemAutoatendimento.aplicacao.comanda.dto.DadosDeComanda;
 import br.com.totemAutoatendimento.aplicacao.pedido.BuscaDadosDePedidos;
+import br.com.totemAutoatendimento.aplicacao.pedido.DeletaPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.EntregaPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.FazPedido;
-import br.com.totemAutoatendimento.aplicacao.pedido.DeletaPedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosDePedido;
 import br.com.totemAutoatendimento.aplicacao.pedido.dto.DadosFazerPedido;
 import br.com.totemAutoatendimento.dominio.usuario.Usuario;

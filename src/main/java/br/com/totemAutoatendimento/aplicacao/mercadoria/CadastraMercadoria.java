@@ -51,9 +51,9 @@ public class CadastraMercadoria {
 				dados.precoPromocional(), 
 				true, 
 				"Sem imagem");
-		Mercadoria mercadoriaCriada = repository.salvar(mercadoria);
-		logger.info(String.format("Mercadoria com código %s cadastrada!", mercadoriaCriada.getCodigo()), usuarioAutenticado);
-		return mercadoriaCriada;
+		Mercadoria mercadoriaCadastrada = repository.salvar(mercadoria);
+		logger.info(String.format("Mercadoria com código %s cadastrada!", mercadoriaCadastrada.getCodigo()), usuarioAutenticado);
+		return mercadoriaCadastrada;
 	}
 
 }

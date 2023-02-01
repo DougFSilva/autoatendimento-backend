@@ -55,8 +55,8 @@ public class CadastraFuncionario {
 		Usuario usuario = new Usuario(null, dados.matricula(), password, perfis);
 		Email email = new Email(dados.email());
 		Funcionario funcionario = new Funcionario(null, dados.matricula(), dados.nome(), dados.cpf(), email, usuario);
-		Funcionario funcionarioCriado = repository.salvar(funcionario);
-		logger.info(String.format("Funcionário com matrícula %s cadastrado!", funcionarioCriado.getMatricula()), usuarioAutenticado);
-		return funcionarioCriado;
+		Funcionario funcionarioCadastrado = repository.salvar(funcionario);
+		logger.info(String.format("Funcionário com matrícula %s cadastrado!", funcionarioCadastrado.getMatricula()), usuarioAutenticado);
+		return funcionarioCadastrado;
 	}
 }

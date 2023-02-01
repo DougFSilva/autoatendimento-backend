@@ -52,9 +52,9 @@ public class AbreComanda {
 					String.format("Cartão com código %s não encontrado!", dados.codigoCartao()));
 		}
 		Comanda comanda = new Comanda(cartao.get(), cliente.get());
-		Comanda comandaCriada = repository.salvar(comanda);
-		logger.info(String.format("Comanda com id %d aberta!", comandaCriada.getId()), usuarioAutenticado);
-		return comandaCriada;
+		Comanda comandaAberta = repository.salvar(comanda);
+		logger.info(String.format("Comanda com id %d aberta!", comandaAberta.getId()), usuarioAutenticado);
+		return comandaAberta;
 	}
 
 }

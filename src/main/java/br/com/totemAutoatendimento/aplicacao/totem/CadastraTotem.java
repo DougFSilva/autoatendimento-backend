@@ -51,10 +51,10 @@ public class CadastraTotem {
 		List<Perfil> perfis = Arrays.asList(new Perfil(TipoPerfil.TOTEM));
 		Usuario usuario = new Usuario(null, dados.username(), password, perfis);
 		Totem totem = new Totem(null, dados.identificador(), dados.localDeInstalacao(), usuario);
-		Totem totemCriado = repository.salvar(totem);
-		logger.info(String.format("Totem com identificador %s cadastrado!", totemCriado.getIdentificador()),
+		Totem totemCadastrado = repository.salvar(totem);
+		logger.info(String.format("Totem com identificador %s cadastrado!", totemCadastrado.getIdentificador()),
 				usuarioAutenticado);
-		return totemCriado;
+		return totemCadastrado;
 	}
 
 }

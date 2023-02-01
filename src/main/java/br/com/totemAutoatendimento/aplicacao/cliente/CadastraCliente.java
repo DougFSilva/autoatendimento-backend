@@ -40,8 +40,8 @@ public class CadastraCliente {
 				dados.numero());
 		Email email = new Email(dados.email());
 		Cliente cliente = new Cliente(dados.nome(), dados.cpf(), dados.telefone(), email, endereco);
-		Cliente clienteCriado = repository.salvar(cliente);
-		logger.info(String.format("Cliente com cpf %s cadastrado!", clienteCriado.getCpf()), usuarioAutenticado);
-		return clienteCriado;
+		Cliente clienteCadastrado = repository.salvar(cliente);
+		logger.info(String.format("Cliente com cpf %s cadastrado!", clienteCadastrado.getCpf()), usuarioAutenticado);
+		return clienteCadastrado;
 	}
 }

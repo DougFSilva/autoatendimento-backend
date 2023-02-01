@@ -30,8 +30,8 @@ public class CadastraCartao {
 			throw new ViolacaoDeIntegridadeDeDadosException(String.format("Cartão com código %s já criado!", codigo));
 		}
 		Cartao novoCartao = new Cartao(codigo);
-		Cartao cartaoCriado = repository.salvar(novoCartao);
-		logger.info(String.format("Cartão com código %s cadastrado!", cartaoCriado.getCodigo()), usuarioAutenticado);
-		return cartaoCriado;
+		Cartao cartaoCadastrado = repository.salvar(novoCartao);
+		logger.info(String.format("Cartão com código %s cadastrado!", cartaoCadastrado.getCodigo()), usuarioAutenticado);
+		return cartaoCadastrado;
 	}
 }

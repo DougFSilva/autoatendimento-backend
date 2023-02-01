@@ -46,7 +46,7 @@ public class FazPedido {
 
 	@Transactional
 	public DadosDeComanda fazer(String codigoCartao, List<DadosFazerPedido> dados, Usuario usuarioAutenticado) {
-		AutorizacaoDeAcesso.requerirQualquerPerfil(null);
+		AutorizacaoDeAcesso.requerirQualquerPerfil(usuarioAutenticado);
 		Optional<Comanda> comanda = comandaRepository.buscarPeloCartao(codigoCartao, true);
 		if (comanda.isEmpty()) {
 			throw new ObjetoNaoEncontradoException(
